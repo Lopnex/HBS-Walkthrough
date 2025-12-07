@@ -84,11 +84,11 @@
 
       <!-- Main sections (only one visible at a time) -->
 
-      <!-- Information (default visible) -->
+      <!-- Information (default visible, NO hide button) -->
       <section id="info" class="content-section visible">
         <div class="section-header">
           <h2>Information</h2>
-          <button class="hide-section-btn" data-section="info">Hide</button>
+          <!-- no hide button here on purpose -->
         </div>
         <p>
           Basic info about the game: version, routes, spoilers, and general notes.
@@ -268,10 +268,31 @@
           const target = link.getAttribute('data-section');
           if (!target) return;
           showSection(target);
-          // no left nav item gets "active" here
+          // we don't change active nav here on purpose
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       });
+
+      // Helper: add entry to Manage Hidden list
+      function addToHiddenList(sectionId, label) {
+        if (!hiddenList) return;
+        // avoid duplicates
+        if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
+
+        const li = document.createElement('li');
+        li.setAttribute('data-section', sectionId);
+        li.innerHTML = `
+          <span>${label}</span>
+          <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
+        `;
+        hiddenList.appendChild(li);
+      }
+
+      // Helper: remove from Manage Hidden list
+      function removeFromHiddenList(sectionId) {
+        const li = hiddenList?.querySelector('li[data-section="' + sectionId + '"]');
+        if (li) li.remove();
+      }
 
       // Middle "Hide" buttons in each section
       hideSectionButtons.forEach(btn => {
@@ -281,33 +302,26 @@
           const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
           if (!navItem) return;
 
-          // hide from left nav
-          navItem.style.display = 'none';
+          const isHiddenNow = navItem.style.display === 'none';
 
-          // if currently viewing this section, switch to Information if available
-          const currentVisible = document.querySelector('.content-section.visible');
-          if (currentVisible && currentVisible.id === sectionId) {
-            if (document.getElementById('info')) {
-              showSection('info');
-              setActiveNav('info');
-            }
-          }
+          if (!isHiddenNow) {
+            // HIDE: hide from left nav, add to hidden list, stay on this page
+            navItem.style.display = 'none';
 
-          // add to hidden list if not already present
-          if (hiddenList && !hiddenList.querySelector('[data-section="' + sectionId + '"]')) {
             const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
-            const li = document.createElement('li');
-            li.setAttribute('data-section', sectionId);
-            li.innerHTML = `
-              <span>${label}</span>
-              <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
-            `;
-            hiddenList.appendChild(li);
-          }
+            addToHiddenList(sectionId, label);
 
-          // jump to Manage Hidden Sections page so the user sees where it went
-          showSection('hiddenManager');
-          setActiveNav(''); // clear active state
+            // turn this button into "Unhide"
+            btn.textContent = 'Unhide';
+          } else {
+            // UNHIDE: show in left nav again, remove from hidden list
+            navItem.style.display = '';
+            removeFromHiddenList(sectionId);
+
+            // turn this button back into "Hide"
+            btn.textContent = 'Hide';
+          }
+          // Note: we do NOT change visible section here.
         });
       });
 
@@ -318,13 +332,25 @@
           if (!btn) return;
           const sectionId = btn.getAttribute('data-section');
           const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+
           if (navItem) {
-            navItem.style.display = ''; // show again
+            navItem.style.display = '';
           }
-          // remove from hidden list
+
+          // reset middle hide button text if it exists
+          const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
+          if (midBtn) {
+            midBtn.textContent = 'Hide';
+          }
+
+          // remove the entry from the list
           btn.parentElement.remove();
         });
       }
+
+      // start on Information
+      showSection('info');
+      setActiveNav('info');
     });
   </script>
 </body>
