@@ -10,83 +10,82 @@ body {
   color: #eee;
 }
 
-/* Container */
+/* Layout: left nav, middle, right sidebar */
 #app {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 220px;
   min-height: 100vh;
   background: #4b8b9b; /* teal behind center column */
 }
 
-/* LEFT SIDEBAR – fixed full height */
+/* ========== LEFT SIDEBAR ========== */
+
 #sidebar {
-  width: 260px;
   padding: 16px;
   background: #151515;
   border-right: 1px solid #333;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  bottom: 0;
-  overflow-y: auto;
+  align-self: flex-start;
+  min-height: 100vh;
 }
 
 .site-title {
-  margin: 0 0 4px;
+  margin: 0 0 16px;
   font-size: 1.2rem;
 }
 
-.site-subtitle {
-  margin: 0 0 16px;
-  font-size: 0.9rem;
-  color: #bbb;
-}
-
-#sectionList {
+#navList {
   list-style: none;
-  margin: 0 0 16px;
+  margin: 0;
   padding: 0;
 }
 
-#sectionList li {
-  margin-bottom: 4px;
-}
-
-#sectionList a {
-  display: block;
+/* clickable items */
+.nav-link {
+  width: 100%;
+  text-align: left;
   padding: 6px 8px;
+  margin-bottom: 4px;
   border-radius: 4px;
-  text-decoration: none;
+  border: none;
+  background: transparent;
   color: #eee;
   font-size: 0.95rem;
+  cursor: pointer;
 }
 
-#sectionList a:hover {
+.nav-link:hover {
   background: #2a2a2a;
 }
 
-#sectionList a.active {
+.nav-link.active {
   background: #444;
 }
 
-.info-box {
-  margin-top: 16px;
-  padding: 8px;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  background: #222;
-  color: #ccc;
+/* non-clickable headers */
+.nav-header {
+  margin: 10px 0 4px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #bbb;
+  text-align: center;
+  border-top: 1px solid #333;
 }
 
-/* RIGHT SIDEBAR – fixed full height */
+/* ========== RIGHT SIDEBAR ========== */
+
 #rightbar {
-  width: 220px;
   padding: 16px;
   background: #151515;
   border-left: 1px solid #333;
-  position: fixed;
+  position: sticky;
   top: 0;
-  right: 0;
-  bottom: 0;
-  overflow-y: auto;
+  align-self: flex-start;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -98,15 +97,13 @@ body {
   margin-bottom: 8px;
 }
 
-/* Patreon Logo (small & aligned) */
+/* Patreon logo */
 #patreon-logo {
-  width: 45px;          /* tweak this if you want smaller/bigger */
+  width: 45px;
   height: auto;
   display: block;
   cursor: pointer;
   object-fit: contain;
-  margin-left: auto;
-  margin-bottom: 10px;
   transition: transform 0.15s ease, filter 0.15s ease;
 }
 
@@ -138,180 +135,86 @@ body {
   padding: 0;
 }
 
-/* Each highlight row */
 .highlight-list li {
   padding: 4px 0;
-  border-bottom: 1px solid #222;
   font-size: 0.85rem;
   text-align: center;
 }
 
-.highlight-list li:last-child {
-  border-bottom: none;
-}
+/* ========== MIDDLE CONTENT ========== */
 
-/* Clickable "New in ..." links (if you add them later) */
-.highlight-list a {
-  color: #eee;
-  text-decoration: none;
-  display: block;
-  padding: 3px 0;
-}
-
-.highlight-list a:hover {
-  background: #222;
-}
-
-/* Manage hidden link under highlight */
-.manage-hidden-link {
-  display: block;
-  margin-top: 10px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  border: 1px solid #333;
-  background: #101010;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #eee;
-  text-decoration: none;
-}
-
-.manage-hidden-link:hover {
-  background: #222;
-}
-
-/* MAIN CONTENT (teal middle column) */
 #content {
-  padding: 16px 24px 40px;
-  width: 100%;                /* 🔹 stretch to full center column */
+  padding: 0 24px 40px;
+  width: 100%;
   background: #4b8b9b;        /* teal center column */
   border-left: 1px solid #333;
   border-right: 1px solid #333;
-  min-height: 100vh;          /* borders go all the way down */
+  min-height: 100vh;
 }
 
-/* Banner – responsive, 5px border */
+/* Banner – full width (inside content) */
 .center-banner {
-  margin: 0 auto 16px;
-  text-align: center;
+  margin: 0 -24px 16px;
 }
 
 .center-banner img {
-  width: 100%;             /* fill the center column */
-  max-width: 1000px;       /* cap it on huge screens */
+  width: 100%;             /* fills center column */
   height: auto;
   display: block;
-  margin: 0 auto 16px;
   border-radius: 6px;
-  border: 5px solid rgba(0, 0, 0, 0.7); /* thicker 5px border */
+  border: 5px solid rgba(0, 0, 0, 0.7);
 }
 
-/* Page message */
-.top-message {
-  background: #202020;
-  padding: 10px 12px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  color: #ccc;
-}
-
-/* Walkthrough sections */
-.walkthrough-section {
+/* Content sections */
+.content-section {
+  display: none;           /* hidden by default */
   margin-bottom: 24px;
-  padding: 12px 14px;
+  padding: 16px 18px;
   background: #1a1a1a;
   border-radius: 4px;
   border: 1px solid #333;
 }
 
-.section-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
+.content-section.visible {
+  display: block;          /* only active one is shown */
 }
 
-.section-title h2 {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.hide-section {
-  padding: 4px 8px;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background: #262626;
-  color: #eee;
-  cursor: pointer;
-}
-
-.hide-section:hover {
-  background: #333;
-}
-
-/* Hidden manager */
-#hiddenManager {
-  margin-top: 32px;
-  padding: 12px 14px;
-  border-radius: 4px;
-  background: #181818;
-  border: 1px solid #333;
-}
-
-#hiddenList {
-  list-style: none;
-  margin: 8px 0 0;
-  padding: 0;
-}
-
-#hiddenList li {
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-}
-
-#hiddenList button {
-  padding: 3px 8px;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background: #262626;
-  color: #eee;
-  cursor: pointer;
-}
-
-#hiddenList button:hover {
-  background: #333;
+.content-section h2 {
+  margin-top: 0;
 }
 
 /* Footer */
 #footer {
   margin-top: 32px;
   font-size: 0.8rem;
-  color: #999;
+  color: #111;
+  text-align: center;
 }
 
-/* Responsive - stack on small screens */
+/* ========== Responsive ========== */
+
 @media (max-width: 800px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+
   #sidebar {
     position: static;
-    width: 100%;
+    min-height: auto;
     border-right: none;
     border-bottom: 1px solid #333;
   }
 
   #rightbar {
-    display: none; /* hide on small screens */
+    display: none; /* hide right sidebar on small screens */
   }
 
   #content {
-    margin-left: 0;
-    margin-right: 0;
     border-left: none;
     border-right: none;
+  }
+
+  .center-banner {
+    margin: 0 0 16px;
   }
 }
