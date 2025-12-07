@@ -20,35 +20,30 @@
             <button class="nav-link active" data-section="info">
               Information
             </button>
-            <button class="hide-nav" data-section="info">hide</button>
           </li>
 
           <li class="nav-item" data-section="getting-started">
             <button class="nav-link" data-section="getting-started">
               Getting Started!
             </button>
-            <button class="hide-nav" data-section="getting-started">hide</button>
           </li>
 
           <li class="nav-item" data-section="main-story">
             <button class="nav-link" data-section="main-story">
               Main Story
             </button>
-            <button class="hide-nav" data-section="main-story">hide</button>
           </li>
 
           <li class="nav-item" data-section="side-quests">
             <button class="nav-link" data-section="side-quests">
               Side Quests
             </button>
-            <button class="hide-nav" data-section="side-quests">hide</button>
           </li>
 
           <li class="nav-item" data-section="extra-content">
             <button class="nav-link" data-section="extra-content">
               Extra Content / Tips
             </button>
-            <button class="hide-nav" data-section="extra-content">hide</button>
           </li>
 
           <!-- Main Characters header (non-clickable) -->
@@ -58,21 +53,18 @@
             <button class="nav-link" data-section="adel-reynolds">
               Adel Reynolds
             </button>
-            <button class="hide-nav" data-section="adel-reynolds">hide</button>
           </li>
 
           <li class="nav-item" data-section="gemma-rey">
             <button class="nav-link" data-section="gemma-rey">
               Gemma Rey
             </button>
-            <button class="hide-nav" data-section="gemma-rey">hide</button>
           </li>
 
           <li class="nav-item" data-section="christine-samson">
             <button class="nav-link" data-section="christine-samson">
               Christine Samson
             </button>
-            <button class="hide-nav" data-section="christine-samson">hide</button>
           </li>
 
           <!-- Residents header (non-clickable) -->
@@ -94,7 +86,10 @@
 
       <!-- Information (default visible) -->
       <section id="info" class="content-section visible">
-        <h2>Information</h2>
+        <div class="section-header">
+          <h2>Information</h2>
+          <button class="hide-section-btn" data-section="info">Hide</button>
+        </div>
         <p>
           Basic info about the game: version, routes, spoilers, and general notes.
           You can describe which choices matter, if saves are recommended, etc.
@@ -103,7 +98,10 @@
 
       <!-- Getting Started -->
       <section id="getting-started" class="content-section">
-        <h2>Getting Started!</h2>
+        <div class="section-header">
+          <h2>Getting Started!</h2>
+          <button class="hide-section-btn" data-section="getting-started">Hide</button>
+        </div>
         <p>
           Intro details about starting a new game, recommended settings, and
           anything a new player should know before jumping in.
@@ -112,7 +110,10 @@
 
       <!-- Main Story -->
       <section id="main-story" class="content-section">
-        <h2>Main Story</h2>
+        <div class="section-header">
+          <h2>Main Story</h2>
+          <button class="hide-section-btn" data-section="main-story">Hide</button>
+        </div>
         <p>
           Put your main story walkthrough here: key choices, chapter order,
           and important flags so players can follow the core route.
@@ -121,7 +122,10 @@
 
       <!-- Side Quests -->
       <section id="side-quests" class="content-section">
-        <h2>Side Quests</h2>
+        <div class="section-header">
+          <h2>Side Quests</h2>
+          <button class="hide-section-btn" data-section="side-quests">Hide</button>
+        </div>
         <p>
           Use this section to list and detail optional quests, how to start them,
           and any rewards or missable content.
@@ -130,7 +134,10 @@
 
       <!-- Extra Content / Tips -->
       <section id="extra-content" class="content-section">
-        <h2>Extra Content / Tips</h2>
+        <div class="section-header">
+          <h2>Extra Content / Tips</h2>
+          <button class="hide-section-btn" data-section="extra-content">Hide</button>
+        </div>
         <p>
           General hints, tricks, hidden scenes, replay tips, or anything
           that doesn’t fit neatly into the main story or side quests.
@@ -139,7 +146,10 @@
 
       <!-- Character pages -->
       <section id="adel-reynolds" class="content-section">
-        <h2>Adel Reynolds</h2>
+        <div class="section-header">
+          <h2>Adel Reynolds</h2>
+          <button class="hide-section-btn" data-section="adel-reynolds">Hide</button>
+        </div>
         <p>
           Notes about Adel: how to meet them, route requirements,
           important choices, and key scenes.
@@ -147,7 +157,10 @@
       </section>
 
       <section id="gemma-rey" class="content-section">
-        <h2>Gemma Rey</h2>
+        <div class="section-header">
+          <h2>Gemma Rey</h2>
+          <button class="hide-section-btn" data-section="gemma-rey">Hide</button>
+        </div>
         <p>
           Notes about Gemma: relationship tips, quest steps,
           and any unique scenes tied to Gemma.
@@ -155,16 +168,21 @@
       </section>
 
       <section id="christine-samson" class="content-section">
-        <h2>Christine Samson</h2>
+        <div class="section-header">
+          <h2>Christine Samson</h2>
+          <button class="hide-section-btn" data-section="christine-samson">Hide</button>
+        </div>
         <p>
           Notes about Christine: how to progress her storyline,
           choices that matter, and recommended order for events.
         </p>
       </section>
 
-      <!-- Manage Hidden Sections page (shown when you click from the right or left, not always visible) -->
+      <!-- Manage Hidden Sections page -->
       <section id="hiddenManager" class="content-section">
-        <h2>Manage Hidden Sections</h2>
+        <div class="section-header">
+          <h2>Manage Hidden Sections</h2>
+        </div>
         <p>
           Sections you hide from the left menu will appear here. Click "Unhide"
           to add them back into the navigation.
@@ -200,7 +218,7 @@
           <li><strong>New in 0.6.0.2</strong></li>
         </ul>
 
-        <!-- 🔹 Right-side button that opens the Manage Hidden Sections page in the middle -->
+        <!-- Right-side button that opens the Manage Hidden Sections page -->
         <a href="#" class="manage-hidden-link" data-section="hiddenManager">
           Manage Hidden Sections
         </a>
@@ -209,14 +227,14 @@
 
   </div>
 
-  <!-- Simple JS: switch visible sections + hide/unhide nav items -->
+  <!-- JS: switch visible section + hide/unhide via middle Hide buttons -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const navLinks = document.querySelectorAll('.nav-link');
       const manageHiddenLinks = document.querySelectorAll('.manage-hidden-link');
       const sections = document.querySelectorAll('.content-section');
       const hiddenList = document.getElementById('hiddenList');
-      const hideButtons = document.querySelectorAll('.hide-nav');
+      const hideSectionButtons = document.querySelectorAll('.hide-section-btn');
 
       function showSection(id) {
         sections.forEach(sec => {
@@ -250,23 +268,23 @@
           const target = link.getAttribute('data-section');
           if (!target) return;
           showSection(target);
-          // no left nav gets "active" here, that's okay
+          // no left nav item gets "active" here
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       });
 
-      // Hide buttons on left nav
-      hideButtons.forEach(btn => {
+      // Middle "Hide" buttons in each section
+      hideSectionButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
           const sectionId = btn.getAttribute('data-section');
-          const navItem = btn.closest('.nav-item');
+          const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
           if (!navItem) return;
 
           // hide from left nav
           navItem.style.display = 'none';
 
-          // if currently viewing this section, switch to Information (if it exists)
+          // if currently viewing this section, switch to Information if available
           const currentVisible = document.querySelector('.content-section.visible');
           if (currentVisible && currentVisible.id === sectionId) {
             if (document.getElementById('info')) {
@@ -275,7 +293,7 @@
             }
           }
 
-          // add to hidden list if not already there
+          // add to hidden list if not already present
           if (hiddenList && !hiddenList.querySelector('[data-section="' + sectionId + '"]')) {
             const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
             const li = document.createElement('li');
@@ -286,6 +304,10 @@
             `;
             hiddenList.appendChild(li);
           }
+
+          // jump to Manage Hidden Sections page so the user sees where it went
+          showSection('hiddenManager');
+          setActiveNav(''); // clear active state
         });
       });
 
