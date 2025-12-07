@@ -96,15 +96,20 @@ body {
   margin-bottom: 8px;
 }
 
-/* Patreon Logo */
+/* Patreon Logo (smaller + aligned) */
 .patreon-link img {
-  height: 28px;
-  width: auto;
+  width: 45px;          /* change to 32px or 60px if you want smaller/bigger */
+  height: auto;
   display: block;
   cursor: pointer;
+  object-fit: contain;
+  margin-left: auto;    /* push it to the right edge */
+  margin-bottom: 10px;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .patreon-link img:hover {
+  transform: scale(1.1);
   filter: brightness(1.2);
 }
 
