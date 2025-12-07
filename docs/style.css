@@ -85,8 +85,6 @@ body {
   padding: 16px;
   background: #151515;
   border-left: 1px solid #333;
-
-  /* full-height sidebar using flexbox */
   position: sticky;
   top: 0;
   height: 100vh;
@@ -94,47 +92,49 @@ body {
   flex-direction: column;
 }
 
-/* Patreon + highlight cluster at the top */
-.right-top {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
+/* Row for social icons */
 .right-icons {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-/* Top social icons (Discord, Subscribestar, Patreon) */
+/* Equal sizing + better visual match */
 #discord-logo,
 #subscribstar-logo,
 #patreon-logo {
-  width: 45px;
-  height: auto;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
   transition: transform 0.15s ease, filter 0.15s ease;
   cursor: pointer;
 }
 
+/* Discord circle looks visually smaller → boost it */
+#discord-logo {
+  width: 48px;
+  height: 48px;
+}
+
+/* Hover */
 #discord-logo:hover,
 #subscribstar-logo:hover,
 #patreon-logo:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
   filter: brightness(1.2);
 }
 
-/* Highlight card now fills remaining height */
+/* Highlight card fills the remaining column height */
 .highlight-box {
-  flex: 1 1 auto;                 /* take all remaining space in sidebar */
+  flex: 1 1 auto;
   border-radius: 4px;
   border: 1px solid #333;
   background: #101010;
   padding: 10px 12px;
   font-size: 0.9rem;
-
-  display: flex;                  /* stack content vertically */
+  display: flex;
   flex-direction: column;
 }
 
@@ -158,10 +158,10 @@ body {
   text-align: center;
 }
 
-/* bottom-pinned Manage Hidden Sections button INSIDE highlight card */
+/* Bottom pinned button */
 .manage-hidden-link {
   display: block;
-  margin-top: auto;               /* pushes it to the bottom of highlight-box */
+  margin-top: auto;
   padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #333;
@@ -187,7 +187,6 @@ body {
   min-height: 100vh;
 }
 
-/* Banner */
 .center-banner {
   margin: 0 -24px 16px;
 }
@@ -213,12 +212,6 @@ body {
   display: block;
 }
 
-/* section titles */
-.content-section h2 {
-  margin: 0 0 8px;
-}
-
-/* header row for title + Hide button */
 .section-header {
   display: flex;
   justify-content: space-between;
