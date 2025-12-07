@@ -85,15 +85,17 @@ body {
   padding: 16px;
   background: #151515;
   border-left: 1px solid #333;
+
+  /* 🔹 force full-height column and use flexbox */
   position: sticky;
   top: 0;
-  align-self: flex-start;
-  min-height: 100vh;
+  height: 100vh;        /* <– this forces it to fill the viewport */
+  align-self: stretch;
   display: flex;
-  flex-direction: column;   /* stack top → bottom */
+  flex-direction: column;
 }
 
-/* top cluster (Patreon + Highlight) */
+/* Patreon + highlight cluster (top) */
 .right-top {
   display: flex;
   flex-direction: column;
@@ -147,10 +149,10 @@ body {
   text-align: center;
 }
 
-/* bottom-pinned Manage Hidden button */
+/* 🔹 bottom-pinned Manage Hidden button */
 .manage-hidden-link {
   display: block;
-  margin-top: auto;          /* push to bottom of sidebar */
+  margin-top: auto;       /* uses flex to push it to the bottom */
   padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #333;
