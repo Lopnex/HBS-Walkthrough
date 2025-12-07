@@ -1,3 +1,4 @@
+/* Reset + Base */
 * {
   box-sizing: border-box;
 }
@@ -17,7 +18,6 @@ body {
 }
 
 /* LEFT SIDEBAR */
-
 #sidebar {
   padding: 16px;
   background: #151515;
@@ -76,8 +76,7 @@ body {
   color: #ccc;
 }
 
-/* RIGHT SIDEBAR: Patreon + Highlight */
-
+/* RIGHT SIDEBAR */
 #rightbar {
   padding: 16px;
   background: #151515;
@@ -94,43 +93,22 @@ body {
 .right-icons {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 8px;
 }
 
-/* Patreon circle icon (image inside circle) */
-.icon-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;            /* keep image perfectly circular */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: none;                /* remove orange square border */
-  background: transparent;     /* let the image show normally */
-  cursor: pointer;
-  transition: transform 0.15s ease-in-out;
-}
-
-.icon-circle:hover {
-  transform: scale(1.08);
-}
-
-/* make the image fill the circle cleanly */
-.icon-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* Patreon Logo */
+.patreon-link img {
+  height: 28px;
+  width: auto;
   display: block;
+  cursor: pointer;
 }
 
-/* we don't need special background on patreon-icon anymore,
-   but you can keep this for future tweaks if you want */
-.patreon-icon {
+.patreon-link img:hover {
+  filter: brightness(1.2);
 }
 
 /* Highlight box */
-
 .highlight-box {
   border-radius: 4px;
   border: 1px solid #333;
@@ -163,13 +141,26 @@ body {
 }
 
 /* MAIN CONTENT */
-
 #content {
   padding: 16px 24px;
   max-width: 1000px;
-  background: #5697ab;   /* new center color */
 }
 
+/* Center Banner */
+.center-banner {
+  margin: 0 auto 16px;
+  text-align: center;
+}
+
+.center-banner img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+/* Page message */
 .top-message {
   background: #202020;
   padding: 10px 12px;
@@ -180,7 +171,6 @@ body {
 }
 
 /* Walkthrough sections */
-
 .walkthrough-section {
   margin-bottom: 24px;
   padding: 12px 14px;
@@ -216,7 +206,6 @@ body {
 }
 
 /* Hidden manager */
-
 #hiddenManager {
   margin-top: 32px;
   padding: 12px 14px;
@@ -254,15 +243,13 @@ body {
 }
 
 /* Footer */
-
 #footer {
   margin-top: 32px;
   font-size: 0.8rem;
   color: #999;
 }
 
-/* Responsive */
-
+/* Responsive - Hide Right Sidebar */
 @media (max-width: 800px) {
   #app {
     grid-template-columns: 1fr;
@@ -276,7 +263,6 @@ body {
     border-bottom: 1px solid #333;
   }
 
-  /* Hide right sidebar on mobile */
   #rightbar {
     display: none;
   }
