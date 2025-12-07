@@ -92,12 +92,12 @@ body {
   flex-direction: column;
 }
 
-/* Row for social icons */
 .right-icons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between; /* 🔹 evenly distribute left → right */
   align-items: center;
-  gap: 10px;
+  width: 100%; /* 🔹 use full width of the rightbar */
+  padding: 0 4px; /* small clean margins */
   margin-bottom: 10px;
 }
 
