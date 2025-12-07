@@ -15,6 +15,7 @@
 
       <nav>
         <ul id="navList">
+          <!-- Top level pages -->
           <li class="nav-item" data-section="info">
             <button class="nav-link active" data-section="info">
               Information
@@ -45,6 +46,7 @@
             </button>
           </li>
 
+          <!-- Main Characters header (non-clickable) -->
           <li class="nav-header">Main Characters</li>
 
           <li class="nav-item" data-section="adel-reynolds">
@@ -65,8 +67,9 @@
             </button>
           </li>
 
+          <!-- Residents header (non-clickable) -->
           <li class="nav-header">Horton Bay Residents</li>
-
+          <!-- more residents later -->
         </ul>
       </nav>
     </aside>
@@ -74,11 +77,12 @@
     <!-- MIDDLE CONTENT -->
     <main id="content">
 
+      <!-- Banner -->
       <div class="center-banner">
         <img src="Lumphorngames-banner.png" alt="Lumphorn Games banner" />
       </div>
 
-      <!-- Information default -->
+      <!-- Information (default visible, with Hide) -->
       <section id="info" class="content-section visible">
         <div class="section-header">
           <h2>Information</h2>
@@ -90,39 +94,64 @@
         </p>
       </section>
 
+      <!-- Getting Started -->
       <section id="getting-started" class="content-section">
         <div class="section-header">
           <h2>Getting Started!</h2>
           <button class="hide-section-btn" data-section="getting-started">Hide</button>
         </div>
+        <p>
+          Intro details about starting a new game, recommended settings, and
+          anything a new player should know before jumping in.
+        </p>
       </section>
 
+      <!-- Main Story -->
       <section id="main-story" class="content-section">
         <div class="section-header">
           <h2>Main Story</h2>
           <button class="hide-section-btn" data-section="main-story">Hide</button>
         </div>
+        <p>
+          Put your main story walkthrough here: key choices, chapter order,
+          and important flags so players can follow the core route.
+        </p>
       </section>
 
+      <!-- Side Quests -->
       <section id="side-quests" class="content-section">
         <div class="section-header">
           <h2>Side Quests</h2>
           <button class="hide-section-btn" data-section="side-quests">Hide</button>
         </div>
+        <p>
+          Use this section to list and detail optional quests, how to start them,
+          and any rewards or missable content.
+        </p>
       </section>
 
+      <!-- Extra Content / Tips -->
       <section id="extra-content" class="content-section">
         <div class="section-header">
           <h2>Extra Content / Tips</h2>
           <button class="hide-section-btn" data-section="extra-content">Hide</button>
         </div>
+        <p>
+          General hints, tricks, hidden scenes, replay tips, or anything
+          that doesn’t fit neatly into the main story or side quests.
+        </p>
       </section>
 
+      <!-- Character pages -->
       <section id="adel-reynolds" class="content-section">
         <div class="section-header">
           <h2>Adel Reynolds</h2>
           <button class="hide-section-btn" data-section="adel-reynolds">Hide</button>
         </div>
+        <p>
+          Notes about Adel: how to meet them, route requirements,
+          important choices, and key scenes.
+        </p>
       </section>
 
       <section id="gemma-rey" class="content-section">
@@ -130,6 +159,10 @@
           <h2>Gemma Rey</h2>
           <button class="hide-section-btn" data-section="gemma-rey">Hide</button>
         </div>
+        <p>
+          Notes about Gemma: relationship tips, quest steps,
+          and any unique scenes tied to Gemma.
+        </p>
       </section>
 
       <section id="christine-samson" class="content-section">
@@ -137,13 +170,24 @@
           <h2>Christine Samson</h2>
           <button class="hide-section-btn" data-section="christine-samson">Hide</button>
         </div>
+        <p>
+          Notes about Christine: how to progress her storyline,
+          choices that matter, and recommended order for events.
+        </p>
       </section>
 
+      <!-- Manage Hidden Sections page -->
       <section id="hiddenManager" class="content-section">
         <div class="section-header">
           <h2>Manage Hidden Sections</h2>
         </div>
-        <ul id="hiddenList"></ul>
+        <p>
+          Sections you hide from the left menu will appear here. Click "Unhide"
+          to add them back into the navigation.
+        </p>
+        <ul id="hiddenList">
+          <!-- filled by JS -->
+        </ul>
       </section>
 
       <footer id="footer">
@@ -154,7 +198,16 @@
     <!-- RIGHT SIDEBAR -->
     <aside id="rightbar">
       <div class="right-icons">
-        <img id="patreon-logo" src="Patreon-logo.png" alt="Patreon" />
+        <a href="https://patreon.com/Lumphorngames"
+           target="_blank"
+           rel="noopener"
+           title="Support on Patreon">
+          <img
+            id="patreon-logo"
+            src="Patreon-logo.png"
+            alt="Patreon"
+          />
+        </a>
       </div>
 
       <div class="highlight-box">
@@ -163,6 +216,7 @@
           <li><strong>New in 0.6.0.2</strong></li>
         </ul>
 
+        <!-- Right-side button that opens the Manage Hidden Sections page -->
         <a href="#" class="manage-hidden-link" data-section="hiddenManager">
           Manage Hidden Sections
         </a>
@@ -171,70 +225,126 @@
 
   </div>
 
+  <!-- JS: nav switching + hide/unhide logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('.content-section');
       const hideButtons = document.querySelectorAll('.hide-section-btn');
       const hiddenList = document.getElementById('hiddenList');
       const manageLinks = document.querySelectorAll('.manage-hidden-link');
-      const sections = document.querySelectorAll('.content-section');
 
       function showSection(id) {
-        sections.forEach(sec => sec.classList.toggle('visible', sec.id === id));
+        sections.forEach(sec => {
+          sec.classList.toggle('visible', sec.id === id);
+        });
       }
 
-      function setActive(id) {
-        navLinks.forEach(btn =>
-          btn.classList.toggle('active', btn.dataset.section === id)
-        );
+      function setActiveNav(id) {
+        navLinks.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.section === id);
+        });
       }
 
-      navLinks.forEach(btn =>
-        btn.addEventListener('click', () => {
-          showSection(btn.dataset.section);
-          setActive(btn.dataset.section);
-        })
-      );
-
-      hideButtons.forEach(btn =>
-        btn.addEventListener('click', () => {
+      /* ------- Left nav clicks: just switch section ------- */
+      navLinks.forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
           const id = btn.dataset.section;
-          const navItem = document.querySelector(`.nav-item[data-section="${id}"]`);
-          const li = document.createElement('li');
-
-          navItem.style.display = 'none';
-          btn.textContent = 'Unhide';
-
-          li.innerHTML = `
-            <span>${navItem.textContent.trim()}</span>
-            <button class="unhide-btn" data-section="${id}">Unhide</button>
-          `;
-          li.dataset.section = id;
-          hiddenList.appendChild(li);
-        })
-      );
-
-      hiddenList.addEventListener('click', e => {
-        if (e.target.classList.contains('unhide-btn')) {
-          const id = e.target.dataset.section;
-          const navItem = document.querySelector(`.nav-item[data-section="${id}"]`);
-          const sectionBtn = document.querySelector(`.hide-section-btn[data-section="${id}"]`);
-
-          navItem.style.display = '';
-          sectionBtn.textContent = 'Hide';
-          e.target.parentElement.remove();
-        }
+          if (!id) return;
+          showSection(id);
+          setActiveNav(id);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       });
 
-      manageLinks.forEach(link =>
-        link.addEventListener('click', () => {
-          showSection('hiddenManager');
-          setActive('');
-        })
-      );
+      /* ------- Helpers for hide/unhide ------- */
+      function addToHiddenList(sectionId, label) {
+        if (!hiddenList) return;
+        if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
 
+        const li = document.createElement('li');
+        li.dataset.section = sectionId;
+        li.innerHTML = `
+          <span>${label}</span>
+          <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
+        `;
+        hiddenList.appendChild(li);
+      }
+
+      function removeFromHiddenList(sectionId) {
+        const li = hiddenList?.querySelector('li[data-section="' + sectionId + '"]');
+        if (li) li.remove();
+      }
+
+      function hideSection(sectionId) {
+        const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+        if (!navItem) return;
+
+        navItem.style.display = 'none';
+
+        const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
+        addToHiddenList(sectionId, label);
+
+        const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
+        if (midBtn) midBtn.textContent = 'Unhide';
+      }
+
+      function unhideSection(sectionId) {
+        const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+        if (navItem) navItem.style.display = '';
+
+        removeFromHiddenList(sectionId);
+
+        const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
+        if (midBtn) midBtn.textContent = 'Hide';
+      }
+
+      /* ------- Middle Hide buttons (toggle) ------- */
+      hideButtons.forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          const sectionId = btn.dataset.section;
+          const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+          if (!navItem) return;
+
+          const currentlyHidden = navItem.style.display === 'none';
+
+          if (currentlyHidden) {
+            unhideSection(sectionId);
+          } else {
+            hideSection(sectionId);
+          }
+          // stays on the same page – no forced jump
+        });
+      });
+
+      /* ------- Manage Hidden list: Unhide buttons ------- */
+      if (hiddenList) {
+        hiddenList.addEventListener('click', e => {
+          const btn = e.target.closest('.unhide-btn');
+          if (!btn) return;
+
+          const sectionId = btn.dataset.section;
+          unhideSection(sectionId);
+        });
+      }
+
+      /* ------- Right sidebar: jump to Manage Hidden page ------- */
+      manageLinks.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const target = link.dataset.section;
+          if (!target) return;
+          showSection(target);
+          setActiveNav(''); // none highlighted
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // default
       showSection('info');
-      setActive('info');
+      setActiveNav('info');
     });
   </script>
 </body>
