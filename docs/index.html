@@ -1,14 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>My Game Walkthrough</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <title>HBS Walkthrough</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<h1>My Game Walkthrough</h1>
-<p>If you can see this, GitHub Pages is working! 🎉</p>
-<script src="script.js"></script>
+  <div id="app">
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <h1 class="site-title">Horton Bay Stories Walkthrough</h1>
+      <p class="site-subtitle">Quick navigation</p>
+
+      <nav>
+        <ul id="sectionList">
+          <!-- JS fills this based on sections -->
+        </ul>
+      </nav>
+
+      <div class="info-box">
+        <p>This page uses JavaScript. If the menu doesn't work, make sure JS is enabled.</p>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main id="content">
+      <header class="top-message">
+        <p>
+          Click a section title in the menu on the left to jump to it.
+          Use the “hide” button on any section to remove it from the menu.
+          You can unhide sections at the bottom of the page.
+        </p>
+      </header>
+
+      <!-- Replace these sections with your real walkthrough content -->
+
+      <section id="info" class="walkthrough-section" data-title="Information">
+        <div class="section-title">
+          <h2>Information</h2>
+          <button class="hide-section" data-target="info">hide</button>
+        </div>
+        <div class="section-body">
+          <p>
+            Basic info about the game: version, routes, spoilers, and general notes.
+            You can describe which choices matter, if saves are recommended, etc.
+          </p>
+        </div>
+      </section>
+
+      <section id="tips" class="walkthrough-section" data-title="Tips &amp; Tricks">
+        <div class="section-title">
+          <h2>Tips &amp; Tricks</h2>
+          <button class="hide-section" data-target="tips">hide</button>
+        </div>
+        <div class="section-body">
+          <ul>
+            <li>Save before any major choice or branch.</li>
+            <li>Talk to every character at least once each day/phase.</li>
+            <li>Some scenes only appear at certain times or after certain flags.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="prologue" class="walkthrough-section" data-title="Prologue">
+        <div class="section-title">
+          <h2>Prologue</h2>
+          <button class="hide-section" data-target="prologue">hide</button>
+        </div>
+        <div class="section-body">
+          <ol>
+            <li>After the opening scene, check your messages and interact with the main character.</li>
+            <li>Visit the first location (e.g., cafe / school / office) to trigger the starting event.</li>
+            <li>Follow the prompts until the game gives you free movement or first main choice.</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Example route / character sections -->
+      <section id="route1" class="walkthrough-section" data-title="Route 1">
+        <div class="section-title">
+          <h2>Route 1</h2>
+          <button class="hide-section" data-target="route1">hide</button>
+        </div>
+        <div class="section-body">
+          <p>Describe how to start and follow Route 1. Replace this with your actual steps.</p>
+        </div>
+      </section>
+
+      <section id="route2" class="walkthrough-section" data-title="Route 2">
+        <div class="section-title">
+          <h2>Route 2</h2>
+          <button class="hide-section" data-target="route2">hide</button>
+        </div>
+        <div class="section-body">
+          <p>Describe how to start and follow Route 2. Add choices, important flags, etc.</p>
+        </div>
+      </section>
+
+      <!-- Hidden sections manager -->
+      <section id="hiddenManager">
+        <h2>Manage Hidden Sections</h2>
+        <p>Sections you hide from the menu will appear here so you can unhide them.</p>
+        <ul id="hiddenList">
+          <!-- JS fills this -->
+        </ul>
+      </section>
+
+      <footer id="footer">
+        <p>Made by <strong>Lopnex</strong> – hosted with GitHub Pages.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
