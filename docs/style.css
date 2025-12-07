@@ -6,7 +6,7 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #111; /* sidebars and outer area stay dark */
+  background: #111; /* outer background */
   color: #eee;
 }
 
@@ -15,17 +15,10 @@ body {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr) 220px;
   min-height: 100vh;
-  background: #5697ab; /* 🔹 bring teal background back */
+  background: #4b8b9b; /* 🔹 teal background behind center column */
 }
 
-/* MAIN CONTENT area stays teal */
-#content {
-  padding: 16px 24px;
-  max-width: 1000px;
-  background: #5697ab; /* 🔹 teal main column */
-}
-
-/* LEFT SIDEBAR stays dark */
+/* LEFT SIDEBAR */
 #sidebar {
   padding: 16px;
   background: #151515;
@@ -37,7 +30,54 @@ body {
   overflow-y: auto;
 }
 
-/* RIGHT SIDEBAR stays dark */
+.site-title {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+}
+
+.site-subtitle {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+#sectionList {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+#sectionList li {
+  margin-bottom: 4px;
+}
+
+#sectionList a {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #eee;
+  font-size: 0.95rem;
+}
+
+#sectionList a:hover {
+  background: #2a2a2a;
+}
+
+#sectionList a.active {
+  background: #444;
+}
+
+.info-box {
+  margin-top: 16px;
+  padding: 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  background: #222;
+  color: #ccc;
+}
+
+/* RIGHT SIDEBAR */
 #rightbar {
   padding: 16px;
   background: #151515;
@@ -51,29 +91,212 @@ body {
   gap: 16px;
 }
 
-/* Sections need dark background so they pop */
-.walkthrough-section,
-#hiddenManager {
+.right-icons {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+/* Patreon Logo (small & aligned) */
+#patreon-logo {
+  width: 45px;          /* tweak this if you want smaller/bigger */
+  height: auto;
+  display: block;
+  cursor: pointer;
+  object-fit: contain;
+  margin-left: auto;
+  margin-bottom: 10px;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+#patreon-logo:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Highlight box */
+.highlight-box {
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #101010;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.highlight-box h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 4px;
+}
+
+.highlight-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.highlight-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid #222;
+  font-size: 0.85rem;
+}
+
+.highlight-list li:last-child {
+  border-bottom: none;
+}
+
+/* Manage hidden link under highlight */
+.manage-hidden-link {
+  display: block;
+  margin-top: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #101010;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #eee;
+  text-decoration: none;
+}
+
+.manage-hidden-link:hover {
+  background: #222;
+}
+
+/* MAIN CONTENT (teal middle column) */
+#content {
+  padding: 16px 24px 40px;
+  max-width: 1000px;
+  background: #4b8b9b;        /* 🔹 teal center column */
+  border-left: 1px solid #333;
+  border-right: 1px solid #333;
+}
+
+/* Banner – bigger, responsive, with 1px border */
+.center-banner {
+  margin: 0 auto 16px;
+  text-align: center;
+}
+
+.center-banner img {
+  width: 100%;          /* fill the center column */
+  max-width: 1000px;    /* cap it on huge screens */
+  height: auto;
+  display: block;
+  margin: 0 auto 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.5); /* 🔹 1px border around banner */
+}
+
+/* Page message */
+.top-message {
+  background: #202020;
+  padding: 10px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Walkthrough sections */
+.walkthrough-section {
+  margin-bottom: 24px;
+  padding: 12px 14px;
   background: #1a1a1a;
   border-radius: 4px;
   border: 1px solid #333;
 }
 
-/* Banner stays responsive + centered */
-.center-banner img {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto 16px;
-  border-radius: 6px;
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-/* Mobile responsive: hide right sidebar */
+.section-title h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.hide-section {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #262626;
+  color: #eee;
+  cursor: pointer;
+}
+
+.hide-section:hover {
+  background: #333;
+}
+
+/* Hidden manager */
+#hiddenManager {
+  margin-top: 32px;
+  padding: 12px 14px;
+  border-radius: 4px;
+  background: #181818;
+  border: 1px solid #333;
+}
+
+#hiddenList {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+#hiddenList li {
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+#hiddenList button {
+  padding: 3px 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #262626;
+  color: #eee;
+  cursor: pointer;
+}
+
+#hiddenList button:hover {
+  background: #333;
+}
+
+/* Footer */
+#footer {
+  margin-top: 32px;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+/* Responsive - Hide Right Sidebar on small screens */
 @media (max-width: 800px) {
   #app {
     grid-template-columns: 1fr;
   }
+
+  #sidebar {
+    position: static;
+    width: 100%;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  #content {
+    border-left: none;
+    border-right: none;
+  }
+
   #rightbar {
     display: none;
   }
