@@ -91,9 +91,14 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;  /* 🔹 keep everything at the top */
-  align-items: stretch;
-  gap: 16px;                    /* space between logo and highlight box */
+  justify-content: space-between;   /* 🔹 top cluster + bottom button */
+}
+
+/* top cluster (Patreon + Highlight) */
+.right-top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .right-icons {
@@ -143,6 +148,7 @@ body {
   text-align: center;
 }
 
+/* bottom-pinned Manage Hidden button */
 .manage-hidden-link {
   display: block;
   margin-top: 14px;
@@ -197,12 +203,12 @@ body {
   display: block;
 }
 
-/* Unified section titles */
+/* section titles */
 .content-section h2 {
   margin: 0 0 8px;
 }
 
-/* Header row for title + Hide button */
+/* header row for title + Hide button */
 .section-header {
   display: flex;
   justify-content: space-between;
