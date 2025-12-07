@@ -6,7 +6,7 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #111; /* outer background */
+  background: #111;
   color: #eee;
 }
 
@@ -15,18 +15,16 @@ body {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr) 220px;
   min-height: 100vh;
-  background: #4b8b9b; /* teal behind center column */
+  background: #4b8b9b;
 }
 
-/* ========== LEFT SIDEBAR ========== */
-
+/* LEFT SIDEBAR */
 #sidebar {
   padding: 16px;
   background: #151515;
   border-right: 1px solid #333;
   position: sticky;
   top: 0;
-  align-self: flex-start;
   min-height: 100vh;
 }
 
@@ -44,18 +42,16 @@ body {
   padding: 0;
 }
 
-/* clickable items */
 .nav-link {
   width: 100%;
   text-align: left;
   padding: 6px 8px;
   margin-bottom: 4px;
-  border-radius: 4px;
-  border: none;
   background: transparent;
   color: #eee;
-  font-size: 0.95rem;
   cursor: pointer;
+  border-radius: 4px;
+  border: none;
 }
 
 .nav-link:hover {
@@ -66,21 +62,18 @@ body {
   background: #444;
 }
 
-/* non-clickable headers */
 .nav-header {
   margin: 12px 0 4px;
-  padding: 4px 8px;
+  padding: 4px;
+  text-align: center;
+  color: #ddd;
   font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  color: #ddd;
-  text-align: center;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
 }
 
-/* ========== RIGHT SIDEBAR ========== */
-
+/* RIGHT SIDEBAR */
 #rightbar {
   padding: 16px;
   background: #151515;
@@ -92,75 +85,70 @@ body {
   flex-direction: column;
 }
 
+/* Top social icons */
 .right-icons {
   display: flex;
-  justify-content: space-between; /* 🔹 evenly distribute left → right */
+  justify-content: space-between;
   align-items: center;
-  width: 100%; /* 🔹 use full width of the rightbar */
-  padding: 0 4px; /* small clean margins */
+  width: 100%;
+  padding: 0 4px;
   margin-bottom: 10px;
 }
 
-/* Equal sizing + better visual match */
+/* PERFECT uniform icon visual size */
 #discord-logo,
 #subscribstar-logo,
 #patreon-logo {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
+  background: #222;
+  padding: 6px;
+  border-radius: 50%;
   object-fit: contain;
-  transition: transform 0.15s ease, filter 0.15s ease;
   cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-/* Discord circle looks visually smaller → boost it */
-#discord-logo {
-  width: 48px;
-  height: 48px;
-}
-
-/* Hover */
+/* Hover effect */
 #discord-logo:hover,
 #subscribstar-logo:hover,
 #patreon-logo:hover {
-  transform: scale(1.15);
+  transform: scale(1.12);
   filter: brightness(1.2);
 }
 
-/* Highlight card fills the remaining column height */
+/* Highlight box */
 .highlight-box {
   flex: 1 1 auto;
-  border-radius: 4px;
-  border: 1px solid #333;
   background: #101010;
+  border: 1px solid #333;
+  border-radius: 4px;
   padding: 10px 12px;
-  font-size: 0.9rem;
   display: flex;
   flex-direction: column;
 }
 
 .highlight-box h2 {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  border-bottom: 1px solid #333;
-  padding-bottom: 4px;
   text-align: center;
+  margin: 0 0 8px;
+  border-bottom: 1px solid #333;
 }
 
+/* Highlight items */
 .highlight-list {
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 .highlight-list li {
-  padding: 4px 0;
-  font-size: 0.85rem;
   text-align: center;
+  font-size: 0.85rem;
+  padding: 4px 0;
 }
 
 /* Bottom pinned button */
 .manage-hidden-link {
-  display: block;
   margin-top: auto;
   padding: 6px 8px;
   border-radius: 4px;
@@ -176,11 +164,9 @@ body {
   background: #222;
 }
 
-/* ========== MIDDLE CONTENT ========== */
-
+/* MIDDLE CONTENT */
 #content {
   padding: 0 24px 40px;
-  width: 100%;
   background: #4b8b9b;
   border-left: 1px solid #333;
   border-right: 1px solid #333;
@@ -193,19 +179,17 @@ body {
 
 .center-banner img {
   width: 100%;
-  height: auto;
   border-radius: 6px;
   border: 5px solid rgba(0, 0, 0, 0.7);
-  display: block;
 }
 
 .content-section {
   display: none;
-  margin-bottom: 24px;
-  padding: 16px 18px;
   background: #1a1a1a;
+  padding: 16px 18px;
   border-radius: 4px;
   border: 1px solid #333;
+  margin-bottom: 24px;
 }
 
 .content-section.visible {
@@ -221,8 +205,8 @@ body {
 .hide-section-btn {
   padding: 2px 8px;
   font-size: 0.8rem;
-  border-radius: 4px;
   background: #262626;
+  border-radius: 4px;
   border: 1px solid #555;
   color: #eee;
   cursor: pointer;
@@ -241,12 +225,8 @@ body {
 #hiddenList li {
   display: flex;
   justify-content: space-between;
-  padding: 6px 0;
   border-bottom: 1px solid #333;
-}
-
-#hiddenList button {
-  padding: 2px 6px;
+  padding: 6px 0;
 }
 
 /* Responsive */
