@@ -16,54 +16,68 @@
       <nav>
         <ul id="navList">
           <!-- Top level pages -->
-          <li>
+          <li class="nav-item" data-section="info">
             <button class="nav-link active" data-section="info">
               Information
             </button>
+            <button class="hide-nav" data-section="info">hide</button>
           </li>
-          <li>
+
+          <li class="nav-item" data-section="getting-started">
             <button class="nav-link" data-section="getting-started">
               Getting Started!
             </button>
+            <button class="hide-nav" data-section="getting-started">hide</button>
           </li>
-          <li>
+
+          <li class="nav-item" data-section="main-story">
             <button class="nav-link" data-section="main-story">
               Main Story
             </button>
+            <button class="hide-nav" data-section="main-story">hide</button>
           </li>
-          <li>
+
+          <li class="nav-item" data-section="side-quests">
             <button class="nav-link" data-section="side-quests">
               Side Quests
             </button>
+            <button class="hide-nav" data-section="side-quests">hide</button>
           </li>
-          <li>
+
+          <li class="nav-item" data-section="extra-content">
             <button class="nav-link" data-section="extra-content">
               Extra Content / Tips
             </button>
+            <button class="hide-nav" data-section="extra-content">hide</button>
           </li>
 
           <!-- Main Characters header (non-clickable) -->
           <li class="nav-header">Main Characters</li>
 
-          <li>
+          <li class="nav-item" data-section="adel-reynolds">
             <button class="nav-link" data-section="adel-reynolds">
               Adel Reynolds
             </button>
+            <button class="hide-nav" data-section="adel-reynolds">hide</button>
           </li>
-          <li>
+
+          <li class="nav-item" data-section="gemma-rey">
             <button class="nav-link" data-section="gemma-rey">
               Gemma Rey
             </button>
+            <button class="hide-nav" data-section="gemma-rey">hide</button>
           </li>
-          <li>
+
+          <li class="nav-item" data-section="christine-samson">
             <button class="nav-link" data-section="christine-samson">
               Christine Samson
             </button>
+            <button class="hide-nav" data-section="christine-samson">hide</button>
           </li>
 
           <!-- Residents header (non-clickable) -->
           <li class="nav-header">Horton Bay Residents</li>
-          <!-- add more resident buttons here later if you want -->
+          <!-- add more resident nav-items here later if you want -->
         </ul>
       </nav>
     </aside>
@@ -148,13 +162,16 @@
         </p>
       </section>
 
-      <!-- Manage Hidden Sections target for the right-side link -->
-      <section id="hiddenManager" class="manager-section">
+      <!-- Manage Hidden Sections page (shown when you click from the right or left, not always visible) -->
+      <section id="hiddenManager" class="content-section">
         <h2>Manage Hidden Sections</h2>
         <p>
-          This is a placeholder for managing hidden sections. You can use this area
-          later for notes, or to describe any hide/show behavior you add to the page.
+          Sections you hide from the left menu will appear here. Click "Unhide"
+          to add them back into the navigation.
         </p>
+        <ul id="hiddenList">
+          <!-- filled by JS -->
+        </ul>
       </section>
 
       <footer id="footer">
@@ -183,8 +200,8 @@
           <li><strong>New in 0.6.0.2</strong></li>
         </ul>
 
-        <!-- Manage Hidden Sections link under the version text -->
-        <a href="#hiddenManager" class="manage-hidden-link">
+        <!-- 🔹 Right-side button that opens the Manage Hidden Sections page in the middle -->
+        <a href="#" class="manage-hidden-link" data-section="hiddenManager">
           Manage Hidden Sections
         </a>
       </div>
@@ -192,11 +209,14 @@
 
   </div>
 
-  <!-- Simple JS to switch visible section -->
+  <!-- Simple JS: switch visible sections + hide/unhide nav items -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const links = document.querySelectorAll('.nav-link');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const manageHiddenLinks = document.querySelectorAll('.manage-hidden-link');
       const sections = document.querySelectorAll('.content-section');
+      const hiddenList = document.getElementById('hiddenList');
+      const hideButtons = document.querySelectorAll('.hide-nav');
 
       function showSection(id) {
         sections.forEach(sec => {
@@ -204,17 +224,85 @@
         });
       }
 
-      links.forEach(btn => {
-        btn.addEventListener('click', () => {
+      function setActiveNav(id) {
+        navLinks.forEach(btn => {
+          const sec = btn.getAttribute('data-section');
+          btn.classList.toggle('active', sec === id);
+        });
+      }
+
+      // Left sidebar: click to show section
+      navLinks.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
           const target = btn.getAttribute('data-section');
-          // nav active state
-          links.forEach(b => b.classList.toggle('active', b === btn));
-          // show the chosen section
+          if (!target) return;
           showSection(target);
-          // scroll to top of content on small screens
+          setActiveNav(target);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       });
+
+      // Right sidebar: Manage Hidden Sections opens that page
+      manageHiddenLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = link.getAttribute('data-section');
+          if (!target) return;
+          showSection(target);
+          // no left nav gets "active" here, that's okay
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Hide buttons on left nav
+      hideButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const sectionId = btn.getAttribute('data-section');
+          const navItem = btn.closest('.nav-item');
+          if (!navItem) return;
+
+          // hide from left nav
+          navItem.style.display = 'none';
+
+          // if currently viewing this section, switch to Information (if it exists)
+          const currentVisible = document.querySelector('.content-section.visible');
+          if (currentVisible && currentVisible.id === sectionId) {
+            if (document.getElementById('info')) {
+              showSection('info');
+              setActiveNav('info');
+            }
+          }
+
+          // add to hidden list if not already there
+          if (hiddenList && !hiddenList.querySelector('[data-section="' + sectionId + '"]')) {
+            const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
+            const li = document.createElement('li');
+            li.setAttribute('data-section', sectionId);
+            li.innerHTML = `
+              <span>${label}</span>
+              <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
+            `;
+            hiddenList.appendChild(li);
+          }
+        });
+      });
+
+      // Unhide via Manage Hidden Sections list
+      if (hiddenList) {
+        hiddenList.addEventListener('click', (e) => {
+          const btn = e.target.closest('.unhide-btn');
+          if (!btn) return;
+          const sectionId = btn.getAttribute('data-section');
+          const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+          if (navItem) {
+            navItem.style.display = ''; // show again
+          }
+          // remove from hidden list
+          btn.parentElement.remove();
+        });
+      }
     });
   </script>
 </body>
