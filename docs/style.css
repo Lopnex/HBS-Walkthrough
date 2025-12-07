@@ -75,6 +75,83 @@ body {
   color: #ccc;
 }
 
+/* Right sidebar: Patreon + Highlight */
+
+#rightbar {
+  width: 220px;
+  padding: 16px;
+  background: #151515;
+  border-left: 1px solid #333;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.right-icons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Patreon circle icon (top right) */
+.icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 2px solid #ff6a00;
+}
+
+.patreon-icon {
+  background: #ff6a00;
+  color: #111;
+}
+
+.patreon-icon:hover {
+  background: #ff8c33;
+}
+
+/* Highlight box */
+
+.highlight-box {
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #101010;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.highlight-box h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 4px;
+}
+
+.highlight-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.highlight-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid #222;
+  font-size: 0.85rem;
+}
+
+.highlight-list li:last-child {
+  border-bottom: none;
+}
+
 .patreon-box {
   margin: 8px 0 16px;
   padding: 10px;
@@ -216,5 +293,10 @@ body {
     max-height: none;
     border-right: none;
     border-bottom: 1px solid #333;
+  }
+
+  /* Hide right sidebar on mobile */
+  #rightbar {
+    display: none;
   }
 }
