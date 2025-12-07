@@ -96,27 +96,37 @@ body {
   justify-content: flex-end;
 }
 
-/* Patreon circle icon (top right) */
+/* Patreon circle icon (image inside circle) */
 .icon-circle {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  overflow: hidden;            /* keep image perfectly circular */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 700;
-  border: 2px solid #ff6a00;
+  padding: 0;
+  border: none;                /* remove orange square border */
+  background: transparent;     /* let the image show normally */
+  cursor: pointer;
+  transition: transform 0.15s ease-in-out;
 }
 
+.icon-circle:hover {
+  transform: scale(1.08);
+}
+
+/* make the image fill the circle cleanly */
+.icon-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* we don't need special background on patreon-icon anymore,
+   but you can keep this for future tweaks if you want */
 .patreon-icon {
-  background: #ff6a00;
-  color: #111;
-}
-
-.patreon-icon:hover {
-  background: #ff8c33;
 }
 
 /* Highlight box */
