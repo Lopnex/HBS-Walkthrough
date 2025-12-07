@@ -15,7 +15,7 @@ body {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr) 220px;
   min-height: 100vh;
-  background: #4b8b9b; /* 🔹 teal background behind center column */
+  background: #4b8b9b; /* teal behind center column */
 }
 
 /* LEFT SIDEBAR */
@@ -26,8 +26,6 @@ body {
   position: sticky;
   top: 0;
   align-self: flex-start;
-  max-height: 100vh;
-  overflow-y: auto;
 }
 
 .site-title {
@@ -85,7 +83,6 @@ body {
   position: sticky;
   top: 0;
   align-self: flex-start;
-  max-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -128,6 +125,7 @@ body {
   font-size: 1rem;
   border-bottom: 1px solid #333;
   padding-bottom: 4px;
+  text-align: center;
 }
 
 .highlight-list {
@@ -136,14 +134,28 @@ body {
   padding: 0;
 }
 
+/* Each highlight row */
 .highlight-list li {
   padding: 4px 0;
   border-bottom: 1px solid #222;
   font-size: 0.85rem;
+  text-align: center;
 }
 
 .highlight-list li:last-child {
   border-bottom: none;
+}
+
+/* Clickable "New in ..." links */
+.highlight-list a {
+  color: #eee;
+  text-decoration: none;
+  display: block;
+  padding: 3px 0;
+}
+
+.highlight-list a:hover {
+  background: #222;
 }
 
 /* Manage hidden link under highlight */
@@ -168,25 +180,26 @@ body {
 #content {
   padding: 16px 24px 40px;
   max-width: 1000px;
-  background: #4b8b9b;        /* 🔹 teal center column */
+  background: #4b8b9b;        /* teal center column */
   border-left: 1px solid #333;
   border-right: 1px solid #333;
+  min-height: 100vh;          /* make borders go all the way down */
 }
 
-/* Banner – bigger, responsive, with 1px border */
+/* Banner – responsive, 5px border */
 .center-banner {
   margin: 0 auto 16px;
   text-align: center;
 }
 
 .center-banner img {
-  width: 100%;          /* fill the center column */
-  max-width: 1000px;    /* cap it on huge screens */
+  width: 100%;             /* fill the center column */
+  max-width: 1000px;       /* cap it on huge screens */
   height: auto;
   display: block;
   margin: 0 auto 16px;
   border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.5); /* 🔹 1px border around banner */
+  border: 5px solid rgba(0, 0, 0, 0.7); /* 🔹 thicker 5px border */
 }
 
 /* Page message */
@@ -287,7 +300,6 @@ body {
   #sidebar {
     position: static;
     width: 100%;
-    max-height: none;
     border-right: none;
     border-bottom: 1px solid #333;
   }
