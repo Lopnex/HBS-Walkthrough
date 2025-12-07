@@ -183,13 +183,11 @@ body {
 /* MAIN CONTENT (teal middle column) */
 #content {
   padding: 16px 24px 40px;
-  max-width: 1000px;
+  width: 100%;                /* 🔹 stretch to full center column */
   background: #4b8b9b;        /* teal center column */
   border-left: 1px solid #333;
   border-right: 1px solid #333;
-  min-height: 100vh;          /* make borders go all the way down */
-  margin-left: 260px;         /* make room for left sidebar */
-  margin-right: 220px;        /* make room for right sidebar */
+  min-height: 100vh;          /* borders go all the way down */
 }
 
 /* Banner – responsive, 5px border */
