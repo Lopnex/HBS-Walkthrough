@@ -91,7 +91,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;  /* 🔹 keep everything at the top */
+  align-items: stretch;
+  gap: 16px;                    /* space between logo and highlight box */
 }
 
 .right-icons {
@@ -195,12 +197,12 @@ body {
   display: block;
 }
 
-/* 🔹 Unified section titles */
+/* Unified section titles */
 .content-section h2 {
   margin: 0 0 8px;
 }
 
-/* 🔹 Hide button ONLY for sections that HAVE one */
+/* Header row for title + Hide button */
 .section-header {
   display: flex;
   justify-content: space-between;
