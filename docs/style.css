@@ -9,15 +9,16 @@ body {
   color: #eee;
 }
 
+/* Layout: left nav, main, right sidebar */
 #app {
-  display: flex;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 220px;
   min-height: 100vh;
 }
 
-/* Sidebar */
+/* LEFT SIDEBAR */
 
 #sidebar {
-  width: 260px;
   padding: 16px;
   background: #151515;
   border-right: 1px solid #333;
@@ -75,10 +76,9 @@ body {
   color: #ccc;
 }
 
-/* Right sidebar: Patreon + Highlight */
+/* RIGHT SIDEBAR: Patreon + Highlight */
 
 #rightbar {
-  width: 220px;
   padding: 16px;
   background: #151515;
   border-left: 1px solid #333;
@@ -152,10 +152,9 @@ body {
   border-bottom: none;
 }
 
-/* Main content */
+/* MAIN CONTENT */
 
 #content {
-  flex: 1;
   padding: 16px 24px;
   max-width: 1000px;
 }
@@ -255,7 +254,7 @@ body {
 
 @media (max-width: 800px) {
   #app {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   #sidebar {
