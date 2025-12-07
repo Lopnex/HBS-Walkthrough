@@ -152,35 +152,6 @@ body {
   border-bottom: none;
 }
 
-.patreon-box {
-  margin: 8px 0 16px;
-  padding: 10px;
-  border-radius: 6px;
-  background: #241515;
-  border: 1px solid #663333;
-  font-size: 0.9rem;
-  color: #f5d5d5;
-}
-
-.patreon-box p {
-  margin: 0 0 8px;
-}
-
-.patreon-btn {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  background: #ff6a00;
-  color: #111;
-}
-
-.patreon-btn:hover {
-  background: #ff8c33;
-}
-
 /* Main content */
 
 #content {
