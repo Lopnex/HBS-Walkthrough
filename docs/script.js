@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const sections = Array.from(
     document.querySelectorAll(".walkthrough-section")
@@ -31,14 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Hide link if section is hidden
     if (hiddenSet.has(id)) {
       li.style.display = "none";
-      addHiddenRow(id, title, section, hiddenSet);
+      addHiddenRow(id, title, hiddenSet);
     }
 
     // Attach hide button
     const hideBtn = section.querySelector(".hide-section");
     if (hideBtn) {
       hideBtn.addEventListener("click", () => {
-        hideSection(id, title, section, hiddenSet);
+        hideSection(id, title, hiddenSet);
       });
     }
   });
@@ -65,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  function hideSection(id, title, section, hiddenSet) {
+  function hideSection(id, title, hiddenSet) {
     // Hide from menu
     const link = sectionList.querySelector(`a[data-section-id="${id}"]`);
     if (link && link.parentElement) {
@@ -74,10 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     hiddenSet.add(id);
     saveHidden(hiddenSet);
-    addHiddenRow(id, title, section, hiddenSet);
+    addHiddenRow(id, title, hiddenSet);
   }
 
-  function addHiddenRow(id, title, section, hiddenSet) {
+  function addHiddenRow(id, title, hiddenSet) {
     // Don't duplicate rows
     if (hiddenList.querySelector(`li[data-section-id="${id}"]`)) return;
 
