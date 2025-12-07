@@ -9,154 +9,143 @@
 <body>
   <div id="app">
 
-    <!-- Sidebar -->
+    <!-- LEFT SIDEBAR -->
     <aside id="sidebar">
       <h1 class="site-title">Horton Bay Stories Walkthrough</h1>
-      <p class="site-subtitle">Quick navigation</p>
-      
+
       <nav>
-        <ul id="sectionList">
+        <ul id="navList">
+          <!-- Top level pages -->
+          <li>
+            <button class="nav-link active" data-section="info">
+              Information
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-section="getting-started">
+              Getting Started!
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-section="main-story">
+              Main Story
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-section="side-quests">
+              Side Quests
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-section="extra-content">
+              Extra Content / Tips
+            </button>
+          </li>
 
-          <!-- Main sections -->
-          <li><a href="#info">Information</a></li>
-          <li><a href="#getting-started">Getting Started!</a></li>
-          <li><a href="#main-story">Main Story</a></li>
-          <li><a href="#side-quests">Side Quests</a></li>
-          <li><a href="#extra-tips">Extra Content / Tips</a></li>
+          <!-- Main Characters header (non-clickable) -->
+          <li class="nav-header">Main Characters</li>
 
-          <!-- Characters -->
-          <li class="nav-group-title">Main Characters</li>
-          <li><a href="#char-adel">Adel Reynolds</a></li>
-          <li><a href="#char-gemma">Gemma Rey</a></li>
-          <li><a href="#char-christine">Christine Samson</a></li>
+          <li>
+            <button class="nav-link" data-section="adel-reynolds">
+              Adel Reynolds
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-section="gemma-rey">
+              Gemma Rey
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-section="christine-samson">
+              Christine Samson
+            </button>
+          </li>
 
-          <!-- Residents -->
-          <li class="nav-group-title">Horton Bay Residents</li>
-          <!-- Add residents later -->
-
+          <!-- Residents header (non-clickable) -->
+          <li class="nav-header">Horton Bay Residents</li>
+          <!-- you can add more character buttons under here later -->
         </ul>
       </nav>
-
-      <div class="info-box">
-        <p>This page uses JavaScript. If the menu doesn't work, make sure JS is enabled.</p>
-      </div>
     </aside>
 
-    <!-- Main content -->
+    <!-- MIDDLE CONTENT -->
     <main id="content">
 
-      <!-- 🔹 Banner -->
+      <!-- Banner -->
       <div class="center-banner">
         <img src="Lumphorngames-banner.png" alt="Lumphorn Games banner" />
       </div>
 
-      <header class="top-message">
+      <!-- Main sections (only one visible at a time) -->
+
+      <!-- Information (default visible) -->
+      <section id="info" class="content-section visible">
+        <h2>Information</h2>
         <p>
-          Click a section title in the menu on the left to jump to it.
-          Use the “hide” button on any section to remove it from the menu.
-          You can unhide sections at the bottom of the page.
+          Basic info about the game: version, routes, spoilers, and general notes.
+          You can describe which choices matter, if saves are recommended, etc.
         </p>
-      </header>
-
-      <!-- Walkthrough sections -->
-      <section id="info" class="walkthrough-section" data-title="Information">
-        <div class="section-title">
-          <h2>Information</h2>
-          <button class="hide-section" data-target="info">hide</button>
-        </div>
-        <div class="section-body">
-          <p>
-            Basic info about the game: version, routes, spoilers, and general notes.
-            You can describe which choices matter, if saves are recommended, etc.
-          </p>
-        </div>
       </section>
 
-      <section id="getting-started" class="walkthrough-section" data-title="Getting Started!">
-        <div class="section-title">
-          <h2>Getting Started!</h2>
-          <button class="hide-section" data-target="getting-started">hide</button>
-        </div>
-        <div class="section-body">
-          <p>
-            First steps and game basics go here.
-          </p>
-        </div>
+      <!-- Getting Started -->
+      <section id="getting-started" class="content-section">
+        <h2>Getting Started!</h2>
+        <p>
+          Intro details about starting a new game, recommended settings, and
+          anything a new player should know before jumping in.
+        </p>
       </section>
 
-      <section id="main-story" class="walkthrough-section" data-title="Main Story">
-        <div class="section-title">
-          <h2>Main Story</h2>
-          <button class="hide-section" data-target="main-story">hide</button>
-        </div>
-        <div class="section-body">
-          <p>
-            Main story walkthrough goes here.
-          </p>
-        </div>
+      <!-- Main Story -->
+      <section id="main-story" class="content-section">
+        <h2>Main Story</h2>
+        <p>
+          Put your main story walkthrough here: key choices, chapter order,
+          and important flags so players can follow the core route.
+        </p>
       </section>
 
-      <section id="side-quests" class="walkthrough-section" data-title="Side Quests">
-        <div class="section-title">
-          <h2>Side Quests</h2>
-          <button class="hide-section" data-target="side-quests">hide</button>
-        </div>
-        <div class="section-body">
-          <p>
-            Side quest content goes here.
-          </p>
-        </div>
+      <!-- Side Quests -->
+      <section id="side-quests" class="content-section">
+        <h2>Side Quests</h2>
+        <p>
+          Use this section to list and detail optional quests, how to start them,
+          and any rewards or missable content.
+        </p>
       </section>
 
-      <section id="extra-tips" class="walkthrough-section" data-title="Extra Content / Tips">
-        <div class="section-title">
-          <h2>Extra Content / Tips</h2>
-          <button class="hide-section" data-target="extra-tips">hide</button>
-        </div>
-        <div class="section-body">
-          <p>
-            Extra unlockables, strategies, and info go here.
-          </p>
-        </div>
+      <!-- Extra Content / Tips -->
+      <section id="extra-content" class="content-section">
+        <h2>Extra Content / Tips</h2>
+        <p>
+          General hints, tricks, hidden scenes, replay tips, or anything
+          that doesn’t fit neatly into the main story or side quests.
+        </p>
       </section>
 
-      <!-- Character Sections -->
-      <section id="char-adel" class="walkthrough-section" data-title="Adel Reynolds">
-        <div class="section-title">
-          <h2>Adel Reynolds</h2>
-          <button class="hide-section" data-target="char-adel">hide</button>
-        </div>
-        <div class="section-body">
-          <p>Adel's route info will go here.</p>
-        </div>
+      <!-- Character pages -->
+      <section id="adel-reynolds" class="content-section">
+        <h2>Adel Reynolds</h2>
+        <p>
+          Notes about Adel: how to meet them, route requirements,
+          important choices, and key scenes.
+        </p>
       </section>
 
-      <section id="char-gemma" class="walkthrough-section" data-title="Gemma Rey">
-        <div class="section-title">
-          <h2>Gemma Rey</h2>
-          <button class="hide-section" data-target="char-gemma">hide</button>
-        </div>
-        <div class="section-body">
-          <p>Gemma's route info will go here.</p>
-        </div>
+      <section id="gemma-rey" class="content-section">
+        <h2>Gemma Rey</h2>
+        <p>
+          Notes about Gemma: relationship tips, quest steps,
+          and any unique scenes tied to Gemma.
+        </p>
       </section>
 
-      <section id="char-christine" class="walkthrough-section" data-title="Christine Samson">
-        <div class="section-title">
-          <h2>Christine Samson</h2>
-          <button class="hide-section" data-target="char-christine">hide</button>
-        </div>
-        <div class="section-body">
-          <p>Christine's route info will go here.</p>
-        </div>
-      </section>
-
-      <!-- Hidden sections manager -->
-      <section id="hiddenManager">
-        <h2>Manage Hidden Sections</h2>
-        <p>Sections you hide from the menu will appear here so you can unhide them.</p>
-        <ul id="hiddenList">
-        </ul>
+      <section id="christine-samson" class="content-section">
+        <h2>Christine Samson</h2>
+        <p>
+          Notes about Christine: how to progress her storyline,
+          choices that matter, and recommended order for events.
+        </p>
       </section>
 
       <footer id="footer">
@@ -166,8 +155,6 @@
 
     <!-- RIGHT SIDEBAR -->
     <aside id="rightbar">
-
-      <!-- Patreon Logo -->
       <div class="right-icons">
         <a href="https://patreon.com/Lumphorngames"
            target="_blank"
@@ -184,18 +171,37 @@
       <div class="highlight-box">
         <h2>Highlight</h2>
         <ul class="highlight-list">
-          <li><strong>New in 0.6.0.2</strong></li>
+          <li><strong>0.6.0.2</strong></li>
         </ul>
-
-        <a href="#hiddenManager" class="manage-hidden-link">
-          Manage Hidden Sections
-        </a>
       </div>
-
     </aside>
 
   </div>
 
-  <script src="script.js"></script>
+  <!-- Simple JS to switch visible section -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('.content-section');
+
+      function showSection(id) {
+        sections.forEach(sec => {
+          sec.classList.toggle('visible', sec.id === id);
+        });
+      }
+
+      links.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-section');
+          // nav active state
+          links.forEach(b => b.classList.toggle('active', b === btn));
+          // show the chosen section
+          showSection(target);
+          // scroll to top of content on small screens
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    });
+  </script>
 </body>
 </html>
