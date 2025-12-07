@@ -33,6 +33,9 @@ body {
 .site-title {
   margin: 0 0 16px;
   font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  padding-bottom: 6px;
 }
 
 #navList {
@@ -65,15 +68,15 @@ body {
 
 /* non-clickable headers */
 .nav-header {
-  margin: 10px 0 4px;
+  margin: 12px 0 4px;
   padding: 4px 8px;
   font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #bbb;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #ddd;
   text-align: center;
   border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
 }
 
 /* ========== RIGHT SIDEBAR ========== */
@@ -88,7 +91,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
 }
 
 .right-icons {
@@ -97,14 +100,12 @@ body {
   margin-bottom: 8px;
 }
 
-/* Patreon logo */
 #patreon-logo {
   width: 45px;
   height: auto;
-  display: block;
-  cursor: pointer;
   object-fit: contain;
   transition: transform 0.15s ease, filter 0.15s ease;
+  cursor: pointer;
 }
 
 #patreon-logo:hover {
@@ -112,7 +113,6 @@ body {
   filter: brightness(1.2);
 }
 
-/* Highlight box */
 .highlight-box {
   border-radius: 4px;
   border: 1px solid #333;
@@ -141,10 +141,9 @@ body {
   text-align: center;
 }
 
-/* Right-side Manage Hidden link */
 .manage-hidden-link {
   display: block;
-  margin-top: 10px;
+  margin-top: 14px;
   padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #333;
@@ -164,28 +163,27 @@ body {
 #content {
   padding: 0 24px 40px;
   width: 100%;
-  background: #4b8b9b;        /* teal center column */
+  background: #4b8b9b;
   border-left: 1px solid #333;
   border-right: 1px solid #333;
   min-height: 100vh;
 }
 
-/* Banner – full width (inside content) */
+/* Banner */
 .center-banner {
   margin: 0 -24px 16px;
 }
 
 .center-banner img {
-  width: 100%;             /* fills center column */
+  width: 100%;
   height: auto;
-  display: block;
   border-radius: 6px;
   border: 5px solid rgba(0, 0, 0, 0.7);
+  display: block;
 }
 
-/* Content sections */
 .content-section {
-  display: none;           /* hidden by default */
+  display: none;
   margin-bottom: 24px;
   padding: 16px 18px;
   background: #1a1a1a;
@@ -194,29 +192,27 @@ body {
 }
 
 .content-section.visible {
-  display: block;          /* only active one is shown */
+  display: block;
 }
 
-/* NEW: header row with title + Hide button */
+/* 🔹 Unified section titles */
+.content-section h2 {
+  margin: 0 0 8px;
+}
+
+/* 🔹 Hide button ONLY for sections that HAVE one */
 .section-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
+  align-items: center;
 }
 
-.section-header h2 {
-  margin: 0;
-}
-
-/* NEW: middle Hide button style */
 .hide-section-btn {
   padding: 2px 8px;
   font-size: 0.8rem;
   border-radius: 4px;
-  border: 1px solid #555;
   background: #262626;
+  border: 1px solid #555;
   color: #eee;
   cursor: pointer;
 }
@@ -225,71 +221,31 @@ body {
   background: #333;
 }
 
-/* Manage Hidden list styling */
+/* Hidden list */
 #hiddenList {
   list-style: none;
-  margin: 12px 0 0;
   padding: 0;
 }
 
 #hiddenList li {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 4px 0;
+  padding: 6px 0;
   border-bottom: 1px solid #333;
-  font-size: 0.9rem;
 }
 
-#hiddenList li:last-child {
-  border-bottom: none;
+#hiddenList button {
+  padding: 2px 6px;
 }
 
-#hiddenList .unhide-btn {
-  padding: 2px 8px;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background: #262626;
-  color: #eee;
-  cursor: pointer;
-}
-
-#hiddenList .unhide-btn:hover {
-  background: #333;
-}
-
-/* Footer */
-#footer {
-  margin-top: 32px;
-  font-size: 0.8rem;
-  color: #111;
-  text-align: center;
-}
-
-/* ========== Responsive ========== */
-
+/* Responsive */
 @media (max-width: 800px) {
   #app {
     grid-template-columns: 1fr;
   }
-
-  #sidebar {
-    position: static;
-    min-height: auto;
-    border-right: none;
-    border-bottom: 1px solid #333;
-  }
-
   #rightbar {
-    display: none; /* hide right sidebar on small screens */
+    display: none;
   }
-
-  #content {
-    border-left: none;
-    border-right: none;
-  }
-
   .center-banner {
     margin: 0 0 16px;
   }
