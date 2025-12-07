@@ -86,16 +86,15 @@ body {
   background: #151515;
   border-left: 1px solid #333;
 
-  /* 🔹 force full-height column and use flexbox */
+  /* full-height sidebar using flexbox */
   position: sticky;
   top: 0;
-  height: 100vh;        /* <– this forces it to fill the viewport */
-  align-self: stretch;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-/* Patreon + highlight cluster (top) */
+/* Patreon + highlight cluster at the top */
 .right-top {
   display: flex;
   flex-direction: column;
@@ -121,12 +120,17 @@ body {
   filter: brightness(1.2);
 }
 
+/* Highlight card now fills remaining height */
 .highlight-box {
+  flex: 1 1 auto;                 /* take all remaining space in sidebar */
   border-radius: 4px;
   border: 1px solid #333;
   background: #101010;
   padding: 10px 12px;
   font-size: 0.9rem;
+
+  display: flex;                  /* stack content vertically */
+  flex-direction: column;
 }
 
 .highlight-box h2 {
@@ -149,10 +153,10 @@ body {
   text-align: center;
 }
 
-/* 🔹 bottom-pinned Manage Hidden button */
+/* bottom-pinned Manage Hidden Sections button INSIDE highlight card */
 .manage-hidden-link {
   display: block;
-  margin-top: auto;       /* uses flex to push it to the bottom */
+  margin-top: auto;               /* pushes it to the bottom of highlight-box */
   padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #333;
