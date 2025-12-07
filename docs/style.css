@@ -167,6 +167,7 @@ body {
 #content {
   padding: 16px 24px;
   max-width: 1000px;
+  background: #5697ab;   /* new center color */
 }
 
 .top-message {
