@@ -119,6 +119,9 @@ body {
   background: #101010;
   padding: 10px 12px;
   font-size: 0.9rem;
+  display: flex;              /* 🔹 makes inner content vertical */
+  flex-direction: column;
+  flex-grow: 1;               /* 🔹 fills space so button can sit at bottom */
 }
 
 .highlight-box h2 {
@@ -139,6 +142,25 @@ body {
   padding: 4px 0;
   font-size: 0.85rem;
   text-align: center;
+  border-bottom: none;        /* no lines under items */
+}
+
+/* "Manage Hidden Sections" link pinned at bottom */
+.manage-hidden-link {
+  margin-top: auto;           /* 🔹 pushes this to the bottom of the box */
+  display: block;
+  padding: 8px 0;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #181818;
+  text-align: center;
+  color: #eee;
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.manage-hidden-link:hover {
+  background: #242424;
 }
 
 /* ========== MIDDLE CONTENT ========== */
