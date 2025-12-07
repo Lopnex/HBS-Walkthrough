@@ -107,6 +107,9 @@ body {
   margin-bottom: 8px;
 }
 
+/* Top social icons (Discord, Subscribestar, Patreon) */
+#discord-logo,
+#subscribstar-logo,
 #patreon-logo {
   width: 45px;
   height: auto;
@@ -115,6 +118,8 @@ body {
   cursor: pointer;
 }
 
+#discord-logo:hover,
+#subscribstar-logo:hover,
 #patreon-logo:hover {
   transform: scale(1.1);
   filter: brightness(1.2);
