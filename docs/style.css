@@ -97,7 +97,7 @@ body {
 }
 
 /* Patreon Logo (smaller + aligned) */
-.patreon-link img {
+#patreon-logo {
   width: 45px;          /* change to 32px or 60px if you want smaller/bigger */
   height: auto;
   display: block;
@@ -108,7 +108,7 @@ body {
   transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-.patreon-link img:hover {
+#patreon-logo:hover {
   transform: scale(1.1);
   filter: brightness(1.2);
 }
@@ -151,15 +151,16 @@ body {
   max-width: 1000px;
 }
 
-/* Center Banner */
+/* Center Banner – responsive */
 .center-banner {
   margin: 0 auto 16px;
   text-align: center;
 }
 
 .center-banner img {
+  width: 100%;      /* always fits the content column */
   max-width: 100%;
-  height: auto;
+  height: auto;     /* keeps aspect ratio */
   display: block;
   margin: 0 auto;
   border-radius: 6px;
@@ -263,7 +264,7 @@ body {
   #sidebar {
     position: static;
     width: 100%;
-    max-height: none;
+  max-height: none;
     border-right: none;
     border-bottom: 1px solid #333;
   }
