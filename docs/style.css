@@ -264,7 +264,7 @@ body {
   #sidebar {
     position: static;
     width: 100%;
-  max-height: none;
+    max-height: none;
     border-right: none;
     border-bottom: 1px solid #333;
   }
