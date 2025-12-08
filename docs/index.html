@@ -237,15 +237,24 @@
 
       <div class="highlight-box">
         <h2>Highlight</h2>
+
+        <!-- top highlight item -->
         <ul class="highlight-list">
           <li>
             <button
-              class="highlight-option highlight-option-new active"
+              class="highlight-option highlight-option-new"
               data-highlight="new"
             >
               New in 0.6.0.2
             </button>
           </li>
+        </ul>
+
+        <!-- Filters header + items -->
+        <div class="highlight-subheader">Filters</div>
+
+        <ul class="highlight-filters">
+          <li class="filter-label">Current Storylines</li>
           <li>
             <button
               class="highlight-option highlight-option-ntr"
@@ -395,7 +404,7 @@
         });
       });
 
-      // start on Information
+      // start on Information in the middle
       showSection('info');
       setActiveNav('info');
     });
