@@ -2701,24 +2701,32 @@
         <!-- Filters block pinned to bottom of highlight box -->
         <div class="highlight-subheader">Filters</div>
 
-        <ul class="highlight-filters">
-          <li>
-            <button
-              class="highlight-option highlight-option-current"
-              data-highlight="current"
-            >
-              Current Storylines
-            </button>
-          </li>
-          <li>
-            <button
-              class="highlight-option highlight-option-ntr"
-              data-highlight="ntr"
-            >
-              NTR
-            </button>
-          </li>
-        </ul>
+       <ul class="highlight-filters">
+  <li>
+    <button
+      class="highlight-option highlight-option-current"
+      data-highlight="current"
+    >
+      Current Storylines
+    </button>
+  </li>
+  <li>
+    <button
+      class="highlight-option highlight-option-pregnancy"
+      data-highlight="pregnancy"
+    >
+      Pregnancy
+    </button>
+  </li>
+  <li>
+    <button
+      class="highlight-option highlight-option-ntr"
+      data-highlight="ntr"
+    >
+      NTR
+    </button>
+  </li>
+</ul>
 
         <a href="#" class="manage-hidden-link" data-section="hiddenManager">
           Manage Hidden Sections
@@ -2792,12 +2800,36 @@
       'jill-romer',
       'nigel-cunningham',
       'dr-jones',
-      'thomas-wilson'
+      'thomas-wilson',
+
+      // EXTRA “current” names you listed
+      'john-abrahms',      // "Abrahms"
+      'lucas-channing',    // Lucas
+      'jackson-reines',    // Jackson
+      'jeremy-rodgers',    // Jeremy
+      'steve-randall',     // Steve
+      'frank',             // Frank
+      'liam-norton',       // Liam
+      'digby-stanfield',   // Digby
+      'rupert-dodson',     // Rupert
+      'horrace-derby',     // Horrace
+      'chase-taylor',      // Chase Taylor
+      'flint-greenwood',   // Flint (renamed)
+      'greg-hutchins',     // Greg
+      'connor-gilding',    // Connor
+      'lionel-gilding',    // Lionel
+      'justin-morris',     // Justin
+      'bruce-kreiger',     // Bruce
+      'francis-dean',      // Francis
+      'jessica-martin',    // Martin (Jessica Martin)
+      // Nightclub people you said should be in Current & NTR:
+      'nightclub-barman',
+      'nightclub-stripper'
     ]);
 
     // IDs that should be red when NTR is active
     const ntrRedIds = new Set([
-      // story girls
+      // main NTR / story girls
       'adel-reynolds',
       'christine-samson',
       'gemma-rey',
@@ -2815,22 +2847,51 @@
       'shelly-bruce',
       'tilly-reynolds',
       'jessica-martin',
-      // paths group
-      'lucas-channing',
-      'frank',
-      'nigel-cunningham',
-      'dr-jones',
-      'thomas-wilson'
+
+      // everyone you explicitly asked to be NTR + Current:
+      'john-abrahms',      // Abrahms
+      'nigel-cunningham',  // Nigel
+      'lucas-channing',    // Lucas
+      'jackson-reines',    // Jackson
+      'jeremy-rodgers',    // Jeremy
+      'steve-randall',     // Steve
+      'thomas-wilson',     // Thomas
+      'frank',             // Frank
+      'liam-norton',       // Liam
+      'digby-stanfield',   // Digby
+      'rupert-dodson',     // Rupert
+      'horrace-derby',     // Horrace
+      'chase-taylor',      // Chase Taylor
+      'flint-greenwood',   // Flint
+      'dr-jones',          // Doc Jones
+      'greg-hutchins',     // Greg
+      'connor-gilding',    // Connor
+      'lionel-gilding',    // Lionel
+      'justin-morris',     // Justin
+      'bruce-kreiger',     // Bruce
+      'francis-dean',      // Francis
+      'jessica-martin',    // Martin
+
+      // nightclub trio you said should be NTR + Current
+      'nightclub-barman',
+      'nightclub-stripper'
     ]);
 
     // IDs that move into the "Paths" subcategory
+    // (Thomas removed from paths as requested)
     const pathIds = [
       'lucas-channing',
       'frank',
       'nigel-cunningham',
-      'dr-jones',
-      'thomas-wilson'
+      'dr-jones'
     ];
+
+    // Pregnancy set – pink names
+    const pregnancyIds = new Set([
+      'adel-reynolds',
+      'gemma-rey',
+      'christine-samson'
+    ]);
 
     // Store original positions for "Paths" items so we can restore them
     const originalPositions = new Map();
@@ -2853,154 +2914,133 @@
     }
 
     function setActiveNav(id) {
-      navLinks.forEach(btn => {
-        const sec = btn.getAttribute('data-section');
-        btn.classList.toggle('active', sec === id);
+      navLinks.forEach(link => {
+        const sec = link.getAttribute('data-section');
+        link.classList.toggle('active', sec === id);
       });
     }
 
-    navLinks.forEach(btn => {
-      btn.addEventListener('click', e => {
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = btn.getAttribute('data-section');
-        if (!target) return;
-        showSection(target);
-        setActiveNav(target);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const sectionId = link.getAttribute('data-section');
+        showSection(sectionId);
+        setActiveNav(sectionId);
       });
     });
 
+    // Manage Hidden link (right sidebar) jumps to Manage Hidden section
     manageHiddenLinks.forEach(link => {
-      link.addEventListener('click', e => {
+      link.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = link.getAttribute('data-section');
-        if (!target) return;
-        showSection(target);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const sectionId = link.getAttribute('data-section');
+        showSection(sectionId);
+        setActiveNav(sectionId);
       });
     });
 
-    // ---------- HIDE / UNHIDE SECTIONS IN LEFT NAV (MID "Hide" BUTTONS) ----------
+    // ---------- MANAGE HIDDEN SECTIONS ----------
 
-    function addToHiddenList(sectionId, label) {
+    const autoHiddenIds = new Set();
+
+    function addHiddenRow(sectionId, title) {
       if (!hiddenList) return;
-      if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
+
+      // Avoid duplicates
+      const existing = hiddenList.querySelector(
+        `li[data-hidden-id="${sectionId}"]`
+      );
+      if (existing) return;
 
       const li = document.createElement('li');
-      li.setAttribute('data-section', sectionId);
-      li.innerHTML = `
-        <span>${label}</span>
-        <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
-      `;
+      li.dataset.hiddenId = sectionId;
+      li.textContent = title;
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Unhide';
+      btn.className = 'hide-section-btn';
+
+      btn.addEventListener('click', () => {
+        const navItem = document.querySelector(
+          `.nav-item[data-section="${sectionId}"]`
+        );
+        if (navItem) {
+          navItem.style.display = '';
+        }
+        li.remove();
+        autoHiddenIds.delete(sectionId);
+      });
+
+      li.appendChild(btn);
       hiddenList.appendChild(li);
     }
 
-    function removeFromHiddenList(sectionId) {
-      const li = hiddenList?.querySelector('li[data-section="' + sectionId + '"]');
-      if (li) li.remove();
-    }
-
     hideSectionButtons.forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
+      btn.addEventListener('click', () => {
         const sectionId = btn.getAttribute('data-section');
-        const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
-        if (!navItem) return;
+        const navItem = document.querySelector(
+          `.nav-item[data-section="${sectionId}"]`
+        );
+        const sectionEl = document.getElementById(sectionId);
 
-        const isHiddenNow = navItem.style.display === 'none';
+        if (!sectionId || !navItem || !sectionEl || !hiddenList) return;
 
-        if (!isHiddenNow) {
-          navItem.style.display = 'none';
-          const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
-          addToHiddenList(sectionId, label);
-          btn.textContent = 'Unhide';
-        } else {
-          navItem.style.display = '';
-          removeFromHiddenList(sectionId);
-          btn.textContent = 'Hide';
-        }
+        navItem.style.display = 'none';
+        const title = sectionEl.querySelector('h2')
+          ? sectionEl.querySelector('h2').textContent
+          : sectionId;
+
+        addHiddenRow(sectionId, title);
       });
     });
 
-    if (hiddenList) {
-      hiddenList.addEventListener('click', e => {
-        const btn = e.target.closest('.unhide-btn');
-        if (!btn) return;
-        const sectionId = btn.getAttribute('data-section');
-        const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
-        if (navItem) {
-          navItem.style.display = '';
-          // If this was auto-hidden by Current Storylines, clear that marker
-          if (navItem.dataset.autoHiddenByCurrent) {
-            delete navItem.dataset.autoHiddenByCurrent;
-          }
-        }
-        const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
-        if (midBtn) midBtn.textContent = 'Hide';
+    // Filter logic for "Current Storylines"
+    function applyCurrentFilter(active) {
+      autoHiddenIds.clear();
 
-        btn.parentElement.remove();
+      // Restore everything first
+      navItems.forEach(navItem => {
+        navItem.style.display = '';
       });
-    }
+      if (hiddenList) {
+        Array.from(hiddenList.querySelectorAll('li')).forEach(li => {
+          if (!li.dataset.hiddenId || autoHiddenIds.has(li.dataset.hiddenId)) {
+            li.remove();
+          }
+        });
+      }
 
-    // ---------- CURRENT STORYLINES FILTER (LEFT NAV HIDING ONLY) ----------
+      if (!active) {
+        return;
+      }
 
-    function applyCurrentFilter(enabled) {
+      // Hide everything that is NOT in the currentStorylineIds set
       navItems.forEach(navItem => {
         const secId = navItem.getAttribute('data-section');
+        if (!currentStorylineIds.has(secId)) {
+          navItem.style.display = 'none';
+          autoHiddenIds.add(secId);
 
-        if (enabled) {
-          // Save whatever the display was before we mess with it
-          if (!navItem.dataset.prevDisplayStored) {
-            navItem.dataset.prevDisplay = navItem.style.display || '';
-            navItem.dataset.prevDisplayStored = '1';
-          }
+          const sectionEl = document.getElementById(secId);
+          const title = sectionEl && sectionEl.querySelector('h2')
+            ? sectionEl.querySelector('h2').textContent
+            : secId;
 
-          // If not in the default current set -> hide + add to hidden list
-          if (!currentStorylineIds.has(secId)) {
-            navItem.style.display = 'none';
-            navItem.dataset.autoHiddenByCurrent = '1';
-
-            const label = navItem.querySelector('.nav-link')?.textContent.trim() || secId;
-            addToHiddenList(secId, label);
-          } else {
-            // In default set -> show it as normal and ensure it's not in hidden manager
-            navItem.style.display = navItem.dataset.prevDisplay || '';
-            if (navItem.dataset.autoHiddenByCurrent) {
-              delete navItem.dataset.autoHiddenByCurrent;
-            }
-            removeFromHiddenList(secId);
-          }
-        } else {
-          // Turning filter OFF: restore original display
-          if (navItem.dataset.prevDisplayStored) {
-            navItem.style.display = navItem.dataset.prevDisplay;
-            delete navItem.dataset.prevDisplay;
-            delete navItem.dataset.prevDisplayStored;
-          }
-
-          // If it was auto-hidden by Current Storylines, clean up its hidden entry
-          if (navItem.dataset.autoHiddenByCurrent) {
-            delete navItem.dataset.autoHiddenByCurrent;
-            removeFromHiddenList(secId);
-          }
+          addHiddenRow(secId, title);
         }
       });
     }
 
-    // ---------- PATHS SUBCATEGORY (FOR NTR) ----------
+    // ---------- PATHS HANDLING (NTR) ----------
 
     function activatePaths() {
-      if (!navList) return;
-
-      const mainCharactersHeader = Array.from(
-        document.querySelectorAll('.nav-header')
-      ).find(li => li.textContent.trim().toLowerCase().includes('main characters'));
-
+      const mainCharactersHeader = document.querySelector('.main-characters-header');
       if (!mainCharactersHeader) return;
 
+      // Insert a "Paths" header above the first path item
       let pathsHeader = document.querySelector('.paths-header');
       if (!pathsHeader) {
-        pathsHeader = document.createElement('li');
+        pathsHeader = document.createElement('div');
         pathsHeader.className = 'nav-header paths-header';
         pathsHeader.textContent = 'Paths';
         navList.insertBefore(pathsHeader, mainCharactersHeader);
@@ -3046,6 +3086,7 @@
     const newBtn = document.querySelector('.highlight-option-new');
     const currentBtn = document.querySelector('.highlight-option-current');
     const ntrBtn = document.querySelector('.highlight-option-ntr');
+    const pregBtn = document.querySelector('.highlight-option-pregnancy');
 
     // Cache the NTR button text color so nav links match it
     let ntrTextColor = null;
@@ -3071,34 +3112,55 @@
         }
 
         let color = link.dataset.baseColor || '';
+        link.classList.remove('ntr-preg-glow');
 
-        // If Current Storylines is active and this id is in that set -> blue
-        if (currentBtn && currentBtn.classList.contains('active') && currentStorylineIds.has(secId)) {
+        const currentOn =
+          currentBtn && currentBtn.classList.contains('active') &&
+          currentStorylineIds.has(secId);
+
+        const ntrOn =
+          ntrBtn && ntrBtn.classList.contains('active') &&
+          ntrRedIds.has(secId);
+
+        const pregOn =
+          pregBtn && pregBtn.classList.contains('active') &&
+          pregnancyIds.has(secId);
+
+        // Current -> blue
+        if (currentOn) {
           color = '#3bafd9';
         }
 
-        // If NTR is active and this id is in NTR-red set -> override to match NTR button text color
-        if (ntrBtn && ntrBtn.classList.contains('active') && ntrRedIds.has(secId)) {
-          color = getNtrTextColor();
+        // Pregnancy -> pink (can override blue)
+        if (pregOn) {
+          color = '#ffa3e2';
+        }
+
+        // NTR -> red (unless combined with Pregnancy)
+        if (ntrOn) {
+          if (pregOn) {
+            // Pink name, red glow
+            link.classList.add('ntr-preg-glow');
+          } else {
+            color = getNtrTextColor();
+          }
         }
 
         link.style.color = color;
       });
     }
 
-    if (newBtn && currentBtn && ntrBtn) {
-      // New in 0.6.1.0:
-      // - Toggles itself ON/OFF
-      // - When turning ON, also turns ON Current Storylines + applies filter
-      // - When turning ON, also turns OFF NTR (mutually exclusive with NTR)
+    if (newBtn && currentBtn && ntrBtn && pregBtn) {
+      // New:
+      // - Toggles itself
+      // - When turning ON, turns ON Current Storylines + filter
+      // - When turning ON, turns OFF NTR & Pregnancy (mutually exclusive)
       newBtn.addEventListener('click', () => {
         const isActive = newBtn.classList.contains('active');
 
         if (isActive) {
-          // Turn ONLY New off
           newBtn.classList.remove('active');
         } else {
-          // Turn New ON
           newBtn.classList.add('active');
 
           // Ensure Current Storylines is ON + filter applied
@@ -3109,10 +3171,15 @@
             applyCurrentFilter(true);
           }
 
-          // Turn OFF NTR if it is currently active
+          // Turn OFF NTR (and restore paths)
           if (ntrBtn.classList.contains('active')) {
             ntrBtn.classList.remove('active');
             deactivatePaths();
+          }
+
+          // Turn OFF Pregnancy
+          if (pregBtn.classList.contains('active')) {
+            pregBtn.classList.remove('active');
           }
         }
 
@@ -3122,8 +3189,8 @@
       // Current Storylines:
       // - Toggles itself
       // - Clicking it always turns OFF New
-      // - When ON -> apply filter (hide others, add to Manage Hidden)
-      // - When OFF -> restore everything it auto-hid
+      // - When ON -> apply filter
+      // - When OFF -> restore everything auto-hid
       currentBtn.addEventListener('click', () => {
         const isActive = currentBtn.classList.contains('active');
 
@@ -3143,24 +3210,39 @@
       // NTR:
       // - Toggles itself
       // - Always turns OFF New
-      // - When ON -> names in ntrRedIds become red, Paths header appears,
-      //              and the 5 path names move there (alphabetical)
-      // - When OFF -> colors restore (base/blue), Paths header removed,
-      //              and names move back to original positions
+      // - Works together with Current & Pregnancy
+      // - ON -> names in ntrRedIds become red / pink+glow; paths header appears
       ntrBtn.addEventListener('click', () => {
         const isActive = ntrBtn.classList.contains('active');
 
         if (isActive) {
-          // Turning OFF NTR
           ntrBtn.classList.remove('active');
           newBtn.classList.remove('active');
           deactivatePaths();
         } else {
-          // Turning ON NTR
           ntrBtn.classList.add('active');
           newBtn.classList.remove('active');
           activatePaths();
         }
+
+        updateNavColors();
+      });
+
+      // Pregnancy:
+      // - Toggles itself
+      // - Always turns OFF New
+      // - Works together with Current & NTR
+      pregBtn.addEventListener('click', () => {
+        const isActive = pregBtn.classList.contains('active');
+
+        if (isActive) {
+          pregBtn.classList.remove('active');
+        } else {
+          pregBtn.classList.add('active');
+        }
+
+        // Pregnancy and New are exclusive (like NTR vs New)
+        newBtn.classList.remove('active');
 
         updateNavColors();
       });
