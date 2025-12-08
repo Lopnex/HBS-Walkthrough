@@ -159,7 +159,7 @@ body {
   padding: 0;
   margin: 0;
   color: #eee;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   cursor: pointer;
 }
 
@@ -167,10 +167,30 @@ body {
   text-decoration: underline;
 }
 
-/* Active states = just color/weight changes */
+/* New in 0.6.0.2 – bigger + bold */
+.highlight-option-new {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
 .highlight-option-new.active {
   color: #4edf6d;
+}
+
+/* Current Storylines – blue and clickable */
+.highlight-option-current {
+  font-size: 1.05rem;
+  color: #3bafd9;
+}
+
+.highlight-option-current.active {
+  color: #3bafd9;
   font-weight: 700;
+}
+
+/* NTR – bigger, red when active */
+.highlight-option-ntr {
+  font-size: 1.05rem;
 }
 
 .highlight-option-ntr.active {
@@ -178,10 +198,10 @@ body {
   font-weight: 700;
 }
 
-/* Filters sub-header */
+/* Filters sub-header pinned toward bottom */
 .highlight-subheader {
-  margin-top: 6px;
-  padding: 4px 0;
+  margin-top: auto;         /* pushes Filters + list toward bottom */
+  padding: 6px 0 4px;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
   text-align: center;
@@ -196,16 +216,13 @@ body {
   margin: 4px 0 0;
 }
 
-.filter-label {
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  margin-bottom: 2px;
+.highlight-filters li {
+  text-align: center;       /* centers Current Storylines and NTR */
 }
 
-/* Bottom pinned button */
+/* Bottom button (under filters, near bottom) */
 .manage-hidden-link {
-  margin-top: auto;        /* pushes to bottom of highlight-box */
+  margin-top: 6px;
   padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #333;
