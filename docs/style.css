@@ -139,7 +139,7 @@ body {
   margin: 0 0 8px;
   border-bottom: 1px solid #333;
   padding-bottom: 4px;
-  font-size: 1.35rem;   /* bigger Highlight title */
+  font-size: 1.15rem;   /* slightly smaller Highlight title */
 }
 
 /* Highlight “New in …” */
@@ -203,7 +203,7 @@ body {
 .highlight-subheader {
   margin-top: auto;         /* pushes Filters + list toward bottom */
   padding: 6px 0 4px;
-  border-top: 1px solid #333;
+  /* removed top border to get rid of line before Filters */
   border-bottom: 1px solid #333;
   text-align: center;
   font-size: 1.2rem;        /* bigger Filters label */
@@ -221,11 +221,10 @@ body {
   text-align: center;       /* centers Current Storylines and NTR */
 }
 
-/* separator between Current Storylines and NTR */
+/* removed separator line between Current Storylines and NTR */
 .highlight-filters li + li {
   margin-top: 4px;
   padding-top: 4px;
-  border-top: 1px solid #333;
 }
 
 /* Bottom button (under filters, near bottom) */
@@ -236,10 +235,10 @@ body {
   border: 1px solid #333;
   background: #101010;
   text-align: center;
-  font-size: 0.85rem;       /* slightly smaller so it fits */
+  font-size: 0.8rem;        /* a bit smaller so it fits */
   color: #eee;
   text-decoration: none;
-  white-space: normal;      /* allow wrapping so it stays inside the box */
+  white-space: nowrap;      /* keep "Manage Hidden Sections" on one line inside the box */
 }
 
 .manage-hidden-link:hover {
