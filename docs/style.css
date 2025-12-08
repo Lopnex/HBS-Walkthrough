@@ -53,6 +53,7 @@ body {
   cursor: pointer;
   border-radius: 4px;
   border: none;
+  font-size: 0.95rem;
 }
 
 .nav-link:hover {
@@ -82,12 +83,12 @@ body {
   border-left: 1px solid #333;
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100vh;           /* full column height */
   display: flex;
   flex-direction: column;
 }
 
-/* Top social icons */
+/* Social icons row */
 .right-icons {
   display: flex;
   justify-content: space-between;
@@ -97,7 +98,7 @@ body {
   margin-bottom: 10px;
 }
 
-/* Equal sizing + clean visibility */
+/* Icon sizes */
 #discord-logo,
 #subscribstar-logo,
 #patreon-logo {
@@ -108,13 +109,12 @@ body {
   cursor: pointer;
 }
 
-/* Discord booster — visually smaller in shape */
+/* Discord looks visually a bit smaller, boost slightly */
 #discord-logo {
   width: 60px;
-  height: auto;
 }
 
-/* Hover animation */
+/* Hover */
 #discord-logo:hover,
 #subscribstar-logo:hover,
 #patreon-logo:hover {
@@ -122,7 +122,7 @@ body {
   filter: brightness(1.2);
 }
 
-/* Highlight + filters card */
+/* Highlight card fills remaining height */
 .highlight-box {
   flex: 1 1 auto;
   background: #101010;
@@ -141,85 +141,74 @@ body {
   padding-bottom: 4px;
 }
 
-/* Highlight list (top area) */
+/* Highlight “New in …” */
 .highlight-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 8px;
 }
 
 .highlight-list li {
   text-align: center;
-  font-size: 0.85rem;
-  padding: 4px 0;
 }
 
-/* Container that holds Filters + button and pins it to bottom */
-.highlight-lower {
-  margin-top: auto;              /* 🔹 pushes this whole block to bottom */
-  display: flex;
-  flex-direction: column;
+/* Common look for toggle buttons */
+.highlight-option {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #181818;
+  color: #eee;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
 
-/* Filters header inside highlight box */
+.highlight-option:hover {
+  background: #222;
+}
+
+/* Active states */
+.highlight-option-new.active {
+  background: #4edf6d;
+  border-color: #4edf6d;
+  color: #000;
+}
+
+.highlight-option-ntr.active {
+  background: #de5050;
+  border-color: #de5050;
+  color: #000;
+}
+
+/* Filters sub-header */
 .highlight-subheader {
-  margin: 10px 0 4px;
+  margin-top: 6px;
   padding: 4px 0;
-  font-size: 0.95rem;            /* 🔹 bigger font */
-  font-weight: 800;              /* 🔹 extra bold */
-  text-align: center;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
-/* Filters list */
+/* Filter list */
 .highlight-filters {
   list-style: none;
   padding: 0;
   margin: 4px 0 0;
 }
 
-.highlight-filters li {
-  text-align: center;
-  font-size: 0.85rem;
-  padding: 4px 0;
-}
-
-/* Non-clickable filter label (Current Storylines) */
 .filter-label {
-  font-weight: 700;              /* 🔹 bold */
-}
-
-/* Clickable highlight buttons */
-.highlight-option {
-  background: transparent;
-  border: none;
-  color: #eee;
+  text-align: center;
+  font-weight: 700;
   font-size: 0.85rem;
-  cursor: pointer;
-  width: 100%;
-  padding: 2px 0;
+  margin-bottom: 2px;
 }
 
-/* default state text */
-.highlight-option-new,
-.highlight-option-ntr {
-  font-weight: 600;
-}
-
-/* active: New in 0.6.0.2 -> green */
-.highlight-option-new.active {
-  color: #4edf6d;
-}
-
-/* active: NTR -> red */
-.highlight-option-ntr.active {
-  color: #de5050;
-}
-
-/* Bottom pinned button (still at very bottom of card) */
+/* Bottom pinned button */
 .manage-hidden-link {
-  margin-top: 6px;
+  margin-top: auto;        /* pushes to bottom of highlight-box */
   padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #333;
@@ -287,7 +276,7 @@ body {
   background: #333;
 }
 
-/* Hidden list */
+/* Hidden list in Manage Hidden page */
 #hiddenList {
   list-style: none;
   padding: 0;
