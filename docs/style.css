@@ -152,33 +152,30 @@ body {
   text-align: center;
 }
 
-/* Common look for toggle buttons */
+/* Word-style clickable highlight/filter */
 .highlight-option {
-  width: 100%;
-  padding: 4px 6px;
-  border-radius: 4px;
-  border: 1px solid #333;
-  background: #181818;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
   color: #eee;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
 .highlight-option:hover {
-  background: #222;
+  text-decoration: underline;
 }
 
-/* Active states */
+/* Active states = just color/weight changes */
 .highlight-option-new.active {
-  background: #4edf6d;
-  border-color: #4edf6d;
-  color: #000;
+  color: #4edf6d;
+  font-weight: 700;
 }
 
 .highlight-option-ntr.active {
-  background: #de5050;
-  border-color: #de5050;
-  color: #000;
+  color: #de5050;
+  font-weight: 700;
 }
 
 /* Filters sub-header */
