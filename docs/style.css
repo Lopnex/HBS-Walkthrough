@@ -201,12 +201,11 @@ body {
 
 /* Filters sub-header pinned toward bottom */
 .highlight-subheader {
-  margin-top: auto;         /* pushes Filters + list toward bottom */
+  margin-top: auto;
   padding: 6px 0 4px;
-  /* removed top border to get rid of line before Filters */
   border-bottom: 1px solid #333;
   text-align: center;
-  font-size: 1.2rem;        /* bigger Filters label */
+  font-size: 1.1rem; /* slightly smaller */
   font-weight: 700;
 }
 
