@@ -199,6 +199,22 @@ body {
   color: #de5050;
 }
 
+/* Text color helpers to match filter colors (for info section text) */
+.filter-color-new {
+  color: #4edf6d;       /* same as New in 0.6.1.0 when active */
+  font-weight: bold;
+}
+
+.filter-color-current {
+  color: #3bafd9;       /* same as Current Storylines when active */
+  font-weight: bold;
+}
+
+.filter-color-ntr {
+  color: #de5050;       /* same as NTR when active */
+  font-weight: bold;
+}
+
 /* Filters sub-header pinned toward bottom */
 .highlight-subheader {
   margin-top: auto;
@@ -308,6 +324,15 @@ body {
   justify-content: space-between;
   border-bottom: 1px solid #333;
   padding: 6px 0;
+}
+
+/* Info section support links (SubscribeStar / Patreon) */
+#info a {
+  color: #4b8b9b;      /* match middle background color */
+}
+
+#info a:hover {
+  text-decoration: underline;
 }
 
 /* Responsive */
