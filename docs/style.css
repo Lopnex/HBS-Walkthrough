@@ -90,7 +90,7 @@ body {
 /* Top social icons */
 .right-icons {
   display: flex;
-  justify-content: space-between; /* evenly distribute left → right */
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 0 4px;
@@ -122,7 +122,7 @@ body {
   filter: brightness(1.2);
 }
 
-/* Highlight box */
+/* Highlight + filters card */
 .highlight-box {
   flex: 1 1 auto;
   background: #101010;
@@ -141,11 +141,11 @@ body {
   padding-bottom: 4px;
 }
 
-/* Highlight items */
+/* Highlight list (top area) */
 .highlight-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 8px;
 }
 
 .highlight-list li {
@@ -154,11 +154,33 @@ body {
   padding: 4px 0;
 }
 
-/* Add separator line under the first item */
-.highlight-list li + li {
+/* Filters header inside highlight box */
+.highlight-subheader {
+  margin: 10px 0 4px;
+  padding: 4px 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
   border-top: 1px solid #333;
-  margin-top: 6px;
-  padding-top: 8px;
+  border-bottom: 1px solid #333;
+}
+
+/* Filters list */
+.highlight-filters {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+}
+
+.highlight-filters li {
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 4px 0;
+}
+
+/* Non-clickable filter label */
+.filter-label {
+  font-weight: 600;
 }
 
 /* Clickable highlight buttons */
