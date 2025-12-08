@@ -111,33 +111,45 @@ document.addEventListener("DOMContentLoaded", () => {
      Highlight toggle logic
      ======================= */
 
-  // Buttons: data-highlight="new" | "current" | "ntr"
-  const newBtn = document.querySelector('.highlight-option[data-highlight="new"]');
-  const currentBtn = document.querySelector('.highlight-option[data-highlight="current"]');
-  const ntrBtn = document.querySelector('.highlight-option[data-highlight="ntr"]');
+  const newBtn = document.querySelector(
+    '.highlight-option[data-highlight="new"]'
+  );
+  const currentBtn = document.querySelector(
+    '.highlight-option[data-highlight="current"]'
+  );
+  const ntrBtn = document.querySelector(
+    '.highlight-option[data-highlight="ntr"]'
+  );
 
   if (newBtn && currentBtn && ntrBtn) {
-    // New in 0.6.1.0 — exclusive, toggle ON/OFF
+    // NEW IN 0.6.1.0 — exclusive ON/OFF toggle
     newBtn.addEventListener("click", () => {
       const isActive = newBtn.classList.contains("active");
 
-      // toggle New
-      newBtn.classList.toggle("active", !isActive);
-
-      // when turning New ON, always turn others OFF
-      if (!isActive) {
+      if (isActive) {
+        // turn New OFF
+        newBtn.classList.remove("active");
+      } else {
+        // turn New ON, force others OFF
+        newBtn.classList.add("active");
         currentBtn.classList.remove("active");
         ntrBtn.classList.remove("active");
       }
     });
 
-    // Current Storylines and NTR — can work together
+    // CURRENT & NTR — can work together, always turn New OFF
     [currentBtn, ntrBtn].forEach((btn) => {
       btn.addEventListener("click", () => {
         const isActive = btn.classList.contains("active");
-        btn.classList.toggle("active", !isActive);
 
-        // any click on these turns New OFF
+        // toggle this one
+        if (isActive) {
+          btn.classList.remove("active");
+        } else {
+          btn.classList.add("active");
+        }
+
+        // any time one of these is clicked, New turns OFF
         newBtn.classList.remove("active");
       });
     });
