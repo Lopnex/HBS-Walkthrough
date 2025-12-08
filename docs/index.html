@@ -1870,8 +1870,11 @@
     const hiddenList = document.getElementById('hiddenList');
     const hideSectionButtons = document.querySelectorAll('.hide-section-btn');
     const navItems = document.querySelectorAll('.nav-item[data-section]');
+    const navList = document.getElementById('navList');
 
-    // IDs that should stay visible + colored when "Current Storylines" is active
+    // ---------- SETS / CONFIG ----------
+
+    // IDs that should stay visible when "Current Storylines" is active
     const currentStorylineIds = new Set([
       'main-story',
       'side-quests',
@@ -1921,8 +1924,58 @@
       'jack-romer',
       'jill-romer',
       'nigel-cunningham',
-      'dr-jones'
+      'dr-jones',
+      'thomas-wilson'
     ]);
+
+    // IDs that should be red when NTR is active
+    const ntrRedIds = new Set([
+      // story girls
+      'adel-reynolds',
+      'christine-samson',
+      'gemma-rey',
+      'lillie-michaels',
+      'marcy-trevean',
+      'rosie-stevens',
+      'marie-prescott',
+      'regan-collins',
+      'amber-johnson',
+      'abigail-coney',
+      'claire-bosworth',
+      'leia-littleton',
+      'tania-abrahms',
+      'polly-mathers',
+      'shelly-bruce',
+      'tilly-reynolds',
+      'jessica-martin',
+      // paths group
+      'lucas-channing',
+      'frank',
+      'nigel-cunningham',
+      'dr-jones',
+      'thomas-wilson'
+    ]);
+
+    // IDs that move into the "Paths" subcategory
+    const pathIds = [
+      'lucas-channing',
+      'frank',
+      'nigel-cunningham',
+      'dr-jones',
+      'thomas-wilson'
+    ];
+
+    // Store original positions for "Paths" items so we can restore them
+    const originalPositions = new Map();
+    pathIds.forEach(id => {
+      const item = document.querySelector('.nav-item[data-section="' + id + '"]');
+      if (item) {
+        originalPositions.set(id, {
+          parent: item.parentNode,
+          nextSibling: item.nextElementSibling
+        });
+      }
+    });
 
     // ---------- MIDDLE CONTENT: SECTION SWITCHING ----------
 
@@ -1964,7 +2017,6 @@
 
     function addToHiddenList(sectionId, label) {
       if (!hiddenList) return;
-      // avoid duplicates
       if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
 
       const li = document.createElement('li');
@@ -1991,13 +2043,11 @@
         const isHiddenNow = navItem.style.display === 'none';
 
         if (!isHiddenNow) {
-          // hide from left nav
           navItem.style.display = 'none';
           const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
           addToHiddenList(sectionId, label);
           btn.textContent = 'Unhide';
         } else {
-          // show again
           navItem.style.display = '';
           removeFromHiddenList(sectionId);
           btn.textContent = 'Hide';
@@ -2018,117 +2068,200 @@
       });
     }
 
-    // ---------- CURRENT STORYLINES FILTER (LEFT NAV + COLOR) ----------
+    // ---------- CURRENT STORYLINES FILTER (LEFT NAV HIDING ONLY) ----------
 
     function applyCurrentFilter(enabled) {
       navItems.forEach(navItem => {
         const secId = navItem.getAttribute('data-section');
-        const link = navItem.querySelector('.nav-link');
 
         if (enabled) {
-          // Store previous display once
           if (!navItem.dataset.prevDisplayStored) {
             navItem.dataset.prevDisplay = navItem.style.display || '';
             navItem.dataset.prevDisplayStored = '1';
           }
 
           if (!currentStorylineIds.has(secId)) {
-            // Hide everything not in the list
             navItem.style.display = 'none';
           } else {
-            // Color allowed ones to match Current Storylines
-            if (link) {
-              if (!link.dataset.prevColorStored) {
-                link.dataset.prevColor = link.style.color || '';
-                link.dataset.prevColorStored = '1';
-              }
-              link.style.color = '#3bafd9';
-            }
+            navItem.style.display = navItem.dataset.prevDisplay || '';
           }
         } else {
-          // Restore display
           if (navItem.dataset.prevDisplayStored) {
             navItem.style.display = navItem.dataset.prevDisplay;
             delete navItem.dataset.prevDisplay;
             delete navItem.dataset.prevDisplayStored;
           }
-          // Restore color
-          if (link && link.dataset.prevColorStored) {
-            link.style.color = link.dataset.prevColor;
-            delete link.dataset.prevColor;
-            delete link.dataset.prevColorStored;
-          }
         }
       });
     }
 
-    // ---------- RIGHT SIDEBAR: HIGHLIGHT FILTERS ----------
+    // ---------- PATHS SUBCATEGORY (FOR NTR) ----------
+
+    function activatePaths() {
+      if (!navList) return;
+
+      const mainCharactersHeader = Array.from(
+        document.querySelectorAll('.nav-header')
+      ).find(li => li.textContent.trim().toLowerCase().includes('main characters'));
+
+      if (!mainCharactersHeader) return;
+
+      let pathsHeader = document.querySelector('.paths-header');
+      if (!pathsHeader) {
+        pathsHeader = document.createElement('li');
+        pathsHeader.className = 'nav-header paths-header';
+        pathsHeader.textContent = 'Paths';
+        navList.insertBefore(pathsHeader, mainCharactersHeader);
+      }
+
+      // Collect and sort path items alphabetically by first name
+      const items = [];
+      pathIds.forEach(id => {
+        const item = document.querySelector('.nav-item[data-section="' + id + '"]');
+        if (item) items.push(item);
+      });
+
+      items.sort((a, b) => {
+        const ta = a.querySelector('.nav-link')?.textContent.trim() || '';
+        const tb = b.querySelector('.nav-link')?.textContent.trim() || '';
+        return ta.localeCompare(tb);
+      });
+
+      items.forEach(item => {
+        navList.insertBefore(item, mainCharactersHeader);
+      });
+    }
+
+    function deactivatePaths() {
+      pathIds.forEach(id => {
+        const info = originalPositions.get(id);
+        const item = document.querySelector('.nav-item[data-section="' + id + '"]');
+        if (!info || !item) return;
+        const { parent, nextSibling } = info;
+        if (nextSibling && nextSibling.parentNode === parent) {
+          parent.insertBefore(item, nextSibling);
+        } else {
+          parent.appendChild(item);
+        }
+      });
+
+      const pathsHeader = document.querySelector('.paths-header');
+      if (pathsHeader) pathsHeader.remove();
+    }
+
+    // ---------- RIGHT SIDEBAR: HIGHLIGHT BUTTONS ----------
 
     const newBtn = document.querySelector('.highlight-option-new');
     const currentBtn = document.querySelector('.highlight-option-current');
     const ntrBtn = document.querySelector('.highlight-option-ntr');
 
+    // Color logic based on active filters
+    function updateNavColors() {
+      navItems.forEach(navItem => {
+        const secId = navItem.getAttribute('data-section');
+        const link = navItem.querySelector('.nav-link');
+        if (!link) return;
+
+        // Store base/original color once
+        if (!link.dataset.baseColorStored) {
+          link.dataset.baseColor = link.style.color || '';
+          link.dataset.baseColorStored = '1';
+        }
+
+        let color = link.dataset.baseColor || '';
+
+        // If Current Storylines is active and this id is in that set -> blue
+        if (currentBtn && currentBtn.classList.contains('active') && currentStorylineIds.has(secId)) {
+          color = '#3bafd9';
+        }
+
+        // If NTR is active and this id is in NTR-red set -> override to red
+        if (ntrBtn && ntrBtn.classList.contains('active') && ntrRedIds.has(secId)) {
+          color = '#cc0000';
+        }
+
+        link.style.color = color;
+      });
+    }
+
     if (newBtn && currentBtn && ntrBtn) {
       // New in 0.6.1.0:
       // - Toggles itself ON/OFF
-      // - When turning ON, also turns ON Current Storylines + applies filter, turns OFF NTR
-      // - When turning OFF, does NOT touch Current Storylines
+      // - When turning ON, also turns ON Current Storylines + applies filter
+      // - Turns OFF NTR? (no, you asked only for NTR to turn off New, not vice versa)
       newBtn.addEventListener('click', () => {
         const isActive = newBtn.classList.contains('active');
 
         if (isActive) {
           // Turn ONLY New off
           newBtn.classList.remove('active');
-          // If Current is still active, its filter stays on
         } else {
           // Turn New ON
           newBtn.classList.add('active');
-          // Force Current Storylines ON + apply filter
+
+          // Ensure Current Storylines is ON + filter applied
           if (!currentBtn.classList.contains('active')) {
             currentBtn.classList.add('active');
             applyCurrentFilter(true);
           } else {
-            // already active -> make sure filter is applied
             applyCurrentFilter(true);
           }
-          // Turn NTR off
-          ntrBtn.classList.remove('active');
         }
+
+        updateNavColors();
       });
 
       // Current Storylines:
       // - Toggles itself
       // - Clicking it always turns OFF New
-      // - When ON -> apply filter (hide others + color matches)
+      // - When ON -> apply filter (hide others)
       // - When OFF -> restore everything
       currentBtn.addEventListener('click', () => {
         const isActive = currentBtn.classList.contains('active');
 
         if (isActive) {
           currentBtn.classList.remove('active');
-          newBtn.classList.remove('active'); // keep your previous behavior
+          newBtn.classList.remove('active');
           applyCurrentFilter(false);
         } else {
           currentBtn.classList.add('active');
           newBtn.classList.remove('active');
           applyCurrentFilter(true);
         }
+
+        updateNavColors();
       });
 
       // NTR:
       // - Toggles itself
       // - Always turns OFF New
-      // - Does NOT affect Current Storylines filter
+      // - When ON -> names in ntrRedIds become red, Paths header appears,
+      //              and the 5 path names move there (alphabetical)
+      // - When OFF -> colors restore (base/blue), Paths header removed,
+      //              and names move back to original positions
       ntrBtn.addEventListener('click', () => {
-        ntrBtn.classList.toggle('active');
-        newBtn.classList.remove('active');
-        // Current stays however it was
+        const isActive = ntrBtn.classList.contains('active');
+
+        if (isActive) {
+          // Turning OFF NTR
+          ntrBtn.classList.remove('active');
+          newBtn.classList.remove('active');
+          deactivatePaths();
+        } else {
+          // Turning ON NTR
+          ntrBtn.classList.add('active');
+          newBtn.classList.remove('active');
+          activatePaths();
+        }
+
+        updateNavColors();
       });
     }
 
     // Default visible section + active nav
     showSection('info');
     setActiveNav('info');
+    updateNavColors();
   });
 </script>
 
