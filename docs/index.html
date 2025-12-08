@@ -1971,23 +1971,27 @@
     const ntrBtn = document.querySelector('.highlight-option-ntr');
 
     if (newBtn && currentBtn && ntrBtn) {
-      // New in 0.6.1.0 = exclusive ON/OFF
+      // New in 0.6.1.0:
+      // - Toggles itself ON/OFF
+      // - When turning ON, it also turns ON Current Storylines and turns OFF NTR
+      // - When turning OFF, it leaves Current Storylines as-is
       newBtn.addEventListener('click', () => {
         const isActive = newBtn.classList.contains('active');
 
         if (isActive) {
-          // If already active, turn it OFF
+          // Already active -> turn ONLY New off
           newBtn.classList.remove('active');
         } else {
-          // Turn New ON, force others OFF
+          // Turn New ON, also force Current ON, and NTR OFF
           newBtn.classList.add('active');
-          currentBtn.classList.remove('active');
+          currentBtn.classList.add('active');
           ntrBtn.classList.remove('active');
         }
       });
 
-      // Current Storylines & NTR can both be active,
-      // but they always turn OFF New when clicked
+      // Current Storylines & NTR:
+      // - Each toggles itself
+      // - Clicking either always turns OFF New
       [currentBtn, ntrBtn].forEach(btn => {
         btn.addEventListener('click', () => {
           btn.classList.toggle('active');
