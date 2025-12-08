@@ -2234,7 +2234,7 @@
       // New in 0.6.1.0:
       // - Toggles itself ON/OFF
       // - When turning ON, also turns ON Current Storylines + applies filter
-      // - Does NOT affect NTR
+      // - When turning ON, also turns OFF NTR (mutually exclusive with NTR)
       newBtn.addEventListener('click', () => {
         const isActive = newBtn.classList.contains('active');
 
@@ -2251,6 +2251,12 @@
             applyCurrentFilter(true);
           } else {
             applyCurrentFilter(true);
+          }
+
+          // Turn OFF NTR if it is currently active
+          if (ntrBtn.classList.contains('active')) {
+            ntrBtn.classList.remove('active');
+            deactivatePaths();
           }
         }
 
