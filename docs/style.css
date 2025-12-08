@@ -182,11 +182,21 @@ body {
 .highlight-option-current {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #eee;          /* normal color */
+  color: #eee;
 }
 
 .highlight-option-current.active {
-  color: #3bafd9;       /* blue when selected */
+  color: #3bafd9;
+}
+
+/* Pregnancy – bold, pink when active */
+.highlight-option-pregnancy {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.highlight-option-pregnancy.active {
+  color: #ffa3e2;
 }
 
 /* NTR – bold, red when active */
@@ -201,18 +211,29 @@ body {
 
 /* Text color helpers to match filter colors (for info section text) */
 .filter-color-new {
-  color: #4edf6d;       /* same as New in 0.6.1.0 when active */
+  color: #4edf6d;
   font-weight: bold;
 }
 
 .filter-color-current {
-  color: #3bafd9;       /* same as Current Storylines when active */
+  color: #3bafd9;
   font-weight: bold;
 }
 
 .filter-color-ntr {
-  color: #de5050;       /* same as NTR when active */
+  color: #de5050;
   font-weight: bold;
+}
+
+/* Pregnancy helper if you want to mention it in the Info text */
+.filter-color-pregnancy {
+  color: #ffa3e2;
+  font-weight: bold;
+}
+
+/* Glow when BOTH NTR + Pregnancy apply to a name */
+.nav-link.ntr-preg-glow {
+  text-shadow: 0 0 4px #de5050, 0 0 8px #de5050;
 }
 
 /* Filters sub-header pinned toward bottom */
