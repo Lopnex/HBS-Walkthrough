@@ -106,4 +106,31 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveHidden(hiddenSet) {
     localStorage.setItem("hiddenSections", JSON.stringify([...hiddenSet]));
   }
+
+  /* =======================
+     Highlight toggle logic
+     ======================= */
+
+  // Buttons should have class="highlight-option"
+  // and data-highlight="new" | "current" | "ntr"
+  const highlightOptions = document.querySelectorAll(".highlight-option");
+  let activeHighlight = null;
+
+  highlightOptions.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const selected = btn.getAttribute("data-highlight");
+
+      // If clicking the already active one, turn it off
+      if (activeHighlight === selected) {
+        btn.classList.remove("active");
+        activeHighlight = null;
+        return;
+      }
+
+      // Otherwise, clear others and activate this one
+      highlightOptions.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeHighlight = selected;
+    });
+  });
 });
