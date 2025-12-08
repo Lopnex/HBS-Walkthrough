@@ -1650,113 +1650,137 @@
   </div>
 
   <!-- JS -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const navLinks = document.querySelectorAll('.nav-link[data-section]');
-      const manageHiddenLinks = document.querySelectorAll('.manage-hidden-link');
-      const sections = document.querySelectorAll('.content-section');
-      const hiddenList = document.getElementById('hiddenList');
-      const hideSectionButtons = document.querySelectorAll('.hide-section-btn');
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    const manageHiddenLinks = document.querySelectorAll('.manage-hidden-link');
+    const sections = document.querySelectorAll('.content-section');
+    const hiddenList = document.getElementById('hiddenList');
+    const hideSectionButtons = document.querySelectorAll('.hide-section-btn');
 
-      function showSection(id) {
-        sections.forEach(sec => {
-          sec.classList.toggle('visible', sec.id === id);
-        });
-      }
+    // ---------- MIDDLE CONTENT: SECTION SWITCHING ----------
 
-      function setActiveNav(id) {
-        navLinks.forEach(btn => {
-          const sec = btn.getAttribute('data-section');
-          btn.classList.toggle('active', sec === id);
-        });
-      }
+    function showSection(id) {
+      sections.forEach(sec => {
+        sec.classList.toggle('visible', sec.id === id);
+      });
+    }
 
+    function setActiveNav(id) {
       navLinks.forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          const target = btn.getAttribute('data-section');
-          if (!target) return;
-          showSection(target);
-          setActiveNav(target);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        const sec = btn.getAttribute('data-section');
+        btn.classList.toggle('active', sec === id);
       });
+    }
 
-      manageHiddenLinks.forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          const target = link.getAttribute('data-section');
-          if (!target) return;
-          showSection(target);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+    navLinks.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const target = btn.getAttribute('data-section');
+        if (!target) return;
+        showSection(target);
+        setActiveNav(target);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
-
-      function addToHiddenList(sectionId, label) {
-        if (!hiddenList) return;
-        if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
-
-        const li = document.createElement('li');
-        li.setAttribute('data-section', sectionId);
-        li.innerHTML = `
-          <span>${label}</span>
-          <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
-        `;
-        hiddenList.appendChild(li);
-      }
-
-      function removeFromHiddenList(sectionId) {
-        const li = hiddenList?.querySelector('li[data-section="' + sectionId + '"]');
-        if (li) li.remove();
-      }
-
-      hideSectionButtons.forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          const sectionId = btn.getAttribute('data-section');
-          const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
-          if (!navItem) return;
-
-          const isHiddenNow = navItem.style.display === 'none';
-
-          if (!isHiddenNow) {
-            navItem.style.display = 'none';
-            const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
-            addToHiddenList(sectionId, label);
-            btn.textContent = 'Unhide';
-          } else {
-            navItem.style.display = '';
-            removeFromHiddenList(sectionId);
-            btn.textContent = 'Hide';
-          }
-        });
-      });
-
-      if (hiddenList) {
-        hiddenList.addEventListener('click', e => {
-          const btn = e.target.closest('.unhide-btn');
-          if (!btn) return;
-          const sectionId = btn.getAttribute('data-section');
-          const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
-          if (navItem) navItem.style.display = '';
-          const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
-          if (midBtn) midBtn.textContent = 'Hide';
-          btn.parentElement.remove();
-        });
-      }
-
-      /* ===== Highlight toggle logic: ALL can work together ===== */
-      const highlightOptions = document.querySelectorAll('.highlight-option');
-      highlightOptions.forEach(btn => {
-        btn.addEventListener('click', () => {
-          // Each button toggles independently
-          btn.classList.toggle('active');
-        });
-      });
-
-      showSection('info');
-      setActiveNav('info');
     });
-  </script>
+
+    manageHiddenLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = link.getAttribute('data-section');
+        if (!target) return;
+        showSection(target);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // ---------- HIDE / UNHIDE SECTIONS IN LEFT NAV ----------
+
+    function addToHiddenList(sectionId, label) {
+      if (!hiddenList) return;
+      // avoid duplicates
+      if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
+
+      const li = document.createElement('li');
+      li.setAttribute('data-section', sectionId);
+      li.innerHTML = `
+        <span>${label}</span>
+        <button class="unhide-btn" data-section="${sectionId}">Unhide</button>
+      `;
+      hiddenList.appendChild(li);
+    }
+
+    function removeFromHiddenList(sectionId) {
+      const li = hiddenList?.querySelector('li[data-section="' + sectionId + '"]');
+      if (li) li.remove();
+    }
+
+    hideSectionButtons.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const sectionId = btn.getAttribute('data-section');
+        const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+        if (!navItem) return;
+
+        const isHiddenNow = navItem.style.display === 'none';
+
+        if (!isHiddenNow) {
+          // hide from left nav
+          navItem.style.display = 'none';
+          const label = navItem.querySelector('.nav-link')?.textContent.trim() || sectionId;
+          addToHiddenList(sectionId, label);
+          btn.textContent = 'Unhide';
+        } else {
+          // show again
+          navItem.style.display = '';
+          removeFromHiddenList(sectionId);
+          btn.textContent = 'Hide';
+        }
+      });
+    });
+
+    if (hiddenList) {
+      hiddenList.addEventListener('click', e => {
+        const btn = e.target.closest('.unhide-btn');
+        if (!btn) return;
+        const sectionId = btn.getAttribute('data-section');
+        const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
+        if (navItem) navItem.style.display = '';
+        const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
+        if (midBtn) midBtn.textContent = 'Hide';
+        btn.parentElement.remove();
+      });
+    }
+
+    // ---------- RIGHT SIDEBAR: HIGHLIGHT FILTERS ----------
+
+    const newBtn = document.querySelector('.highlight-option-new');
+    const currentBtn = document.querySelector('.highlight-option-current');
+    const ntrBtn = document.querySelector('.highlight-option-ntr');
+
+    if (newBtn && currentBtn && ntrBtn) {
+      // New in 0.6.1.0 = exclusive (like old behavior)
+      newBtn.addEventListener('click', () => {
+        newBtn.classList.add('active');
+        currentBtn.classList.remove('active');
+        ntrBtn.classList.remove('active');
+      });
+
+      // Current Storylines & NTR can both be active,
+      // but they always turn OFF New when clicked
+      [currentBtn, ntrBtn].forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          newBtn.classList.remove('active');
+        });
+      });
+    }
+
+    // Default visible section + active nav
+    showSection('info');
+    setActiveNav('info');
+  });
+</script>
+
 </body>
 </html>
