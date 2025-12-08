@@ -1977,6 +1977,9 @@
       }
     });
 
+    // Sections that the user has explicitly "unhidden" while Current Storylines is on
+    const overrideVisibleInCurrent = new Set();
+
     // ---------- MIDDLE CONTENT: SECTION SWITCHING ----------
 
     function showSection(id) {
@@ -2061,9 +2064,22 @@
         if (!btn) return;
         const sectionId = btn.getAttribute('data-section');
         const navItem = document.querySelector('.nav-item[data-section="' + sectionId + '"]');
-        if (navItem) navItem.style.display = '';
+        if (navItem) {
+          navItem.style.display = '';
+          // If this was auto-hidden by Current Storylines, clear that marker
+          if (navItem.dataset.autoHiddenByCurrent) {
+            delete navItem.dataset.autoHiddenByCurrent;
+          }
+        }
         const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
         if (midBtn) midBtn.textContent = 'Hide';
+
+        // If Current Storylines is active and this id is NOT in its default set,
+        // remember that the user wants this visible anyway.
+        if (currentBtn && currentBtn.classList.contains('active') && !currentStorylineIds.has(sectionId)) {
+          overrideVisibleInCurrent.add(sectionId);
+        }
+
         btn.parentElement.remove();
       });
     }
@@ -2075,21 +2091,41 @@
         const secId = navItem.getAttribute('data-section');
 
         if (enabled) {
+          // Save whatever the display was before we mess with it
           if (!navItem.dataset.prevDisplayStored) {
             navItem.dataset.prevDisplay = navItem.style.display || '';
             navItem.dataset.prevDisplayStored = '1';
           }
 
-          if (!currentStorylineIds.has(secId)) {
+          // If not in the default current set AND not explicitly overridden -> hide + add to hidden list
+          if (!currentStorylineIds.has(secId) && !overrideVisibleInCurrent.has(secId)) {
             navItem.style.display = 'none';
+            navItem.dataset.autoHiddenByCurrent = '1';
+
+            const label = navItem.querySelector('.nav-link')?.textContent.trim() || secId;
+            addToHiddenList(secId, label);
           } else {
+            // Either in default set or user has overridden to keep visible
             navItem.style.display = navItem.dataset.prevDisplay || '';
+            // If it was previously auto-hidden, clear that flag and make sure
+            // it doesn't sit in the hidden manager anymore.
+            if (navItem.dataset.autoHiddenByCurrent) {
+              delete navItem.dataset.autoHiddenByCurrent;
+            }
+            removeFromHiddenList(secId);
           }
         } else {
+          // Turning filter OFF: restore original display
           if (navItem.dataset.prevDisplayStored) {
             navItem.style.display = navItem.dataset.prevDisplay;
             delete navItem.dataset.prevDisplay;
             delete navItem.dataset.prevDisplayStored;
+          }
+
+          // If it was auto-hidden by Current Storylines, clean up its hidden entry
+          if (navItem.dataset.autoHiddenByCurrent) {
+            delete navItem.dataset.autoHiddenByCurrent;
+            removeFromHiddenList(secId);
           }
         }
       });
@@ -2224,8 +2260,8 @@
       // Current Storylines:
       // - Toggles itself
       // - Clicking it always turns OFF New
-      // - When ON -> apply filter (hide others)
-      // - When OFF -> restore everything
+      // - When ON -> apply filter (hide others, add to Manage Hidden)
+      // - When OFF -> restore everything it auto-hid
       currentBtn.addEventListener('click', () => {
         const isActive = currentBtn.classList.contains('active');
 
@@ -2245,7 +2281,7 @@
       // NTR:
       // - Toggles itself
       // - Always turns OFF New
-      // - When ON -> names in ntrRedIds become red (matching NTR button), Paths header appears,
+      // - When ON -> names in ntrRedIds become red, Paths header appears,
       //              and the 5 path names move there (alphabetical)
       // - When OFF -> colors restore (base/blue), Paths header removed,
       //              and names move back to original positions
