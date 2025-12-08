@@ -18,7 +18,8 @@ body {
   background: #4b8b9b;
 }
 
-/* LEFT SIDEBAR */
+/* ========== LEFT SIDEBAR ========== */
+
 #sidebar {
   padding: 16px;
   background: #151515;
@@ -73,7 +74,8 @@ body {
   border-bottom: 1px solid #333;
 }
 
-/* RIGHT SIDEBAR */
+/* ========== RIGHT SIDEBAR ========== */
+
 #rightbar {
   padding: 16px;
   background: #151515;
@@ -86,7 +88,6 @@ body {
 }
 
 /* Top social icons */
-
 .right-icons {
   display: flex;
   justify-content: space-between; /* evenly distribute left → right */
@@ -130,12 +131,14 @@ body {
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
+  font-size: 0.9rem;
 }
 
 .highlight-box h2 {
   text-align: center;
   margin: 0 0 8px;
   border-bottom: 1px solid #333;
+  padding-bottom: 4px;
 }
 
 /* Highlight items */
@@ -149,6 +152,40 @@ body {
   text-align: center;
   font-size: 0.85rem;
   padding: 4px 0;
+}
+
+/* Add separator line under the first item */
+.highlight-list li + li {
+  border-top: 1px solid #333;
+  margin-top: 6px;
+  padding-top: 8px;
+}
+
+/* Clickable highlight buttons */
+.highlight-option {
+  background: transparent;
+  border: none;
+  color: #eee;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+  padding: 2px 0;
+}
+
+/* default state text */
+.highlight-option-new,
+.highlight-option-ntr {
+  font-weight: 600;
+}
+
+/* active: New in 0.6.0.2 -> green */
+.highlight-option-new.active {
+  color: #4edf6d;
+}
+
+/* active: NTR -> red */
+.highlight-option-ntr.active {
+  color: #de5050;
 }
 
 /* Bottom pinned button */
