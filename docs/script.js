@@ -111,26 +111,35 @@ document.addEventListener("DOMContentLoaded", () => {
      Highlight toggle logic
      ======================= */
 
-  // Buttons should have class="highlight-option"
-  // and data-highlight="new" | "current" | "ntr"
-  const highlightOptions = document.querySelectorAll(".highlight-option");
-  let activeHighlight = null;
+  // Buttons: data-highlight="new" | "current" | "ntr"
+  const newBtn = document.querySelector('.highlight-option[data-highlight="new"]');
+  const currentBtn = document.querySelector('.highlight-option[data-highlight="current"]');
+  const ntrBtn = document.querySelector('.highlight-option[data-highlight="ntr"]');
 
-  highlightOptions.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const selected = btn.getAttribute("data-highlight");
+  if (newBtn && currentBtn && ntrBtn) {
+    // New in 0.6.1.0 — exclusive, toggle ON/OFF
+    newBtn.addEventListener("click", () => {
+      const isActive = newBtn.classList.contains("active");
 
-      // If clicking the already active one, turn it off
-      if (activeHighlight === selected) {
-        btn.classList.remove("active");
-        activeHighlight = null;
-        return;
+      // toggle New
+      newBtn.classList.toggle("active", !isActive);
+
+      // when turning New ON, always turn others OFF
+      if (!isActive) {
+        currentBtn.classList.remove("active");
+        ntrBtn.classList.remove("active");
       }
-
-      // Otherwise, clear others and activate this one
-      highlightOptions.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      activeHighlight = selected;
     });
-  });
+
+    // Current Storylines and NTR — can work together
+    [currentBtn, ntrBtn].forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const isActive = btn.classList.contains("active");
+        btn.classList.toggle("active", !isActive);
+
+        // any click on these turns New OFF
+        newBtn.classList.remove("active");
+      });
+    });
+  }
 });
