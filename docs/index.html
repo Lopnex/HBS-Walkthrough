@@ -1977,9 +1977,6 @@
       }
     });
 
-    // Sections that the user has explicitly "unhidden" while Current Storylines is on
-    const overrideVisibleInCurrent = new Set();
-
     // ---------- MIDDLE CONTENT: SECTION SWITCHING ----------
 
     function showSection(id) {
@@ -2074,12 +2071,6 @@
         const midBtn = document.querySelector('.hide-section-btn[data-section="' + sectionId + '"]');
         if (midBtn) midBtn.textContent = 'Hide';
 
-        // If Current Storylines is active and this id is NOT in its default set,
-        // remember that the user wants this visible anyway.
-        if (currentBtn && currentBtn.classList.contains('active') && !currentStorylineIds.has(sectionId)) {
-          overrideVisibleInCurrent.add(sectionId);
-        }
-
         btn.parentElement.remove();
       });
     }
@@ -2097,18 +2088,16 @@
             navItem.dataset.prevDisplayStored = '1';
           }
 
-          // If not in the default current set AND not explicitly overridden -> hide + add to hidden list
-          if (!currentStorylineIds.has(secId) && !overrideVisibleInCurrent.has(secId)) {
+          // If not in the default current set -> hide + add to hidden list
+          if (!currentStorylineIds.has(secId)) {
             navItem.style.display = 'none';
             navItem.dataset.autoHiddenByCurrent = '1';
 
             const label = navItem.querySelector('.nav-link')?.textContent.trim() || secId;
             addToHiddenList(secId, label);
           } else {
-            // Either in default set or user has overridden to keep visible
+            // In default set -> show it as normal and ensure it's not in hidden manager
             navItem.style.display = navItem.dataset.prevDisplay || '';
-            // If it was previously auto-hidden, clear that flag and make sure
-            // it doesn't sit in the hidden manager anymore.
             if (navItem.dataset.autoHiddenByCurrent) {
               delete navItem.dataset.autoHiddenByCurrent;
             }
