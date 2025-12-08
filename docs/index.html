@@ -2155,6 +2155,16 @@
     const currentBtn = document.querySelector('.highlight-option-current');
     const ntrBtn = document.querySelector('.highlight-option-ntr');
 
+    // Cache the NTR button text color so nav links match it
+    let ntrTextColor = null;
+    function getNtrTextColor() {
+      if (!ntrTextColor && ntrBtn) {
+        const styles = window.getComputedStyle(ntrBtn);
+        ntrTextColor = styles.color || '#cc0000'; // fallback
+      }
+      return ntrTextColor || '#cc0000';
+    }
+
     // Color logic based on active filters
     function updateNavColors() {
       navItems.forEach(navItem => {
@@ -2175,9 +2185,9 @@
           color = '#3bafd9';
         }
 
-        // If NTR is active and this id is in NTR-red set -> override to red
+        // If NTR is active and this id is in NTR-red set -> override to match NTR button text color
         if (ntrBtn && ntrBtn.classList.contains('active') && ntrRedIds.has(secId)) {
-          color = '#cc0000';
+          color = getNtrTextColor();
         }
 
         link.style.color = color;
@@ -2188,7 +2198,7 @@
       // New in 0.6.1.0:
       // - Toggles itself ON/OFF
       // - When turning ON, also turns ON Current Storylines + applies filter
-      // - Turns OFF NTR? (no, you asked only for NTR to turn off New, not vice versa)
+      // - Does NOT affect NTR
       newBtn.addEventListener('click', () => {
         const isActive = newBtn.classList.contains('active');
 
@@ -2235,7 +2245,7 @@
       // NTR:
       // - Toggles itself
       // - Always turns OFF New
-      // - When ON -> names in ntrRedIds become red, Paths header appears,
+      // - When ON -> names in ntrRedIds become red (matching NTR button), Paths header appears,
       //              and the 5 path names move there (alphabetical)
       // - When OFF -> colors restore (base/blue), Paths header removed,
       //              and names move back to original positions
