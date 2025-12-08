@@ -1869,6 +1869,60 @@
     const sections = document.querySelectorAll('.content-section');
     const hiddenList = document.getElementById('hiddenList');
     const hideSectionButtons = document.querySelectorAll('.hide-section-btn');
+    const navItems = document.querySelectorAll('.nav-item[data-section]');
+
+    // IDs that should stay visible + colored when "Current Storylines" is active
+    const currentStorylineIds = new Set([
+      'main-story',
+      'side-quests',
+      'adel-reynolds',
+      'gemma-rey',
+      'christine-samson',
+      'lucas-channing',
+      'louise-samson',
+      'lillie-michaels',
+      'marcy-trevean',
+      'rosie-stevens',
+      'mika-colton',
+      'marie-prescott',
+      'lucy-channing',
+      'crystal',
+      'suki-sato',
+      'jenny-landon',
+      'samantha-stewart',
+      'rhea-cox',
+      'regan-collins',
+      'lana-goodman',
+      'amber-johnson',
+      'marley-dewitt',
+      'bethany-benson',
+      'frank',
+      'abigail-coney',
+      'claire-bosworth',
+      'lola-johnson',
+      'amy-bronson',
+      'stacey-price',
+      'loretta-hobson',
+      'julie-compton',
+      'steve-randall',
+      'molly-simmons',
+      'margot-simmons',
+      'marion-ravenwood',   // Nurse Marion
+      'leia-littleton',
+      'tania-abrahms',
+      'polly-mathers',
+      'shelly-bruce',
+      'connor-gilding',
+      'greg-hutchins',
+      'yua-mita',
+      'tilly-reynolds',
+      'jessica-martin',
+      'frankie-durham',
+      'jack-romer',
+      'jill-romer',
+      'nigel-cunningham',
+      'dr-jones'
+    ]);
 
     // ---------- MIDDLE CONTENT: SECTION SWITCHING ----------
 
@@ -1906,7 +1960,7 @@
       });
     });
 
-    // ---------- HIDE / UNHIDE SECTIONS IN LEFT NAV ----------
+    // ---------- HIDE / UNHIDE SECTIONS IN LEFT NAV (MID "Hide" BUTTONS) ----------
 
     function addToHiddenList(sectionId, label) {
       if (!hiddenList) return;
@@ -1964,6 +2018,50 @@
       });
     }
 
+    // ---------- CURRENT STORYLINES FILTER (LEFT NAV + COLOR) ----------
+
+    function applyCurrentFilter(enabled) {
+      navItems.forEach(navItem => {
+        const secId = navItem.getAttribute('data-section');
+        const link = navItem.querySelector('.nav-link');
+
+        if (enabled) {
+          // Store previous display once
+          if (!navItem.dataset.prevDisplayStored) {
+            navItem.dataset.prevDisplay = navItem.style.display || '';
+            navItem.dataset.prevDisplayStored = '1';
+          }
+
+          if (!currentStorylineIds.has(secId)) {
+            // Hide everything not in the list
+            navItem.style.display = 'none';
+          } else {
+            // Color allowed ones to match Current Storylines
+            if (link) {
+              if (!link.dataset.prevColorStored) {
+                link.dataset.prevColor = link.style.color || '';
+                link.dataset.prevColorStored = '1';
+              }
+              link.style.color = '#3bafd9';
+            }
+          }
+        } else {
+          // Restore display
+          if (navItem.dataset.prevDisplayStored) {
+            navItem.style.display = navItem.dataset.prevDisplay;
+            delete navItem.dataset.prevDisplay;
+            delete navItem.dataset.prevDisplayStored;
+          }
+          // Restore color
+          if (link && link.dataset.prevColorStored) {
+            link.style.color = link.dataset.prevColor;
+            delete link.dataset.prevColor;
+            delete link.dataset.prevColorStored;
+          }
+        }
+      });
+    }
+
     // ---------- RIGHT SIDEBAR: HIGHLIGHT FILTERS ----------
 
     const newBtn = document.querySelector('.highlight-option-new');
@@ -1973,30 +2071,58 @@
     if (newBtn && currentBtn && ntrBtn) {
       // New in 0.6.1.0:
       // - Toggles itself ON/OFF
-      // - When turning ON, it also turns ON Current Storylines and turns OFF NTR
-      // - When turning OFF, it leaves Current Storylines as-is
+      // - When turning ON, also turns ON Current Storylines + applies filter, turns OFF NTR
+      // - When turning OFF, does NOT touch Current Storylines
       newBtn.addEventListener('click', () => {
         const isActive = newBtn.classList.contains('active');
 
         if (isActive) {
-          // Already active -> turn ONLY New off
+          // Turn ONLY New off
           newBtn.classList.remove('active');
+          // If Current is still active, its filter stays on
         } else {
-          // Turn New ON, also force Current ON, and NTR OFF
+          // Turn New ON
           newBtn.classList.add('active');
-          currentBtn.classList.add('active');
+          // Force Current Storylines ON + apply filter
+          if (!currentBtn.classList.contains('active')) {
+            currentBtn.classList.add('active');
+            applyCurrentFilter(true);
+          } else {
+            // already active -> make sure filter is applied
+            applyCurrentFilter(true);
+          }
+          // Turn NTR off
           ntrBtn.classList.remove('active');
         }
       });
 
-      // Current Storylines & NTR:
-      // - Each toggles itself
-      // - Clicking either always turns OFF New
-      [currentBtn, ntrBtn].forEach(btn => {
-        btn.addEventListener('click', () => {
-          btn.classList.toggle('active');
+      // Current Storylines:
+      // - Toggles itself
+      // - Clicking it always turns OFF New
+      // - When ON -> apply filter (hide others + color matches)
+      // - When OFF -> restore everything
+      currentBtn.addEventListener('click', () => {
+        const isActive = currentBtn.classList.contains('active');
+
+        if (isActive) {
+          currentBtn.classList.remove('active');
+          newBtn.classList.remove('active'); // keep your previous behavior
+          applyCurrentFilter(false);
+        } else {
+          currentBtn.classList.add('active');
           newBtn.classList.remove('active');
-        });
+          applyCurrentFilter(true);
+        }
+      });
+
+      // NTR:
+      // - Toggles itself
+      // - Always turns OFF New
+      // - Does NOT affect Current Storylines filter
+      ntrBtn.addEventListener('click', () => {
+        ntrBtn.classList.toggle('active');
+        newBtn.classList.remove('active');
+        // Current stays however it was
       });
     }
 
