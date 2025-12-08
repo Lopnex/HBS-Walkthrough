@@ -234,10 +234,10 @@ body {
 /* NTR + Pregnancy combo halo — exact NTR color */
 .nav-link.ntr-preg-glow {
   text-shadow:
-    0 0 4px #de5050,
-    0 0 8px #de5050,
-    0 0 12px #de5050,
-    0 0 16px #de5050;
+    0 0 6px #de5050,
+    0 0 14px #de5050,
+    0 0 22px #de5050,
+    0 0 32px #de5050;
 }
 
 /* Filters sub-header pinned toward bottom */
