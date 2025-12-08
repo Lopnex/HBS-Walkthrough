@@ -1745,11 +1745,25 @@
         });
       }
 
+      /* ===== Highlight toggle logic ===== */
       const highlightOptions = document.querySelectorAll('.highlight-option');
+      let activeHighlight = null;
+
       highlightOptions.forEach(btn => {
         btn.addEventListener('click', () => {
+          const selected = btn.getAttribute('data-highlight');
+
+          // If clicking the same active one: turn it off
+          if (activeHighlight === selected) {
+            btn.classList.remove('active');
+            activeHighlight = null;
+            return;
+          }
+
+          // Otherwise switch active to this one
           highlightOptions.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
+          activeHighlight = selected;
         });
       });
 
