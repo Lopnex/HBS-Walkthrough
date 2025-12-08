@@ -139,6 +139,7 @@ body {
   margin: 0 0 8px;
   border-bottom: 1px solid #333;
   padding-bottom: 4px;
+  font-size: 0.85rem;   /* smaller Highlight title */
 }
 
 /* Highlight “New in …” */
@@ -167,35 +168,35 @@ body {
   text-decoration: underline;
 }
 
-/* New in 0.6.0.2 – bigger + bold */
+/* New in 0.6.0.2 – smaller, not bold */
 .highlight-option-new {
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 0.93rem;   /* a little smaller */
+  font-weight: 400;     /* not bold */
 }
 
 .highlight-option-new.active {
   color: #4edf6d;
 }
 
-/* Current Storylines – blue and clickable */
+/* Current Storylines – bold, turns blue ONLY when active */
 .highlight-option-current {
-  font-size: 1.05rem;
-  color: #3bafd9;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #eee;          /* normal color */
 }
 
 .highlight-option-current.active {
-  color: #3bafd9;
-  font-weight: 700;
+  color: #3bafd9;       /* blue when selected */
 }
 
-/* NTR – bigger, red when active */
+/* NTR – bold, red when active */
 .highlight-option-ntr {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .highlight-option-ntr.active {
   color: #de5050;
-  font-weight: 700;
 }
 
 /* Filters sub-header pinned toward bottom */
@@ -205,7 +206,7 @@ body {
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1rem;          /* bigger Filters label */
   font-weight: 700;
 }
 
@@ -228,7 +229,7 @@ body {
   border: 1px solid #333;
   background: #101010;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.9rem;        /* slightly bigger */
   color: #eee;
   text-decoration: none;
 }
