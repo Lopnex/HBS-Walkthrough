@@ -139,7 +139,7 @@ body {
   margin: 0 0 8px;
   border-bottom: 1px solid #333;
   padding-bottom: 4px;
-  font-size: 0.85rem;   /* smaller Highlight title */
+  font-size: 1rem;   /* bigger Highlight title */
 }
 
 /* Highlight “New in …” */
@@ -232,6 +232,7 @@ body {
   font-size: 0.9rem;        /* slightly bigger */
   color: #eee;
   text-decoration: none;
+  white-space: nowrap;      /* keep “Manage Hidden Sections” on one line */
 }
 
 .manage-hidden-link:hover {
