@@ -1971,11 +1971,19 @@
     const ntrBtn = document.querySelector('.highlight-option-ntr');
 
     if (newBtn && currentBtn && ntrBtn) {
-      // New in 0.6.1.0 = exclusive (like old behavior)
+      // New in 0.6.1.0 = exclusive ON/OFF
       newBtn.addEventListener('click', () => {
-        newBtn.classList.add('active');
-        currentBtn.classList.remove('active');
-        ntrBtn.classList.remove('active');
+        const isActive = newBtn.classList.contains('active');
+
+        if (isActive) {
+          // If already active, turn it OFF
+          newBtn.classList.remove('active');
+        } else {
+          // Turn New ON, force others OFF
+          newBtn.classList.add('active');
+          currentBtn.classList.remove('active');
+          ntrBtn.classList.remove('active');
+        }
       });
 
       // Current Storylines & NTR can both be active,
