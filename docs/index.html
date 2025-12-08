@@ -3008,6 +3008,15 @@ const newIds = new Set([
       }
       return ntrTextColor || '#cc0000';
     }
+        // Cache the New button text color so nav links match it
+    let newTextColor = null;
+    function getNewTextColor() {
+      if (!newTextColor && newBtn) {
+        const styles = window.getComputedStyle(newBtn);
+        newTextColor = styles.color || '#3bd97a'; // fallback green-ish
+      }
+      return newTextColor || '#3bd97a';
+    }
 
     // Color logic based on active filters
     function updateNavColors() {
@@ -3037,23 +3046,32 @@ const newIds = new Set([
           pregBtn && pregBtn.classList.contains('active') &&
           pregnancyIds.has(secId);
 
-        // Current -> blue
-        if (currentOn) {
-          color = '#3bafd9';
-        }
+        const newOn =
+          newBtn && newBtn.classList.contains('active') &&
+          newIds.has(secId);
 
-        // Pregnancy -> pink (can override blue)
-        if (pregOn) {
-          color = '#ffa3e2';
-        }
+        // NEW CONTENT -> uses New button color, takes priority over Current
+        if (newOn) {
+          color = getNewTextColor();
+        } else {
+          // Current -> blue
+          if (currentOn) {
+            color = '#3bafd9';
+          }
 
-        // NTR -> red (unless combined with Pregnancy)
-        if (ntrOn) {
+          // Pregnancy -> pink (can override blue)
           if (pregOn) {
-            // Pink name, red glow
-            link.classList.add('ntr-preg-glow');
-          } else {
-            color = getNtrTextColor();
+            color = '#ffa3e2';
+          }
+
+          // NTR -> red (unless combined with Pregnancy)
+          if (ntrOn) {
+            if (pregOn) {
+              // Pink name, red glow
+              link.classList.add('ntr-preg-glow');
+            } else {
+              color = getNtrTextColor();
+            }
           }
         }
 
