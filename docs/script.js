@@ -127,17 +127,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const isActive = newBtn.classList.contains("active");
 
       if (isActive) {
-        // turn New OFF
+        // turn New OFF + stop pulse
         newBtn.classList.remove("active");
+        document.body.classList.remove("v0610-new-active");
       } else {
-        // turn New ON, force others OFF
+        // turn New ON, force others OFF + enable pulse
         newBtn.classList.add("active");
         currentBtn.classList.remove("active");
         ntrBtn.classList.remove("active");
+
+        document.body.classList.add("v0610-new-active");
       }
     });
 
-    // CURRENT & NTR — can work together, always turn New OFF
+    // CURRENT & NTR — can work together, always turn New OFF + stop pulse
     [currentBtn, ntrBtn].forEach((btn) => {
       btn.addEventListener("click", () => {
         const isActive = btn.classList.contains("active");
@@ -149,8 +152,9 @@ document.addEventListener("DOMContentLoaded", () => {
           btn.classList.add("active");
         }
 
-        // any time one of these is clicked, New turns OFF
+        // any time one of these is clicked, New turns OFF + pulse stops
         newBtn.classList.remove("active");
+        document.body.classList.remove("v0610-new-active");
       });
     });
   }
