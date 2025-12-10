@@ -209,6 +209,34 @@ body {
   color: #de5050;
 }
 
+/* ===== Green pulse for "New in 0.6.1.0" content ===== */
+
+/* Mark any title that should pulse when New is active */
+.v0610-new {
+  padding: 2px 3px;
+  border-radius: 4px;
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Slow, soft green pulse – same green as New in 0.6.1.0 */
+@keyframes v0610PulseGreen {
+  0%,
+  100% {
+    background-color: rgba(78, 223, 109, 0);       /* transparent */
+    box-shadow: 0 0 0 rgba(78, 223, 109, 0);
+  }
+  50% {
+    background-color: rgba(78, 223, 109, 0.18);    /* gentle tint */
+    box-shadow: 0 0 14px rgba(78, 223, 109, 0.6);  /* soft glow */
+  }
+}
+
+/* Only pulse when New in 0.6.1.0 is active */
+body.v0610-new-active .content-section .v0610-new {
+  color: #4edf6d !important;                      /* same green as New button */
+  animation: v0610PulseGreen 3.5s ease-in-out infinite;
+}
+
 /* Text color helpers to match filter colors (for info section text) */
 .filter-color-new {
   color: #4edf6d;
@@ -229,33 +257,6 @@ body {
 .filter-color-pregnancy {
   color: #ffa3e2;
   font-weight: bold;
-}
-
-/* === Pulse Effect for New in 0.6.1.0 — Same Color as New Filter === */
-
-.v0610-new {
-  transition: transform 0.3s ease, text-shadow 0.3s ease;
-}
-
-/* Only pulse when New filter is active */
-body.v0610-new-active .content-section .v0610-new {
-  color: #4edf6d !important; /* SAME green as the highlight button */
-  animation: v0610PulseGreen 1.8s ease-in-out infinite;
-}
-
-@keyframes v0610PulseGreen {
-  0% {
-    text-shadow: 0 0 0 rgba(78, 223, 109, 0);
-    transform: scale(1);
-  }
-  50% {
-    text-shadow: 0 0 24px rgba(78, 223, 109, 1); /* bright green glow */
-    transform: scale(1.07); /* noticeable pulse */
-  }
-  100% {
-    text-shadow: 0 0 0 rgba(78, 223, 109, 0);
-    transform: scale(1);
-  }
 }
 
 /* NTR + Pregnancy combo halo — exact NTR color */
@@ -397,48 +398,5 @@ body.v0610-new-active .content-section .v0610-new {
   }
   .center-banner {
     margin: 0 0 16px;
-  }
-
-  /* ===========================
-   New in 0.6.1.0 – heading pulse
-   =========================== */
-
-/* Any title/line you mark with class="v0610-new" */
-.v0610-new {
-  display: inline-block;
-  position: relative;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-/* When "New in 0.6.1.0" is active, body gets v0610-new-active.
-   Then any .v0610-new inside content sections will pulse. */
-body.v0610-new-active .content-section .v0610-new {
-  color: #4edf6d; /* same green as New in 0.6.1.0 */
-  text-shadow:
-    0 0 4px rgba(78, 223, 109, 0.5),
-    0 0 10px rgba(78, 223, 109, 0.7),
-    0 0 18px rgba(78, 223, 109, 0.8);
-  animation: v0610-soft-pulse 2.6s ease-in-out infinite;
-}
-
-/* Slow, soft pulse (easy on the eyes) */
-@keyframes v0610-soft-pulse {
-  0% {
-    transform: scale(1);
-    text-shadow:
-      0 0 4px rgba(78, 223, 109, 0.3),
-      0 0 10px rgba(78, 223, 109, 0.5);
-  }
-  50% {
-    transform: scale(1.05);
-    text-shadow:
-      0 0 6px rgba(78, 223, 109, 0.7),
-      0 0 14px rgba(78, 223, 109, 0.9);
-  }
-  100% {
-    transform: scale(1);
-    text-shadow:
-      0 0 4px rgba(78, 223, 109, 0.3),
-      0 0 10px rgba(78, 223, 109, 0.5);
   }
 }
