@@ -398,4 +398,47 @@ body.v0610-new-active .content-section .v0610-new {
   .center-banner {
     margin: 0 0 16px;
   }
+
+  /* ===========================
+   New in 0.6.1.0 – heading pulse
+   =========================== */
+
+/* Any title/line you mark with class="v0610-new" */
+.v0610-new {
+  display: inline-block;
+  position: relative;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* When "New in 0.6.1.0" is active, body gets v0610-new-active.
+   Then any .v0610-new inside content sections will pulse. */
+body.v0610-new-active .content-section .v0610-new {
+  color: #4edf6d; /* same green as New in 0.6.1.0 */
+  text-shadow:
+    0 0 4px rgba(78, 223, 109, 0.5),
+    0 0 10px rgba(78, 223, 109, 0.7),
+    0 0 18px rgba(78, 223, 109, 0.8);
+  animation: v0610-soft-pulse 2.6s ease-in-out infinite;
+}
+
+/* Slow, soft pulse (easy on the eyes) */
+@keyframes v0610-soft-pulse {
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 4px rgba(78, 223, 109, 0.3),
+      0 0 10px rgba(78, 223, 109, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    text-shadow:
+      0 0 6px rgba(78, 223, 109, 0.7),
+      0 0 14px rgba(78, 223, 109, 0.9);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow:
+      0 0 4px rgba(78, 223, 109, 0.3),
+      0 0 10px rgba(78, 223, 109, 0.5);
+  }
 }
