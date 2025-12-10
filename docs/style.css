@@ -352,6 +352,7 @@ body.v0610-new-active .content-section .v0610-new {
   align-items: center;
 }
 
+/* Hide + Back buttons share this style */
 .hide-section-btn {
   padding: 2px 8px;
   font-size: 0.8rem;
@@ -364,6 +365,21 @@ body.v0610-new-active .content-section .v0610-new {
 
 .hide-section-btn:hover {
   background: #333;
+}
+
+/* ⭐ NEW: Stack Hide + Back vertically, right aligned */
+.section-header-buttons {
+  display: flex;
+  flex-direction: column;   /* Hide on top, Back below */
+  align-items: flex-end;    /* Right-align both buttons */
+  gap: 4px;                 /* Space between Hide + Back */
+}
+
+/* ⭐ NEW: Bottom Back button positioned bottom-right */
+.section-footer {
+  display: flex;
+  justify-content: flex-end; /* Align Back to the right */
+  margin-top: 16px;          /* Space above the bottom button */
 }
 
 /* Hidden list in Manage Hidden page */
