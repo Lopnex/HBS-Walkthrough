@@ -5606,9 +5606,15 @@ const newIds = new Set([
         const isActive = newBtn.classList.contains('active');
 
         if (isActive) {
+          // Turn New OFF + stop pulse
           newBtn.classList.remove('active');
+          document.body.classList.remove('v0610-new-active');
         } else {
+          // Turn New ON
           newBtn.classList.add('active');
+
+          // Enable pulse for v0.6.1.0 content
+          document.body.classList.add('v0610-new-active');
 
           // Ensure Current Storylines is ON + filter applied
           if (!currentBtn.classList.contains('active')) {
@@ -5644,10 +5650,12 @@ const newIds = new Set([
         if (isActive) {
           currentBtn.classList.remove('active');
           newBtn.classList.remove('active');
+          document.body.classList.remove('v0610-new-active');
           applyCurrentFilter(false);
         } else {
           currentBtn.classList.add('active');
           newBtn.classList.remove('active');
+          document.body.classList.remove('v0610-new-active');
           applyCurrentFilter(true);
         }
 
@@ -5665,10 +5673,12 @@ const newIds = new Set([
         if (isActive) {
           ntrBtn.classList.remove('active');
           newBtn.classList.remove('active');
+          document.body.classList.remove('v0610-new-active');
           deactivatePaths();
         } else {
           ntrBtn.classList.add('active');
           newBtn.classList.remove('active');
+          document.body.classList.remove('v0610-new-active');
           activatePaths();
         }
 
@@ -5690,6 +5700,7 @@ const newIds = new Set([
 
         // Pregnancy and New are exclusive (like NTR vs New)
         newBtn.classList.remove('active');
+        document.body.classList.remove('v0610-new-active');
 
         updateNavColors();
       });
