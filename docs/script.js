@@ -122,23 +122,69 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   if (newBtn && currentBtn && ntrBtn) {
-    // NEW IN 0.6.1.0 — exclusive ON/OFF toggle
+    // NEW IN 0.6.1.0
+    // - Toggles its own active state
+    // - Can be ON together with Current Storylines
+    // - Must be mutually exclusive with NTR
+    // - Controls the green pulse via body.v0610-new-active
     newBtn.addEventListener("click", () => {
       const isActive = newBtn.classList.contains("active");
 
       if (isActive) {
-        // turn New OFF + stop pulse
+        // Turn New OFF + stop pulse
         newBtn.classList.remove("active");
         document.body.classList.remove("v0610-new-active");
       } else {
-        // turn New ON, force others OFF + enable pulse
+        // Turn New ON + enable pulse
         newBtn.classList.add("active");
-        currentBtn.classList.remove("active");
+        document.body.classList.add("v0610-new-active");
+
+        // New and NTR cannot be active together
         ntrBtn.classList.remove("active");
 
-        document.body.classList.add("v0610-new-active");
+        // If you want New to ALSO auto-enable Current Storylines:
+        if (!currentBtn.classList.contains("active")) {
+          currentBtn.classList.add("active");
+          // If you still have a current filter function, call it here:
+          // applyCurrentFilter(true);
+        }
       }
     });
+
+    // CURRENT STORYLINES
+    // - Toggles independently
+    // - Does NOT touch New or the pulse
+    currentBtn.addEventListener("click", () => {
+      const isActive = currentBtn.classList.contains("active");
+
+      if (isActive) {
+        currentBtn.classList.remove("active");
+        // If you have a filter for Current Storylines, you’d call:
+        // applyCurrentFilter(false);
+      } else {
+        currentBtn.classList.add("active");
+        // applyCurrentFilter(true);
+      }
+    });
+
+    // NTR
+    // - Toggles independently
+    // - Mutually exclusive with New (turns New/pulse OFF when NTR is turned ON)
+    ntrBtn.addEventListener("click", () => {
+      const isActive = ntrBtn.classList.contains("active");
+
+      if (isActive) {
+        ntrBtn.classList.remove("active");
+      } else {
+        ntrBtn.classList.add("active");
+
+        // Turn New OFF + stop pulse
+        newBtn.classList.remove("active");
+        document.body.classList.remove("v0610-new-active");
+      }
+    });
+  }
+});
 
     // CURRENT & NTR — can work together, always turn New OFF + stop pulse
     [currentBtn, ntrBtn].forEach((btn) => {
