@@ -5332,7 +5332,7 @@ Top bloke in my opinion!</p>
           </li>
         </ul>
 
-        <a
+                <a
           href="#"
           class="manage-hidden-link"
           data-section="hiddenManager"
@@ -5344,7 +5344,150 @@ Top bloke in my opinion!</p>
 
   </div> <!-- end of #app -->
 
+  <!-- Your external JS file -->
   <script src="script.js"></script>
+
+  <!-- Existing JS (DO NOT REMOVE, this is the one that starts with navLinks / manageHiddenLinks) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('.nav-link[data-section]');
+      const manageHiddenLinks = document.querySelectorAll('.manage-hidden-link');
+      const sections = document.querySelectorAll('.content-section');
+      const hiddenList = document.getElementById('hiddenList');
+      const hideSectionButtons = document.querySelectorAll('.hide-section-btn');
+      const navItems = document.querySelectorAll('.nav-item[data-section]');
+      const navList = document.getElementById('navList');
+
+      // ... ALL of your existing logic stays here ...
+      // (showSection, setActiveNav, filter buttons, NTR/New/Preg toggles, etc.)
+
+      // Default visible section + active nav
+      showSection('info');
+      setActiveNav('info');
+      updateNavColors();
+    });
+  </script>
+
+    <!-- NEW JS: the Back-button + scroll-to-top code with hide-section-btn styling -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navList = document.getElementById('navList');
+      const navItems = document.querySelectorAll('.nav-item[data-section]');
+      const navLinks = document.querySelectorAll('.nav-link[data-section]');
+      const sections = document.querySelectorAll('.content-section');
+
+      // Map: section id -> nav item element in the left list
+      const navItemBySection = {};
+      navItems.forEach(item => {
+        const id = item.getAttribute('data-section');
+        if (id) {
+          navItemBySection[id] = item;
+        }
+      });
+
+      // Store which nav item opened each section
+      const openerForSection = {};
+
+      // When clicking a name on the left:
+      // - remember the opener
+      // - scroll to top
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const sectionId = link.getAttribute('data-section');
+          const item = link.closest('.nav-item');
+
+          if (sectionId && item) {
+            openerForSection[sectionId] = item;
+          }
+
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Scroll back to the nav item on the left
+      function scrollNavItemIntoView(sectionId) {
+        const item = openerForSection[sectionId] || navItemBySection[sectionId];
+        if (!item) return;
+
+        const rect = item.getBoundingClientRect();
+        const offset = rect.top + window.scrollY - 80;
+
+        window.scrollTo({
+          top: offset < 0 ? 0 : offset,
+          behavior: 'smooth'
+        });
+      }
+
+      // Add Back buttons to each section (except info + hiddenManager)
+      function addBackButtonsToSection(section) {
+        const id = section.id;
+        if (!id || id === 'info' || id === 'hiddenManager') return;
+
+        const header = section.querySelector('.section-header');
+        if (header) {
+          const hideBtn = header.querySelector('.hide-section-btn');
+
+          // Wrapper for stacking hide + back buttons
+          let btnWrapper = header.querySelector('.section-header-buttons');
+          if (!btnWrapper) {
+            btnWrapper = document.createElement('div');
+            btnWrapper.className = 'section-header-buttons';
+            header.appendChild(btnWrapper);
+          }
+
+          // Move Hide button into wrapper if not already inside
+          if (hideBtn && hideBtn.parentElement === header) {
+            btnWrapper.appendChild(hideBtn);
+          }
+
+          // TOP Back button styled exactly like Hide
+          const backTop = document.createElement('button');
+          backTop.className = 'hide-section-btn';
+          backTop.textContent = 'Back';
+          backTop.addEventListener('click', () => scrollNavItemIntoView(id));
+          btnWrapper.appendChild(backTop);
+        }
+
+        // BOTTOM Back button
+        const footer = document.createElement('div');
+        footer.className = 'section-footer';
+
+        const backBottom = document.createElement('button');
+        backBottom.className = 'hide-section-btn';
+        backBottom.textContent = 'Back';
+        backBottom.addEventListener('click', () => scrollNavItemIntoView(id));
+
+        footer.appendChild(backBottom);
+        section.appendChild(footer);
+      }
+
+      // Apply Back buttons to all sections
+      sections.forEach(section => addBackButtonsToSection(section));
+
+      // SPECIAL CASE: Manage Hidden → Back returns to Information
+      const hiddenManager = document.getElementById('hiddenManager');
+      if (hiddenManager) {
+        const header = hiddenManager.querySelector('.section-header');
+        if (header) {
+          const backManage = document.createElement('button');
+          backManage.className = 'hide-section-btn';
+          backManage.textContent = 'Back';
+
+          backManage.addEventListener('click', () => {
+            const infoLink = document.querySelector('.nav-link[data-section="info"]');
+            if (infoLink) {
+              infoLink.click();
+            } else if (typeof showSection === 'function') {
+              showSection('info');
+            }
+          });
+
+          header.appendChild(backManage);
+        }
+      }
+    });
+  </script>
+
 </body>
 </html>
 
