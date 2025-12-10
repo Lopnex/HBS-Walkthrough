@@ -375,11 +375,22 @@ body.v0610-new-active .content-section .v0610-new {
   gap: 4px;                 /* Space between Hide + Back */
 }
 
+/* ⭐ Make Hide + Back identical width */
+.section-header-buttons .hide-section-btn {
+  width: 100%;        /* Both buttons match the widest one */
+  text-align: center; /* Center text inside */
+}
+
 /* ⭐ NEW: Bottom Back button positioned bottom-right */
 .section-footer {
   display: flex;
   justify-content: flex-end; /* Align Back to the right */
   margin-top: 16px;          /* Space above the bottom button */
+}
+
+/* ⭐ Keep bottom Back button text centered */
+.section-footer .hide-section-btn {
+  text-align: center;
 }
 
 /* Hidden list in Manage Hidden page */
