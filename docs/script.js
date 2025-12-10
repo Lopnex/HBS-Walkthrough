@@ -32,13 +32,34 @@ document.addEventListener("DOMContentLoaded", () => {
       addHiddenRow(id, title, hiddenSet);
     }
 
-    // Attach hide button
-    const hideBtn = section.querySelector(".hide-section");
-    if (hideBtn) {
-      hideBtn.addEventListener("click", () => {
-        hideSection(id, title, hiddenSet);
-      });
-    }
+// Attach hide button
+const hideBtn = section.querySelector(".hide-section");
+if (hideBtn) {
+  hideBtn.addEventListener("click", () => {
+    hideSection(id, title, hiddenSet);
+  });
+
+  // ---------------------------------------------
+  // ADD BACK BUTTON (TOP RIGHT)
+  // ---------------------------------------------
+  if (id !== "info" && id !== "hiddenManager") {
+    // Create Back button
+    const backBtn = document.createElement("button");
+    backBtn.className = "back-btn";
+    backBtn.textContent = "Back";
+
+    // Insert it directly under the hide button
+    hideBtn.insertAdjacentElement("afterend", backBtn);
+
+    // When back is clicked, scroll to the nav item on the left
+    backBtn.addEventListener("click", () => {
+      const navItem = document.querySelector(`[data-section="${id}"]`);
+      if (navItem) {
+        navItem.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  }
+}
   });
 
   // Smooth scroll & active link highlight
