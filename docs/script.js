@@ -1,206 +1,137 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== Core DOM references =====
-  const sections = Array.from(document.querySelectorAll(".content-section"));
-  const navList = document.getElementById("navList");
-  const navButtons = navList
-    ? Array.from(navList.querySelectorAll(".nav-link"))
-    : [];
+  const sections = Array.from(
+    document.querySelectorAll(".walkthrough-section")
+  );
+  const sectionList = document.getElementById("sectionList");
   const hiddenList = document.getElementById("hiddenList");
-  const manageHiddenLink = document.querySelector(".manage-hidden-link");
 
-  // If navList isn't found something is very wrong; bail out gracefully.
-  if (!navList) {
-    console.warn("navList (#navList) not found – check your HTML.");
-  }
-
-  // ===== Hidden sections (persisted in localStorage) =====
+  // Load hidden sections from localStorage
   const hiddenFromStorage = JSON.parse(
     localStorage.getItem("hiddenSections") || "[]"
   );
   const hiddenSet = new Set(hiddenFromStorage);
 
-  function saveHidden() {
-    localStorage.setItem("hiddenSections", JSON.stringify([...hiddenSet]));
-  }
+  // Build sidebar menu based on sections in the HTML
+  sections.forEach((section) => {
+    const id = section.id;
+    const title =
+      section.dataset.title || section.querySelector("h2").textContent;
 
-  function findSectionTitle(id) {
-    const section = document.getElementById(id);
-    if (section) {
-      const h2 = section.querySelector("h2");
-      if (h2) return h2.textContent.trim();
+    // Sidebar link
+    const li = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "#" + id;
+    link.textContent = title;
+    link.dataset.sectionId = id;
+    li.appendChild(link);
+    sectionList.appendChild(li);
+
+    // Hide link if section is hidden
+    if (hiddenSet.has(id)) {
+      li.style.display = "none";
+      addHiddenRow(id, title, hiddenSet);
     }
 
-    if (navList) {
-      const navBtn = navList.querySelector(
-        `.nav-item[data-section="${id}"] .nav-link`
-      );
-      if (navBtn) return navBtn.textContent.trim();
+// Attach hide button
+const hideBtn = section.querySelector(".hide-section");
+if (hideBtn) {
+  hideBtn.addEventListener("click", () => {
+    hideSection(id, title, hiddenSet);
+  });
+
+  // ---------------------------------------------
+  // ADD BACK BUTTON (TOP RIGHT)
+  // ---------------------------------------------
+  if (id !== "info" && id !== "hiddenManager") {
+    // Create Back button
+    const backBtn = document.createElement("button");
+    backBtn.className = "back-btn";
+    backBtn.textContent = "Back";
+
+    // Insert it directly under the hide button
+    hideBtn.insertAdjacentElement("afterend", backBtn);
+
+    // When back is clicked, scroll to the nav item on the left
+    backBtn.addEventListener("click", () => {
+      const navItem = document.querySelector(`[data-section="${id}"]`);
+      if (navItem) {
+        navItem.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  }
+}
+  });
+
+  // Smooth scroll & active link highlight
+  sectionList.addEventListener("click", (evt) => {
+    const link = evt.target.closest("a");
+    if (!link) return;
+
+    evt.preventDefault();
+
+    const id = link.dataset.sectionId;
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    window.scrollTo({
+      top: target.offsetTop - 10,
+      behavior: "smooth",
+    });
+
+    // highlight active link
+    sectionList.querySelectorAll("a").forEach((a) => {
+      a.classList.toggle("active", a === link);
+    });
+  });
+
+  function hideSection(id, title, hiddenSet) {
+    // Hide from menu
+    const link = sectionList.querySelector(`a[data-section-id="${id}"]`);
+    if (link && link.parentElement) {
+      link.parentElement.style.display = "none";
     }
 
-    return id;
+    hiddenSet.add(id);
+    saveHidden(hiddenSet);
+    addHiddenRow(id, title, hiddenSet);
   }
 
-  function updateHideButtonLabel(id) {
-    const section = document.getElementById(id);
-    if (!section) return;
-    const hideBtn = section.querySelector(".hide-section-btn");
-    if (!hideBtn) return;
-
-    hideBtn.textContent = hiddenSet.has(id) ? "Unhide" : "Hide";
-  }
-
-  function addHiddenRow(id) {
-    if (!hiddenList) return;
-
+  function addHiddenRow(id, title, hiddenSet) {
     // Don't duplicate rows
     if (hiddenList.querySelector(`li[data-section-id="${id}"]`)) return;
 
     const li = document.createElement("li");
     li.dataset.sectionId = id;
-
-    const label = document.createElement("span");
-    label.textContent = findSectionTitle(id);
-    li.appendChild(label);
+    li.textContent = title;
 
     const btn = document.createElement("button");
-    btn.textContent = "Unhide";
+    btn.textContent = "unhide";
     btn.addEventListener("click", () => {
-      unhideSection(id);
-    });
-    li.appendChild(btn);
+      // show in menu again
+      const link = sectionList.querySelector(`a[data-section-id="${id}"]`);
+      if (link && link.parentElement) {
+        link.parentElement.style.display = "";
+      }
 
+      hiddenSet.delete(id);
+      saveHidden(hiddenSet);
+
+      // remove row from hidden list
+      hiddenList.removeChild(li);
+    });
+
+    li.appendChild(btn);
     hiddenList.appendChild(li);
   }
 
-  function hideSection(id) {
-    const navItem = navList
-      ? navList.querySelector(`.nav-item[data-section="${id}"]`)
-      : null;
-    if (navItem) {
-      navItem.style.display = "none";
-    }
-
-    hiddenSet.add(id);
-    saveHidden();
-    addHiddenRow(id);
-    updateHideButtonLabel(id);
+  function saveHidden(hiddenSet) {
+    localStorage.setItem("hiddenSections", JSON.stringify([...hiddenSet]));
   }
 
-  function unhideSection(id) {
-    const navItem = navList
-      ? navList.querySelector(`.nav-item[data-section="${id}"]`)
-      : null;
-    if (navItem) {
-      navItem.style.display = "";
-    }
+  /* =======================
+     Highlight toggle logic
+     ======================= */
 
-    hiddenSet.delete(id);
-    saveHidden();
-
-    if (hiddenList) {
-      const row = hiddenList.querySelector(`li[data-section-id="${id}"]`);
-      if (row) {
-        hiddenList.removeChild(row);
-      }
-    }
-
-    updateHideButtonLabel(id);
-  }
-
-  // Apply hidden state from localStorage on load
-  hiddenSet.forEach((id) => {
-    const navItem = navList
-      ? navList.querySelector(`.nav-item[data-section="${id}"]`)
-      : null;
-    if (navItem) {
-      navItem.style.display = "none";
-    }
-    addHiddenRow(id);
-    updateHideButtonLabel(id);
-  });
-
-  // ===== Section show/hide via left nav =====
-  function showSection(id) {
-    sections.forEach((section) => {
-      section.classList.toggle("visible", section.id === id);
-    });
-  }
-
-  navButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.section;
-      if (!id) return;
-
-      showSection(id);
-
-      navButtons.forEach((b) => {
-        b.classList.toggle("active", b === btn);
-      });
-    });
-  });
-
-  // "Manage Hidden Sections" link on the right
-  if (manageHiddenLink) {
-    manageHiddenLink.addEventListener("click", (evt) => {
-      evt.preventDefault();
-      const id = manageHiddenLink.dataset.section;
-      if (!id) return;
-      showSection(id);
-
-      // Clear active state from left nav (nothing in left nav corresponds to this)
-      navButtons.forEach((b) => b.classList.remove("active"));
-    });
-  }
-
-  // ===== Per-section Hide / Unhide + Back buttons =====
-  sections.forEach((section) => {
-    const id = section.id;
-    const hideBtn = section.querySelector(".hide-section-btn");
-
-    if (hideBtn) {
-      // Set initial label based on whether it's in the hidden set
-      updateHideButtonLabel(id);
-
-      hideBtn.addEventListener("click", () => {
-        const isHidden = hiddenSet.has(id);
-        if (isHidden) {
-          // Clicking "Unhide" -> undo hiding
-          unhideSection(id);
-        } else {
-          // Clicking "Hide" -> hide from left menu + add to Manage Hidden
-          hideSection(id);
-        }
-      });
-
-      // Optional Back button at top-right (skip info + hiddenManager)
-      if (id !== "info" && id !== "hiddenManager") {
-        const backBtn = document.createElement("button");
-        backBtn.className = "hide-section-btn";
-        backBtn.textContent = "Back";
-
-        // Stack under the Hide/Unhide button if there's a wrapper, else place after
-        const headerButtonsWrapper = section.querySelector(
-          ".section-header-buttons"
-        );
-        if (headerButtonsWrapper) {
-          headerButtonsWrapper.appendChild(backBtn);
-        } else {
-          hideBtn.insertAdjacentElement("afterend", backBtn);
-        }
-
-        backBtn.addEventListener("click", () => {
-          const navItem = document.querySelector(
-            `.nav-item[data-section="${id}"] .nav-link`
-          );
-          if (navItem) {
-            navItem.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-        });
-      }
-    }
-  });
-
-  // ===== Highlight toggle logic (New / Current / NTR + section tags) =====
   const newBtn = document.querySelector(
     '.highlight-option[data-highlight="new"]'
   );
@@ -213,6 +144,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (newBtn && currentBtn && ntrBtn) {
     // NEW IN 0.6.1.0
+    // - Toggles its own active state
+    // - Can be ON together with Current Storylines
+    // - Must be mutually exclusive with NTR
+    // - Controls the green pulse via body.v0610-new-active
     newBtn.addEventListener("click", () => {
       const isActive = newBtn.classList.contains("active");
 
@@ -225,17 +160,27 @@ document.addEventListener("DOMContentLoaded", () => {
         newBtn.classList.add("active");
         document.body.classList.add("v0610-new-active");
 
-        // If NTR is ON, turn it OFF
+        // New and NTR cannot be active together
         ntrBtn.classList.remove("active");
+
+        // If you want New to ALSO auto-enable Current Storylines:
+        if (!currentBtn.classList.contains("active")) {
+          currentBtn.classList.add("active");
+          // If you still have a current filter function, call it here:
+          // applyCurrentFilter(true);
+        }
       }
     });
 
     // CURRENT STORYLINES
+    // - Toggles independently
+    // - Does NOT touch New or the pulse
     currentBtn.addEventListener("click", () => {
       const isActive = currentBtn.classList.contains("active");
 
       if (isActive) {
         currentBtn.classList.remove("active");
+        // If you have a filter for Current Storylines, you’d call:
         // applyCurrentFilter(false);
       } else {
         currentBtn.classList.add("active");
@@ -244,6 +189,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // NTR
+    // - Toggles independently
+    // - Mutually exclusive with New (turns New/pulse OFF when NTR is turned ON)
     ntrBtn.addEventListener("click", () => {
       const isActive = ntrBtn.classList.contains("active");
 
@@ -257,20 +204,22 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.remove("v0610-new-active");
       }
     });
+  }
+});
 
-    // Section tag buttons
-    const tagButtons = document.querySelectorAll(".section-tag");
-    tagButtons.forEach((btn) => {
+    // CURRENT & NTR — can work together, always turn New OFF + stop pulse
+    [currentBtn, ntrBtn].forEach((btn) => {
       btn.addEventListener("click", () => {
         const isActive = btn.classList.contains("active");
 
+        // toggle this one
         if (isActive) {
           btn.classList.remove("active");
         } else {
           btn.classList.add("active");
         }
 
-        // Any time a tag button is clicked, New turns OFF + pulse stops
+        // any time one of these is clicked, New turns OFF + pulse stops
         newBtn.classList.remove("active");
         document.body.classList.remove("v0610-new-active");
       });
