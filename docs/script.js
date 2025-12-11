@@ -26,40 +26,45 @@ document.addEventListener("DOMContentLoaded", () => {
     li.appendChild(link);
     sectionList.appendChild(li);
 
-    // Hide link if section is hidden
+    const hideBtn = section.querySelector(".hide-section");
+
+    // If this section was hidden previously, reflect that in UI
     if (hiddenSet.has(id)) {
       li.style.display = "none";
-      addHiddenRow(id, title, hiddenSet);
+      addHiddenRow(id, title);
+      if (hideBtn) {
+        hideBtn.textContent = "Unhide";
+      }
     }
 
-// Attach hide button
-const hideBtn = section.querySelector(".hide-section");
-if (hideBtn) {
-  hideBtn.addEventListener("click", () => {
-    hideSection(id, title, hiddenSet);
-  });
+    // Attach hide/unhide toggle button inside the section header
+    if (hideBtn) {
+      hideBtn.addEventListener("click", () => {
+        const isHidden = hiddenSet.has(id);
+        if (isHidden) {
+          unhideSection(id);
+        } else {
+          hideSection(id, title);
+        }
+      });
 
-  // ---------------------------------------------
-  // ADD BACK BUTTON (TOP RIGHT)
-  // ---------------------------------------------
-  if (id !== "info" && id !== "hiddenManager") {
-    // Create Back button
-    const backBtn = document.createElement("button");
-    backBtn.className = "back-btn";
-    backBtn.textContent = "Back";
+      // Add a Back button (except on info/hidden manager sections)
+      if (id !== "info" && id !== "hiddenManager") {
+        const backBtn = document.createElement("button");
+        backBtn.className = "back-btn";
+        backBtn.textContent = "Back";
 
-    // Insert it directly under the hide button
-    hideBtn.insertAdjacentElement("afterend", backBtn);
+        // Insert it directly after the hide/unhide button
+        hideBtn.insertAdjacentElement("afterend", backBtn);
 
-    // When back is clicked, scroll to the nav item on the left
-    backBtn.addEventListener("click", () => {
-      const navItem = document.querySelector(`[data-section="${id}"]`);
-      if (navItem) {
-        navItem.scrollIntoView({ behavior: "smooth", block: "center" });
+        backBtn.addEventListener("click", () => {
+          const navItem = document.querySelector(`[data-section="${id}"]`);
+          if (navItem) {
+            navItem.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
       }
-    });
-  }
-}
+    }
   });
 
   // Smooth scroll & active link highlight
@@ -84,7 +89,9 @@ if (hideBtn) {
     });
   });
 
-  function hideSection(id, title, hiddenSet) {
+  // --- Hide / Unhide helper functions ---
+
+  function hideSection(id, title) {
     // Hide from menu
     const link = sectionList.querySelector(`a[data-section-id="${id}"]`);
     if (link && link.parentElement) {
@@ -92,39 +99,69 @@ if (hideBtn) {
     }
 
     hiddenSet.add(id);
-    saveHidden(hiddenSet);
-    addHiddenRow(id, title, hiddenSet);
+    saveHidden();
+    addHiddenRow(id, title);
+
+    // Change button text to "Unhide"
+    const section = sections.find((s) => s.id === id);
+    if (section) {
+      const hideBtn = section.querySelector(".hide-section");
+      if (hideBtn) {
+        hideBtn.textContent = "Unhide";
+      }
+    }
   }
 
-  function addHiddenRow(id, title, hiddenSet) {
+  function unhideSection(id) {
+    // Show in menu again
+    const link = sectionList.querySelector(`a[data-section-id="${id}"]`);
+    if (link && link.parentElement) {
+      link.parentElement.style.display = "";
+    }
+
+    hiddenSet.delete(id);
+    saveHidden();
+
+    // Remove row from Manage Hidden list
+    const row = hiddenList.querySelector(`li[data-section-id="${id}"]`);
+    if (row) {
+      hiddenList.removeChild(row);
+    }
+
+    // Reset button text to "Hide"
+    const section = sections.find((s) => s.id === id);
+    if (section) {
+      const hideBtn = section.querySelector(".hide-section");
+      if (hideBtn) {
+        hideBtn.textContent = "Hide";
+      }
+    }
+  }
+
+  function addHiddenRow(id, title) {
+    if (!hiddenList) return;
+
     // Don't duplicate rows
     if (hiddenList.querySelector(`li[data-section-id="${id}"]`)) return;
 
     const li = document.createElement("li");
     li.dataset.sectionId = id;
-    li.textContent = title;
+
+    const label = document.createElement("span");
+    label.textContent = title;
+    li.appendChild(label);
 
     const btn = document.createElement("button");
-    btn.textContent = "unhide";
+    btn.textContent = "Unhide";
     btn.addEventListener("click", () => {
-      // show in menu again
-      const link = sectionList.querySelector(`a[data-section-id="${id}"]`);
-      if (link && link.parentElement) {
-        link.parentElement.style.display = "";
-      }
-
-      hiddenSet.delete(id);
-      saveHidden(hiddenSet);
-
-      // remove row from hidden list
-      hiddenList.removeChild(li);
+      unhideSection(id);
     });
-
     li.appendChild(btn);
+
     hiddenList.appendChild(li);
   }
 
-  function saveHidden(hiddenSet) {
+  function saveHidden() {
     localStorage.setItem("hiddenSections", JSON.stringify([...hiddenSet]));
   }
 
@@ -160,15 +197,8 @@ if (hideBtn) {
         newBtn.classList.add("active");
         document.body.classList.add("v0610-new-active");
 
-        // New and NTR cannot be active together
+        // If NTR is ON, turn it OFF
         ntrBtn.classList.remove("active");
-
-        // If you want New to ALSO auto-enable Current Storylines:
-        if (!currentBtn.classList.contains("active")) {
-          currentBtn.classList.add("active");
-          // If you still have a current filter function, call it here:
-          // applyCurrentFilter(true);
-        }
       }
     });
 
@@ -180,7 +210,6 @@ if (hideBtn) {
 
       if (isActive) {
         currentBtn.classList.remove("active");
-        // If you have a filter for Current Storylines, you’d call:
         // applyCurrentFilter(false);
       } else {
         currentBtn.classList.add("active");
@@ -204,11 +233,12 @@ if (hideBtn) {
         document.body.classList.remove("v0610-new-active");
       }
     });
-  }
-});
 
-    // CURRENT & NTR — can work together, always turn New OFF + stop pulse
-    [currentBtn, ntrBtn].forEach((btn) => {
+    // CLICK ANY TAG BUTTON INSIDE THE SECTIONS
+    // - Toggles its own active state
+    // - Always turns New OFF + stops pulse
+    const tagButtons = document.querySelectorAll(".section-tag");
+    tagButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const isActive = btn.classList.contains("active");
 
