@@ -60,8 +60,6 @@ const currentStorylineIds = new Set([
   "jill-romer",
   "nigel-cunningham",
   "dr-jones",
-  "thomas-wilson",
-  // Extra current names
   "lucas-channing",
   "bruce-kreiger"
 ]);
