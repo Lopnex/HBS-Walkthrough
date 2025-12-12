@@ -231,36 +231,55 @@ const currentStorylineIds = new Set([
     hiddenList.appendChild(li);
   }
 
-  function applyCurrentFilter() {
-    navItems.forEach((li) => {
-      const id = li.dataset.section;
-      // Headers have no data-section
-      if (!id) {
-        li.style.display = "";
-        return;
+function applyCurrentFilter() {
+  navItems.forEach((li) => {
+    const id = li.dataset.section;
+
+    // Headers have no data-section, always show
+    if (!id) {
+      li.style.display = "";
+      return;
+    }
+
+    // Manual hide always wins
+    if (hiddenSections.has(id)) {
+      li.style.display = "none"; 
+      return;
+    }
+
+    // FILTER OFF → full restore (except manually hidden)
+    if (!currentFilterOn) {
+      li.style.display = "";
+
+      // Remove auto-hidden entries from Manage Hidden
+      removeHiddenRow(id);
+      currentOverrides.delete(id);
+
+      return;
+    }
+
+    // FILTER ON
+    const isAlways = alwaysShowIds.has(id);
+    const isCurrent = currentStorylineIds.has(id);
+    const overridden = currentOverrides.has(id);
+
+    const shouldShow = isAlways || isCurrent || overridden;
+
+    if (shouldShow) {
+      // KEEP visible + remove if previously auto-hidden
+      li.style.display = "";
+      removeHiddenRow(id);
+    } else {
+      // AUTO-HIDE THIS ITEM
+      li.style.display = "none";
+
+      // Only add auto-hidden items (not manually hidden)
+      if (!hiddenSections.has(id)) {
+        addHiddenRow(id);     // <-- This makes it appear in Manage Hidden Sections
       }
-
-      // If manually hidden, never show in nav no matter what
-      if (hiddenSections.has(id)) {
-        li.style.display = "none";
-        return;
-      }
-
-      if (!currentFilterOn) {
-        // Filter OFF: show anything not manually hidden
-        li.style.display = "";
-        return;
-      }
-
-      // Filter ON:
-      const isAlways = alwaysShowIds.has(id);
-      const isCurrent = currentStorylineIds.has(id);
-      const overridden = currentOverrides.has(id);
-
-      const shouldShow = isAlways || isCurrent || overridden;
-      li.style.display = shouldShow ? "" : "none";
-    });
-  }
+    }
+  });
+}
 
   function hideSection(sectionId) {
     const item = getNavItem(sectionId);
