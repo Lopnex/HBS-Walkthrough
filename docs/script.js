@@ -19,50 +19,53 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====== FILTER CONFIG ======
 
   // Current storylines list
-  const currentStorylineIds = new Set([
-    "adel-reynolds",
-    "gemma-rey",
-    "christine-samson",
-    "marie-prescott",
-    "marcy-trevean",
-    "rosie-stevens",
-    "regan-collins",
-    "lana-goodman",
-    "amber-johnson",
-    "marley-dewitt",
-    "bethany-benson",
-    "frank",
-    "ella-norton",
-    "abigail-coney",
-    "claire-bosworth",
-    "lola-johnson",
-    "amy-bronson",
-    "stacey-price",
-    "loretta-hobson",
-    "julie-compton",
-    "steve-randall",
-    "molly-simmons",
-    "margot-simmons",
-    "marion-ravenwood",
-    "leia-littleton",
-    "tania-abrahms",
-    "polly-mathers",
-    "shelley-bruce",
-    "connor-gilding",
-    "greg-hutchins",
-    "yua-mita",
-    "tilly-reynolds",
-    "jessica-martin",
-    "frankie-durham",
-    "jack-romer",
-    "jill-romer",
-    "nigel-cunningham",
-    "dr-jones",
-    "thomas-wilson",
-    // Extra current names
-    "lucas-channing",
-    "bruce-kreiger"
-  ]);
+const currentStorylineIds = new Set([
+  "main-story",
+  "side-quests",
+  "adel-reynolds",
+  "gemma-rey",
+  "christine-samson",
+  "marie-prescott",
+  "marcy-trevean",
+  "rosie-stevens",
+  "regan-collins",
+  "lana-goodman",
+  "amber-johnson",
+  "marley-dewitt",
+  "bethany-benson",
+  "frank",
+  "ella-norton",
+  "abigail-coney",
+  "claire-bosworth",
+  "lola-johnson",
+  "amy-bronson",
+  "stacey-price",
+  "loretta-hobson",
+  "julie-compton",
+  "steve-randall",
+  "molly-simmons",
+  "margot-simmons",
+  "marion-ravenwood",
+  "leia-littleton",
+  "tania-abrahms",
+  "polly-mathers",
+  "shelley-bruce",
+  "connor-gilding",
+  "greg-hutchins",
+  "yua-mita",
+  "tilly-reynolds",
+  "jessica-martin",
+  "frankie-durham",
+  "jack-romer",
+  "jill-romer",
+  "nigel-cunningham",
+  "dr-jones",
+  "thomas-wilson",
+  // Extra current names
+  "lucas-channing",
+  "bruce-kreiger"
+]);
+
 
   // IDs that should always stay in the nav even when filtered
   const alwaysShowIds = new Set([
@@ -274,15 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
       '.hide-section-btn[data-section="' + sectionId + '"]'
     );
     if (btn) btn.textContent = "Unhide";
-
-    // If you hide the currently visible section, go back to info
-    const currentVisible = sections.find((s) =>
-      s.classList.contains("visible")
-    );
-    if (currentVisible && currentVisible.id === sectionId) {
-      showSection("info");
-      setActiveNav("info");
-    }
   }
 
   function unhideSection(sectionId, fromManager = false) {
