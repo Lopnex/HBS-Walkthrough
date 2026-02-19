@@ -587,15 +587,23 @@ document.addEventListener("DOMContentLoaded", () => {
         clearNewHighlights();
         activatePaths();
 
-        // NTR implies no Current filter
-        currentBtn.classList.remove("active");
-        currentFilterOn = false;
-        currentOverrides.clear();
-        applyCurrentFilter();
-      }
+// NTR
+ntrBtn.addEventListener("click", () => {
+  const isActive = ntrBtn.classList.contains("active");
 
-      updateNavColors();
-    });
+  if (isActive) {
+    ntrBtn.classList.remove("active");
+    clearNewHighlights();
+    deactivatePaths();
+  } else {
+    ntrBtn.classList.add("active");
+    clearNewHighlights();
+    activatePaths();
+  }
+
+  // ✅ Do NOT touch Current Storylines here (NTR can stack with it)
+  updateNavColors();
+});
 
     // PREGNANCY
     pregBtn.addEventListener("click", () => {
