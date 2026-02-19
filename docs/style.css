@@ -371,12 +371,12 @@ body.v0630-new-active .content-section .v0630-new {
   background: #333;
 }
 
-/* ⭐ NEW: Stack Hide + Back vertically, right aligned */
+/* ⭐ Stack Hide + Back vertically, right aligned */
 .section-header-buttons {
   display: flex;
   flex-direction: column;   /* Hide on top, Back below */
   align-items: flex-end;    /* Right-align both buttons */
-  gap: 4px;                 /* Space between Hide + Back */
+  gap: 0px;                 /* Back touches Hide */
 }
 
 /* ⭐ Make Hide + Back identical width */
@@ -385,7 +385,7 @@ body.v0630-new-active .content-section .v0630-new {
   text-align: center; /* Center text inside */
 }
 
-/* ⭐ NEW: Bottom Back button positioned bottom-right */
+/* ⭐ Bottom Back button positioned bottom-right */
 .section-footer {
   display: flex;
   justify-content: flex-end; /* Align Back to the right */
