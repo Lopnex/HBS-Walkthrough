@@ -168,26 +168,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     link.addEventListener("click", (e) => {
       e.preventDefault();
+
+      // Capture current sidebar scroll position so clicking a name NEVER repositions the left list.
+      // (Some browsers will scroll overflow containers to keep a clicked/focused element visible.)
+      const sidebarEl = document.getElementById("sidebar");
+      const sidebarScrollTop = sidebarEl ? sidebarEl.scrollTop : 0;
+      const navScrollTop = navList ? navList.scrollTop : 0;
+
       const sectionId = link.getAttribute("data-section");
       if (!sectionId) return;
 
-
       // Track the last nav title you clicked so Back can re-center on it
       lastNavClickedId = sectionId;
+
       // Ignore clicks on manually hidden sections
       if (hiddenSections.has(sectionId)) return;
 
-      // Save where we came from for Back
+      // Save where we came from for Back (used mainly for Manage Hidden)
       const currentId = getCurrentVisibleSectionId();
       if (currentId && currentId !== sectionId) lastSectionId = currentId;
 
       showSection(sectionId);
       setActiveNav(sectionId);
 
-      // ✅ Start at top of the content
+      // ✅ Clicking a name should ONLY take you to the top of the page
       scrollToTop();
+
+      // Restore sidebar scroll immediately after the click so the left list doesn't "jump"
+      // (double rAF is the most reliable way to win the race vs. native scroll-into-view behaviors)
+      requestAnimationFrame(() => {
+        if (sidebarEl) sidebarEl.scrollTop = sidebarScrollTop;
+        if (navList) navList.scrollTop = navScrollTop;
+        requestAnimationFrame(() => {
+          if (sidebarEl) sidebarEl.scrollTop = sidebarScrollTop;
+          if (navList) navList.scrollTop = navScrollTop;
+        });
+      });
     });
   });
+});
 
   // Manage Hidden link (right sidebar) -> open Manage Hidden
   manageHiddenLinks.forEach((link) => {
