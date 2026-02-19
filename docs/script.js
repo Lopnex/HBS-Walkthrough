@@ -574,19 +574,6 @@ document.addEventListener("DOMContentLoaded", () => {
       updateNavColors();
     });
 
-    // NTR
-    ntrBtn.addEventListener("click", () => {
-      const isActive = ntrBtn.classList.contains("active");
-
-      if (isActive) {
-        ntrBtn.classList.remove("active");
-        clearNewHighlights();
-        deactivatePaths();
-      } else {
-        ntrBtn.classList.add("active");
-        clearNewHighlights();
-        activatePaths();
-
 // NTR
 ntrBtn.addEventListener("click", () => {
   const isActive = ntrBtn.classList.contains("active");
@@ -601,10 +588,10 @@ ntrBtn.addEventListener("click", () => {
     activatePaths();
   }
 
-  // ✅ Do NOT touch Current Storylines here (NTR can stack with it)
+  // ✅ NTR does NOT touch Current Storylines
   updateNavColors();
 });
-
+    
     // PREGNANCY
     pregBtn.addEventListener("click", () => {
       const isActive = pregBtn.classList.contains("active");
