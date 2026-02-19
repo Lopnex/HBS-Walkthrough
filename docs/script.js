@@ -162,6 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Clicking LEFT NAV names
   navLinks.forEach((link) => {
+    // Prevent the browser from auto-scrolling the left sidebar to the focused link
+    // (Chrome can scroll overflow containers on focus/click to keep the target visible)
+    link.addEventListener("mousedown", (e) => e.preventDefault());
+
     link.addEventListener("click", (e) => {
       e.preventDefault();
       const sectionId = link.getAttribute("data-section");
