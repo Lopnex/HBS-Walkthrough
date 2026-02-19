@@ -209,31 +209,35 @@ body {
   color: #de5050;
 }
 
-/* ===== Green pulse for "New in 0.6.1.0" content ===== */
+/* ===== Green pulse for "New in 0.6.1.x / 0.6.2.x / 0.6.3.x" content ===== */
 
 /* Mark any title that should pulse when New is active */
-.v0610-new {
+.v0610-new,
+.v0620-new,
+.v0630-new {
   padding: 2px 3px;
   border-radius: 4px;
   transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* Slow, soft green pulse – same green as New in 0.6.1.0 */
+/* Slow, soft green pulse – same green for all versions */
 @keyframes v0610PulseGreen {
   0%,
   100% {
-    background-color: rgba(78, 223, 109, 0);       /* transparent */
+    background-color: rgba(78, 223, 109, 0);
     box-shadow: 0 0 0 rgba(78, 223, 109, 0);
   }
   50% {
-    background-color: rgba(78, 223, 109, 0.18);    /* gentle tint */
-    box-shadow: 0 0 14px rgba(78, 223, 109, 0.6);  /* soft glow */
+    background-color: rgba(78, 223, 109, 0.18);
+    box-shadow: 0 0 14px rgba(78, 223, 109, 0.6);
   }
 }
 
-/* Only pulse when New in 0.6.1.0 is active */
-body.v0610-new-active .content-section .v0610-new {
-  color: #4edf6d !important;                      /* same green as New button */
+/* Only pulse when the specific version is active */
+body.v0610-new-active .content-section .v0610-new,
+body.v0620-new-active .content-section .v0620-new,
+body.v0630-new-active .content-section .v0630-new {
+  color: #4edf6d !important;
   animation: v0610PulseGreen 3.5s ease-in-out infinite;
 }
 
