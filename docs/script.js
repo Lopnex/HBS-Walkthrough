@@ -62,12 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
     "bruce-kreiger"
   ]);
 
-  // IDs that should always stay in the nav even when filtered
-  const alwaysShowIds = new Set([
-    "main-story",
-    "side-quests"
-    // nothing else here – info/getting-started/extra-content are NOT always shown
-  ]);
+  // IDs that should always stay in the nav even when Current Storylines filter is on
+  const alwaysShowIds = new Set(["main-story", "side-quests"]);
 
   // Pregnancy highlight IDs (pink)
   const pregnancyIds = new Set([
@@ -110,18 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "bruce-kreiger"
   ]);
 
-  // NEW content IDs (green) per version
-  // Add section IDs here to make their names turn green in the left nav
-  // when that version's "New in ..." highlight is active.
-  const newIds061 = new Set([
-    "main-story",
-    "tilly-reynolds",
-    "ella-norton"
-  ]);
-
-  // Fill these when you know what's new in each version
-  const newIds062 = new Set([]);
-  const newIds063 = new Set([]);
+  // NEW content IDs (green) per version — these affect LEFT NAV name color
+  const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
+  const newIds062 = new Set([]); // fill later
+  const newIds063 = new Set([]); // fill later
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
@@ -138,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // When filter is on, manual "unhide" can override filter until filter clicked again
+  // When Current filter is on, manual "unhide" can override filter until filter clicked again
   const currentOverrides = new Set();
   let currentFilterOn = false;
 
@@ -199,10 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function addHiddenRow(sectionId) {
     if (!hiddenList) return;
-    // Avoid duplicates
-    if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) {
-      return;
-    }
+    if (hiddenList.querySelector('li[data-section="' + sectionId + '"]')) return;
 
     const li = document.createElement("li");
     li.dataset.section = sectionId;
@@ -212,9 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btn = document.createElement("button");
     btn.textContent = "Unhide";
-    btn.addEventListener("click", () => {
-      unhideSection(sectionId, true);
-    });
+    btn.addEventListener("click", () => unhideSection(sectionId, true));
 
     li.appendChild(span);
     li.appendChild(btn);
@@ -237,51 +220,36 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // FILTER OFF → full restore (except manually hidden)
+      // FILTER OFF -> restore all (except manually hidden)
       if (!currentFilterOn) {
         li.style.display = "";
-
-        // Remove auto-hidden entries from Manage Hidden
         removeHiddenRow(id);
         currentOverrides.delete(id);
-
         return;
       }
 
       // FILTER ON
-      const isAlways = alwaysShowIds.has(id);
-      const isCurrent = currentStorylineIds.has(id);
-      const overridden = currentOverrides.has(id);
-
-      const shouldShow = isAlways || isCurrent || overridden;
+      const shouldShow =
+        alwaysShowIds.has(id) || currentStorylineIds.has(id) || currentOverrides.has(id);
 
       if (shouldShow) {
-        // KEEP visible + remove if previously auto-hidden
         li.style.display = "";
         removeHiddenRow(id);
       } else {
-        // AUTO-HIDE THIS ITEM
         li.style.display = "none";
-
-        // Only add auto-hidden items (not manually hidden)
-        if (!hiddenSections.has(id)) {
-          addHiddenRow(id); // <-- This makes it appear in Manage Hidden Sections
-        }
+        addHiddenRow(id);
       }
     });
   }
 
   function hideSection(sectionId) {
     const item = getNavItem(sectionId);
-    if (item) {
-      item.style.display = "none";
-    }
+    if (item) item.style.display = "none";
+
     hiddenSections.add(sectionId);
-    // No override when hiding
     currentOverrides.delete(sectionId);
     addHiddenRow(sectionId);
 
-    // Change that section's button text to "Unhide"
     const btn = document.querySelector(
       '.hide-section-btn[data-section="' + sectionId + '"]'
     );
@@ -292,20 +260,16 @@ document.addEventListener("DOMContentLoaded", () => {
     hiddenSections.delete(sectionId);
 
     const item = getNavItem(sectionId);
-    if (item) {
-      item.style.display = "";
-    }
+    if (item) item.style.display = "";
 
-    // Remove from Manage Hidden list
     removeHiddenRow(sectionId);
 
-    // Make the hide button say "Hide" again
     const btn = document.querySelector(
       '.hide-section-btn[data-section="' + sectionId + '"]'
     );
     if (btn) btn.textContent = "Hide";
 
-    // If Current filter is ON, this acts as an override
+    // If Current filter is ON, this acts as an override for non-current items
     if (currentFilterOn && !currentStorylineIds.has(sectionId)) {
       currentOverrides.add(sectionId);
     }
@@ -321,13 +285,8 @@ document.addEventListener("DOMContentLoaded", () => {
   hideButtons.forEach((btn) => {
     const sectionId = btn.getAttribute("data-section");
     btn.addEventListener("click", () => {
-      if (hiddenSections.has(sectionId)) {
-        // Already hidden → now unhide
-        unhideSection(sectionId, false);
-      } else {
-        // Not hidden → hide it
-        hideSection(sectionId);
-      }
+      if (hiddenSections.has(sectionId)) unhideSection(sectionId, false);
+      else hideSection(sectionId);
     });
   });
 
@@ -341,13 +300,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const new061Btn = document.querySelector(
     '.highlight-option[data-highlight="new-061"]'
   );
+
   const currentBtn = document.querySelector(
     '.highlight-option[data-highlight="current"]'
   );
   const pregBtn = document.querySelector(
     '.highlight-option[data-highlight="pregnancy"]'
   );
-  const ntrBtn = document.querySelector('.highlight-option[data-highlight="ntr"]');
+  const ntrBtn = document.querySelector(
+    '.highlight-option[data-highlight="ntr"]'
+  );
 
   // Cache colors from buttons
   let ntrTextColor = null;
@@ -361,9 +323,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let newTextColor = null;
   function getActiveNewBtn() {
-    if (new063Btn && new063Btn.classList.contains("active")) return new063Btn;
-    if (new062Btn && new062Btn.classList.contains("active")) return new062Btn;
-    if (new061Btn && new061Btn.classList.contains("active")) return new061Btn;
+    if (new063Btn?.classList.contains("active")) return new063Btn;
+    if (new062Btn?.classList.contains("active")) return new062Btn;
+    if (new061Btn?.classList.contains("active")) return new061Btn;
+    return null;
+  }
+
+  function getActiveNewSet() {
+    const btn = getActiveNewBtn();
+    if (btn === new063Btn) return newIds063;
+    if (btn === new062Btn) return newIds062;
+    if (btn === new061Btn) return newIds061;
     return null;
   }
 
@@ -376,7 +346,61 @@ document.addEventListener("DOMContentLoaded", () => {
     return newTextColor || "#3bd97a";
   }
 
-  // Apply Paths header when NTR is active
+  function clearNewHighlights() {
+    document.body.classList.remove(
+      "v0610-new-active",
+      "v0620-new-active",
+      "v0630-new-active"
+    );
+    document.querySelectorAll(".highlight-option-new").forEach((b) => {
+      b.classList.remove("active");
+    });
+  }
+
+  function activateNew(btn, bodyClass) {
+    const isAlreadyActive = document.body.classList.contains(bodyClass);
+
+    // Toggle off
+    if (isAlreadyActive) {
+      clearNewHighlights();
+      updateNavColors();
+      return;
+    }
+
+    // Toggle on this version
+    clearNewHighlights();
+    document.body.classList.add(bodyClass);
+    btn.classList.add("active");
+
+    // ✅ Old behavior: New forces Current Storylines ON and applies filter
+    if (currentBtn && !currentBtn.classList.contains("active")) {
+      currentBtn.classList.add("active");
+    }
+    currentFilterOn = true;
+    currentOverrides.clear();
+    applyCurrentFilter();
+
+    // Highlight is exclusive with Pregnancy and NTR
+    if (pregBtn?.classList.contains("active")) pregBtn.classList.remove("active");
+    if (ntrBtn?.classList.contains("active")) {
+      ntrBtn.classList.remove("active");
+      deactivatePaths();
+    }
+
+    updateNavColors();
+  }
+
+  new063Btn?.addEventListener("click", () =>
+    activateNew(new063Btn, "v0630-new-active")
+  );
+  new062Btn?.addEventListener("click", () =>
+    activateNew(new062Btn, "v0620-new-active")
+  );
+  new061Btn?.addEventListener("click", () =>
+    activateNew(new061Btn, "v0610-new-active")
+  );
+
+  // Paths header when NTR is active
   function activatePaths() {
     const mainCharactersHeader = document.querySelector(".main-characters-header");
     if (!mainCharactersHeader) return;
@@ -401,9 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return ta.localeCompare(tb);
     });
 
-    items.forEach((item) => {
-      navList.insertBefore(item, mainCharactersHeader);
-    });
+    items.forEach((item) => navList.insertBefore(item, mainCharactersHeader));
   }
 
   function deactivatePaths() {
@@ -411,6 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const info = originalPositions.get(id);
       const item = document.querySelector('.nav-item[data-section="' + id + '"]');
       if (!info || !item) return;
+
       const { parent, nextSibling } = info;
       if (nextSibling && nextSibling.parentNode === parent) {
         parent.insertBefore(item, nextSibling);
@@ -422,6 +445,55 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathsHeader = document.querySelector(".paths-header");
     if (pathsHeader) pathsHeader.remove();
   }
+
+  // CURRENT STORYLINES filter button
+  currentBtn?.addEventListener("click", () => {
+    const isActive = currentBtn.classList.contains("active");
+
+    if (isActive) {
+      currentBtn.classList.remove("active");
+      currentFilterOn = false;
+    } else {
+      currentBtn.classList.add("active");
+      currentFilterOn = true;
+    }
+
+    // Clicking Current does NOT need to turn off NTR/Pregnancy,
+    // but it should clear New highlights (since New forces Current)
+    clearNewHighlights();
+    currentOverrides.clear();
+    applyCurrentFilter();
+    updateNavColors();
+  });
+
+  // PREGNANCY filter button (can stack with Current + NTR, but clears New)
+  pregBtn?.addEventListener("click", () => {
+    const isActive = pregBtn.classList.contains("active");
+    if (isActive) pregBtn.classList.remove("active");
+    else pregBtn.classList.add("active");
+
+    // Pregnancy does not stack with New highlights
+    clearNewHighlights();
+    updateNavColors();
+  });
+
+  // NTR filter button (can stack with Current + Pregnancy, but clears New)
+  ntrBtn?.addEventListener("click", () => {
+    const isActive = ntrBtn.classList.contains("active");
+
+    if (isActive) {
+      ntrBtn.classList.remove("active");
+      clearNewHighlights();
+      deactivatePaths();
+    } else {
+      ntrBtn.classList.add("active");
+      clearNewHighlights();
+      activatePaths();
+    }
+
+    // ✅ IMPORTANT: NTR NEVER touches Current Storylines
+    updateNavColors();
+  });
 
   // Color logic for nav items based on active filters
   function updateNavColors() {
@@ -440,48 +512,26 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.remove("ntr-preg-glow");
 
       const currentOn =
-        currentBtn &&
-        currentBtn.classList.contains("active") &&
-        currentStorylineIds.has(secId);
-
-      const ntrOn =
-        ntrBtn && ntrBtn.classList.contains("active") && ntrRedIds.has(secId);
+        currentBtn?.classList.contains("active") && currentStorylineIds.has(secId);
 
       const pregOn =
-        pregBtn &&
-        pregBtn.classList.contains("active") &&
-        pregnancyIds.has(secId);
+        pregBtn?.classList.contains("active") && pregnancyIds.has(secId);
 
-      const activeNewBtn = getActiveNewBtn();
-      const activeNewSet =
-        activeNewBtn === new063Btn
-          ? newIds063
-          : activeNewBtn === new062Btn
-          ? newIds062
-          : activeNewBtn === new061Btn
-          ? newIds061
-          : null;
+      const ntrOn =
+        ntrBtn?.classList.contains("active") && ntrRedIds.has(secId);
 
-      const newOn = !!activeNewBtn && !!activeNewSet && activeNewSet.has(secId);
+      const newSet = getActiveNewSet();
+      const newOn = !!newSet && newSet.has(secId);
 
-      // NEW CONTENT -> uses New button color, takes priority
+      // Priority: New > Current > Pregnancy > NTR (with special NTR+Preg glow)
       if (newOn) {
         color = getNewTextColor();
       } else {
-        // Current -> blue
-        if (currentOn) {
-          color = "#3bafd9";
-        }
+        if (currentOn) color = "#3bafd9";
+        if (pregOn) color = "#ffa3e2";
 
-        // Pregnancy -> pink (can override blue)
-        if (pregOn) {
-          color = "#ffa3e2";
-        }
-
-        // NTR -> red (unless combined with Pregnancy)
         if (ntrOn) {
           if (pregOn) {
-            // Pink name, red glow
             link.classList.add("ntr-preg-glow");
           } else {
             color = getNtrTextColor();
@@ -493,129 +543,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Hook up highlight buttons
-  if ((new061Btn || new062Btn || new063Btn) && currentBtn && ntrBtn && pregBtn) {
-    function clearNewHighlights() {
-      document.body.classList.remove(
-        "v0610-new-active",
-        "v0620-new-active",
-        "v0630-new-active"
-      );
-
-      document
-        .querySelectorAll(".highlight-option-new")
-        .forEach((btn) => btn.classList.remove("active"));
-    }
-
-    function activateNew(btn, bodyClass) {
-      const isAlreadyActive = document.body.classList.contains(bodyClass);
-
-      // Toggle OFF if clicked again
-      if (isAlreadyActive) {
-        clearNewHighlights();
-        updateNavColors();
-        return;
-      }
-
-      // Turn ON this version (and turn off other New versions)
-      clearNewHighlights();
-      document.body.classList.add(bodyClass);
-      btn.classList.add("active");
-
-      // Match old behavior: New forces Current ON + applies the filter
-      if (!currentBtn.classList.contains("active")) {
-        currentBtn.classList.add("active");
-      }
-      currentFilterOn = true;
-      currentOverrides.clear();
-      applyCurrentFilter();
-
-      // Turn OFF NTR + Paths
-      if (ntrBtn.classList.contains("active")) {
-        ntrBtn.classList.remove("active");
-        deactivatePaths();
-      }
-
-      // Turn OFF Pregnancy
-      if (pregBtn.classList.contains("active")) {
-        pregBtn.classList.remove("active");
-      }
-
-      updateNavColors();
-    }
-
-    // NEW (per version)
-    new063Btn?.addEventListener("click", () =>
-      activateNew(new063Btn, "v0630-new-active")
-    );
-    new062Btn?.addEventListener("click", () =>
-      activateNew(new062Btn, "v0620-new-active")
-    );
-    new061Btn?.addEventListener("click", () =>
-      activateNew(new061Btn, "v0610-new-active")
-    );
-
-    // CURRENT STORYLINES
-    currentBtn.addEventListener("click", () => {
-      const isActive = currentBtn.classList.contains("active");
-
-      if (isActive) {
-        currentBtn.classList.remove("active");
-        clearNewHighlights();
-        currentFilterOn = false;
-      } else {
-        currentBtn.classList.add("active");
-        clearNewHighlights();
-        currentFilterOn = true;
-      }
-
-      currentOverrides.clear();
-      applyCurrentFilter();
-      updateNavColors();
-    });
-
-// NTR
-ntrBtn.addEventListener("click", () => {
-  const isActive = ntrBtn.classList.contains("active");
-
-  if (isActive) {
-    ntrBtn.classList.remove("active");
-    clearNewHighlights();
-    deactivatePaths();
-  } else {
-    ntrBtn.classList.add("active");
-    clearNewHighlights();
-    activatePaths();
-  }
-
-  // ✅ NTR does NOT touch Current Storylines
-  updateNavColors();
-});
-    
-    // PREGNANCY
-    pregBtn.addEventListener("click", () => {
-      const isActive = pregBtn.classList.contains("active");
-
-      if (isActive) {
-        pregBtn.classList.remove("active");
-      } else {
-        pregBtn.classList.add("active");
-      }
-
-      // Pregnancy doesn't stack with New
-      clearNewHighlights();
-      updateNavColors();
-    });
-  }
-
-  // ====== BACK BUTTONS & SCROLL-TO-NAV ======
-
-  // Map: section id -> nav item
-  function getNavButtonForSection(sectionId) {
-    return navList.querySelector('.nav-link[data-section="' + sectionId + '"]');
-  }
-
-  // Back button logic: return to info
+  // ====== BACK BUTTONS ======
+  // Any button with class="back-btn" goes back to Info (works top + bottom)
   const backButtons = Array.from(document.querySelectorAll(".back-btn"));
   backButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -625,7 +554,7 @@ ntrBtn.addEventListener("click", () => {
     });
   });
 
-  // Apply initial filter state if needed
+  // Initial paint
   applyCurrentFilter();
   updateNavColors();
 });
