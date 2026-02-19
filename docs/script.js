@@ -340,9 +340,54 @@ function applyCurrentFilter() {
   });
 
   // ====== HIGHLIGHT / FILTER BUTTONS (RIGHT SIDEBAR) ======
-  const newBtn = document.querySelector(
-    '.highlight-option[data-highlight="new"]'
+const new063Btn = document.querySelector(
+  '.highlight-option[data-highlight="new-063"]'
+);
+const new062Btn = document.querySelector(
+  '.highlight-option[data-highlight="new-062"]'
+);
+const new061Btn = document.querySelector(
+  '.highlight-option[data-highlight="new-061"]'
+);
+
+function clearNewHighlights() {
+  document.body.classList.remove(
+    "v0610-new-active",
+    "v0620-new-active",
+    "v0630-new-active"
   );
+
+  document.querySelectorAll(".highlight-option-new").forEach((btn) => {
+    btn.classList.remove("active");
+  });
+}
+
+new063Btn?.addEventListener("click", () => {
+  const active = document.body.classList.contains("v0630-new-active");
+  clearNewHighlights();
+  if (!active) {
+    document.body.classList.add("v0630-new-active");
+    new063Btn.classList.add("active");
+  }
+});
+
+new062Btn?.addEventListener("click", () => {
+  const active = document.body.classList.contains("v0620-new-active");
+  clearNewHighlights();
+  if (!active) {
+    document.body.classList.add("v0620-new-active");
+    new062Btn.classList.add("active");
+  }
+});
+
+new061Btn?.addEventListener("click", () => {
+  const active = document.body.classList.contains("v0610-new-active");
+  clearNewHighlights();
+  if (!active) {
+    document.body.classList.add("v0610-new-active");
+    new061Btn.classList.add("active");
+  }
+});
   const currentBtn = document.querySelector(
     '.highlight-option[data-highlight="current"]'
   );
