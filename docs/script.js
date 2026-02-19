@@ -206,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
-});
 
   // Manage Hidden link (right sidebar) -> open Manage Hidden
   manageHiddenLinks.forEach((link) => {
