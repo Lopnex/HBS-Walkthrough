@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Tracks where user came from so Back returns there (not Info)
   let lastSectionId = "info";
 
+  let lastNavClickedId = "info";
+
   // ====== FILTER CONFIG ======
 
   // Current storylines list
@@ -152,10 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function alignNavTo(sectionId) {
+  function alignNavTo(sectionId, block = "center") {
     const navBtn = navList.querySelector('.nav-link[data-section="' + sectionId + '"]');
-    if (navBtn) navBtn.scrollIntoView({ block: "nearest" });
+    if (navBtn) navBtn.scrollIntoView({ block, inline: "nearest", behavior: "smooth" });
   }
+
 
   // Clicking LEFT NAV names
   navLinks.forEach((link) => {
@@ -164,6 +167,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const sectionId = link.getAttribute("data-section");
       if (!sectionId) return;
 
+
+      // Track the last nav title you clicked so Back can re-center on it
+      lastNavClickedId = sectionId;
       // Ignore clicks on manually hidden sections
       if (hiddenSections.has(sectionId)) return;
 
@@ -178,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollToTop();
 
       // ✅ Keep left nav aligned to the clicked name
-      link.scrollIntoView({ block: "nearest" });
+      link.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
     });
   });
 
@@ -542,18 +548,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== BACK BUTTONS ======
-  // Back returns to last section you came from (NOT Info),
-  // scrolls to top, and aligns left nav to that name.
+  // Back behavior:
+  // - If on "Manage Hidden", go back to the last section you came from.
+  // - Otherwise, stay on the current section, scroll content to top,
+  //   and re-center the left nav to the current (last clicked) title.
   const backButtons = Array.from(document.querySelectorAll(".back-btn"));
   backButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const target = lastSectionId || "info";
-
-      // Update lastSectionId so repeated Back toggles between two sections naturally
       const currentId = getCurrentVisibleSectionId();
-      if (currentId && currentId !== target) lastSectionId = currentId;
 
-      showSection(target);
+      // If we're on Manage Hidden, Back should actually return to where we were.
+      if (currentId === "hiddenManager") {
+        const target = lastSectionId || "info";
+
+        // Update lastSectionId so repeated Back toggles between two sections naturally
+        if (currentId && currentId !== target) lastSectionId = currentId;
+
+        showSection(target);
+        setActiveNav(target);
+        scrollToTop();
+        alignNavTo(target);
+        return;
+      }
+
+      // Normal pages: Back should NOT change pages.
+      const target = currentId || lastNavClickedId || "info";
       setActiveNav(target);
       scrollToTop();
       alignNavTo(target);
