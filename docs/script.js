@@ -182,9 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // ✅ Start at top of the content
       scrollToTop();
-
-      // ✅ Keep left nav aligned to the clicked name
-      link.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" });
     });
   });
 
@@ -550,8 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====== BACK BUTTONS ======
   // Back behavior:
   // - If on "Manage Hidden", go back to the last section you came from.
-  // - Otherwise, stay on the current section, scroll content to top,
-  //   and re-center the left nav to the current (last clicked) title.
+  // - Otherwise, stay on the current section and re-center the left nav to that title (no page scroll).
   const backButtons = Array.from(document.querySelectorAll(".back-btn"));
   backButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -574,7 +570,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Normal pages: Back should NOT change pages.
       const target = currentId || lastNavClickedId || "info";
       setActiveNav(target);
-      scrollToTop();
       alignNavTo(target);
     });
   });
