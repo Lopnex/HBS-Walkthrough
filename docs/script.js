@@ -2,17 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====== BASIC HOOKS ======
   const navList = document.getElementById("navList");
   const navItems = Array.from(navList.querySelectorAll(".nav-item"));
-  const navLinks = Array.from(
-    navList.querySelectorAll(".nav-link[data-section]")
-  );
+  const navLinks = Array.from(navList.querySelectorAll(".nav-link[data-section]"));
   const sections = Array.from(document.querySelectorAll(".content-section"));
-  const manageHiddenLinks = Array.from(
-    document.querySelectorAll(".manage-hidden-link")
-  );
+  const manageHiddenLinks = Array.from(document.querySelectorAll(".manage-hidden-link"));
   const hiddenList = document.getElementById("hiddenList");
 
   // Manually-hidden sections (from "Hide"/"Unhide")
   const hiddenSections = new Set();
+
+  // Tracks where user came from so Back returns there (not Info)
+  let lastSectionId = "info";
 
   // ====== FILTER CONFIG ======
 
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "bruce-kreiger"
   ]);
 
-  // IDs that should always stay in the nav even when Current Storylines filter is on
+  // IDs that should always stay in nav even when Current Storylines filter is on
   const alwaysShowIds = new Set(["main-story", "side-quests"]);
 
   // Pregnancy highlight IDs (pink)
@@ -106,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "bruce-kreiger"
   ]);
 
-  // NEW content IDs (green) per version — these affect LEFT NAV name color
+  // NEW content IDs (green) per version (left nav name color)
   const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
   const newIds062 = new Set([]); // fill later
   const newIds063 = new Set([]); // fill later
@@ -130,11 +129,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentOverrides = new Set();
   let currentFilterOn = false;
 
-  // ====== SECTION SWITCHING (MIDDLE CONTENT) ======
+  // ====== SECTION SWITCHING ======
   function showSection(id) {
     sections.forEach((sec) => {
       sec.classList.toggle("visible", sec.id === id);
     });
+  }
+
+  function getCurrentVisibleSectionId() {
+    const currentVisible = sections.find((s) => s.classList.contains("visible"));
+    return currentVisible?.id || "info";
   }
 
   function setActiveNav(id) {
@@ -144,6 +148,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function alignNavTo(sectionId) {
+    const navBtn = navList.querySelector('.nav-link[data-section="' + sectionId + '"]');
+    if (navBtn) navBtn.scrollIntoView({ block: "nearest" });
+  }
+
+  // Clicking LEFT NAV names
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
@@ -153,8 +167,18 @@ document.addEventListener("DOMContentLoaded", () => {
       // Ignore clicks on manually hidden sections
       if (hiddenSections.has(sectionId)) return;
 
+      // Save where we came from for Back
+      const currentId = getCurrentVisibleSectionId();
+      if (currentId && currentId !== sectionId) lastSectionId = currentId;
+
       showSection(sectionId);
       setActiveNav(sectionId);
+
+      // ✅ Start at top of the content
+      scrollToTop();
+
+      // ✅ Keep left nav aligned to the clicked name
+      link.scrollIntoView({ block: "nearest" });
     });
   });
 
@@ -162,8 +186,13 @@ document.addEventListener("DOMContentLoaded", () => {
   manageHiddenLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
+
+      const currentId = getCurrentVisibleSectionId();
+      if (currentId && currentId !== "hiddenManager") lastSectionId = currentId;
+
       showSection("hiddenManager");
       setActiveNav(null);
+      scrollToTop();
     });
   });
 
@@ -230,7 +259,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // FILTER ON
       const shouldShow =
-        alwaysShowIds.has(id) || currentStorylineIds.has(id) || currentOverrides.has(id);
+        alwaysShowIds.has(id) ||
+        currentStorylineIds.has(id) ||
+        currentOverrides.has(id);
 
       if (shouldShow) {
         li.style.display = "";
@@ -269,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     if (btn) btn.textContent = "Hide";
 
-    // If Current filter is ON, this acts as an override for non-current items
+    // If Current filter is ON, unhide becomes an override for non-current items
     if (currentFilterOn && !currentStorylineIds.has(sectionId)) {
       currentOverrides.add(sectionId);
     }
@@ -291,37 +322,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ====== HIGHLIGHT / FILTER BUTTONS (RIGHT SIDEBAR) ======
-  const new063Btn = document.querySelector(
-    '.highlight-option[data-highlight="new-063"]'
-  );
-  const new062Btn = document.querySelector(
-    '.highlight-option[data-highlight="new-062"]'
-  );
-  const new061Btn = document.querySelector(
-    '.highlight-option[data-highlight="new-061"]'
-  );
+  const new063Btn = document.querySelector('.highlight-option[data-highlight="new-063"]');
+  const new062Btn = document.querySelector('.highlight-option[data-highlight="new-062"]');
+  const new061Btn = document.querySelector('.highlight-option[data-highlight="new-061"]');
 
-  const currentBtn = document.querySelector(
-    '.highlight-option[data-highlight="current"]'
-  );
-  const pregBtn = document.querySelector(
-    '.highlight-option[data-highlight="pregnancy"]'
-  );
-  const ntrBtn = document.querySelector(
-    '.highlight-option[data-highlight="ntr"]'
-  );
+  const currentBtn = document.querySelector('.highlight-option[data-highlight="current"]');
+  const pregBtn = document.querySelector('.highlight-option[data-highlight="pregnancy"]');
+  const ntrBtn = document.querySelector('.highlight-option[data-highlight="ntr"]');
 
-  // Cache colors from buttons
-  let ntrTextColor = null;
-  function getNtrTextColor() {
-    if (!ntrTextColor && ntrBtn) {
-      const styles = window.getComputedStyle(ntrBtn);
-      ntrTextColor = styles.color || "#cc0000";
-    }
-    return ntrTextColor || "#cc0000";
+  function clearNewHighlights() {
+    document.body.classList.remove("v0610-new-active", "v0620-new-active", "v0630-new-active");
+    document.querySelectorAll(".highlight-option-new").forEach((b) => b.classList.remove("active"));
   }
 
-  let newTextColor = null;
   function getActiveNewBtn() {
     if (new063Btn?.classList.contains("active")) return new063Btn;
     if (new062Btn?.classList.contains("active")) return new062Btn;
@@ -337,6 +350,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
+  // Cache colors from buttons
+  let ntrTextColor = null;
+  function getNtrTextColor() {
+    if (!ntrTextColor && ntrBtn) {
+      const styles = window.getComputedStyle(ntrBtn);
+      ntrTextColor = styles.color || "#cc0000";
+    }
+    return ntrTextColor || "#cc0000";
+  }
+
+  let newTextColor = null;
   function getNewTextColor() {
     const btn = getActiveNewBtn() || new063Btn || new062Btn || new061Btn;
     if (!newTextColor && btn) {
@@ -346,61 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return newTextColor || "#3bd97a";
   }
 
-  function clearNewHighlights() {
-    document.body.classList.remove(
-      "v0610-new-active",
-      "v0620-new-active",
-      "v0630-new-active"
-    );
-    document.querySelectorAll(".highlight-option-new").forEach((b) => {
-      b.classList.remove("active");
-    });
-  }
-
-  function activateNew(btn, bodyClass) {
-    const isAlreadyActive = document.body.classList.contains(bodyClass);
-
-    // Toggle off
-    if (isAlreadyActive) {
-      clearNewHighlights();
-      updateNavColors();
-      return;
-    }
-
-    // Toggle on this version
-    clearNewHighlights();
-    document.body.classList.add(bodyClass);
-    btn.classList.add("active");
-
-    // ✅ Old behavior: New forces Current Storylines ON and applies filter
-    if (currentBtn && !currentBtn.classList.contains("active")) {
-      currentBtn.classList.add("active");
-    }
-    currentFilterOn = true;
-    currentOverrides.clear();
-    applyCurrentFilter();
-
-    // Highlight is exclusive with Pregnancy and NTR
-    if (pregBtn?.classList.contains("active")) pregBtn.classList.remove("active");
-    if (ntrBtn?.classList.contains("active")) {
-      ntrBtn.classList.remove("active");
-      deactivatePaths();
-    }
-
-    updateNavColors();
-  }
-
-  new063Btn?.addEventListener("click", () =>
-    activateNew(new063Btn, "v0630-new-active")
-  );
-  new062Btn?.addEventListener("click", () =>
-    activateNew(new062Btn, "v0620-new-active")
-  );
-  new061Btn?.addEventListener("click", () =>
-    activateNew(new061Btn, "v0610-new-active")
-  );
-
-  // Paths header when NTR is active
+  // Apply Paths header when NTR is active
   function activatePaths() {
     const mainCharactersHeader = document.querySelector(".main-characters-header");
     if (!mainCharactersHeader) return;
@@ -446,10 +416,46 @@ document.addEventListener("DOMContentLoaded", () => {
     if (pathsHeader) pathsHeader.remove();
   }
 
-  // CURRENT STORYLINES filter button
+  function activateNew(btn, bodyClass) {
+    const isAlreadyActive = document.body.classList.contains(bodyClass);
+
+    // Toggle off
+    if (isAlreadyActive) {
+      clearNewHighlights();
+      updateNavColors();
+      return;
+    }
+
+    // Toggle on this version
+    clearNewHighlights();
+    document.body.classList.add(bodyClass);
+    btn.classList.add("active");
+
+    // ✅ Old behavior: New forces Current Storylines ON + applies filter
+    if (currentBtn && !currentBtn.classList.contains("active")) {
+      currentBtn.classList.add("active");
+    }
+    currentFilterOn = true;
+    currentOverrides.clear();
+    applyCurrentFilter();
+
+    // Highlight is exclusive with Pregnancy and NTR
+    if (pregBtn?.classList.contains("active")) pregBtn.classList.remove("active");
+    if (ntrBtn?.classList.contains("active")) {
+      ntrBtn.classList.remove("active");
+      deactivatePaths();
+    }
+
+    updateNavColors();
+  }
+
+  new063Btn?.addEventListener("click", () => activateNew(new063Btn, "v0630-new-active"));
+  new062Btn?.addEventListener("click", () => activateNew(new062Btn, "v0620-new-active"));
+  new061Btn?.addEventListener("click", () => activateNew(new061Btn, "v0610-new-active"));
+
+  // Current Storylines toggle
   currentBtn?.addEventListener("click", () => {
     const isActive = currentBtn.classList.contains("active");
-
     if (isActive) {
       currentBtn.classList.remove("active");
       currentFilterOn = false;
@@ -458,26 +464,24 @@ document.addEventListener("DOMContentLoaded", () => {
       currentFilterOn = true;
     }
 
-    // Clicking Current does NOT need to turn off NTR/Pregnancy,
-    // but it should clear New highlights (since New forces Current)
+    // Clicking Current clears New highlights (New forces Current)
     clearNewHighlights();
     currentOverrides.clear();
     applyCurrentFilter();
     updateNavColors();
   });
 
-  // PREGNANCY filter button (can stack with Current + NTR, but clears New)
+  // Pregnancy toggle (can stack with Current + NTR, but clears New)
   pregBtn?.addEventListener("click", () => {
     const isActive = pregBtn.classList.contains("active");
     if (isActive) pregBtn.classList.remove("active");
     else pregBtn.classList.add("active");
 
-    // Pregnancy does not stack with New highlights
     clearNewHighlights();
     updateNavColors();
   });
 
-  // NTR filter button (can stack with Current + Pregnancy, but clears New)
+  // NTR toggle (can stack with Current + Pregnancy, but clears New)
   ntrBtn?.addEventListener("click", () => {
     const isActive = ntrBtn.classList.contains("active");
 
@@ -495,14 +499,13 @@ document.addEventListener("DOMContentLoaded", () => {
     updateNavColors();
   });
 
-  // Color logic for nav items based on active filters
+  // ====== NAV COLOR LOGIC ======
   function updateNavColors() {
     navItems.forEach((navItem) => {
       const secId = navItem.getAttribute("data-section");
       const link = navItem.querySelector(".nav-link");
       if (!link) return;
 
-      // Store base/original color once
       if (!link.dataset.baseColorStored) {
         link.dataset.baseColor = link.style.color || "";
         link.dataset.baseColorStored = "1";
@@ -511,14 +514,9 @@ document.addEventListener("DOMContentLoaded", () => {
       let color = link.dataset.baseColor || "";
       link.classList.remove("ntr-preg-glow");
 
-      const currentOn =
-        currentBtn?.classList.contains("active") && currentStorylineIds.has(secId);
-
-      const pregOn =
-        pregBtn?.classList.contains("active") && pregnancyIds.has(secId);
-
-      const ntrOn =
-        ntrBtn?.classList.contains("active") && ntrRedIds.has(secId);
+      const currentOn = currentBtn?.classList.contains("active") && currentStorylineIds.has(secId);
+      const pregOn = pregBtn?.classList.contains("active") && pregnancyIds.has(secId);
+      const ntrOn = ntrBtn?.classList.contains("active") && ntrRedIds.has(secId);
 
       const newSet = getActiveNewSet();
       const newOn = !!newSet && newSet.has(secId);
@@ -544,17 +542,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ====== BACK BUTTONS ======
-  // Any button with class="back-btn" goes back to Info (works top + bottom)
+  // Back returns to last section you came from (NOT Info),
+  // scrolls to top, and aligns left nav to that name.
   const backButtons = Array.from(document.querySelectorAll(".back-btn"));
   backButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      showSection("info");
-      setActiveNav("info");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      const target = lastSectionId || "info";
+
+      // Update lastSectionId so repeated Back toggles between two sections naturally
+      const currentId = getCurrentVisibleSectionId();
+      if (currentId && currentId !== target) lastSectionId = currentId;
+
+      showSection(target);
+      setActiveNav(target);
+      scrollToTop();
+      alignNavTo(target);
     });
   });
 
-  // Initial paint
+  // ====== INITIAL PAINT ======
   applyCurrentFilter();
   updateNavColors();
 });
