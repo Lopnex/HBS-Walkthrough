@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function activateNewHighlight(version) {
   clearNewHighlights();
 
-  // 🔥 Force Current Storylines ON when using New highlights
+  // Force Current Storylines ON when using New highlights (restore old behavior)
   currentFilterOn = true;
   if (currentBtn) currentBtn.classList.add("active");
   applyCurrentFilter();
@@ -391,12 +391,10 @@ function activateNewHighlight(version) {
     document.body.classList.add("v0610-new-active");
     if (new061Btn) new061Btn.classList.add("active");
   }
-
   if (version === "062") {
     document.body.classList.add("v0620-new-active");
     if (new062Btn) new062Btn.classList.add("active");
   }
-
   if (version === "063") {
     document.body.classList.add("v0630-new-active");
     if (new063Btn) new063Btn.classList.add("active");
@@ -404,9 +402,7 @@ function activateNewHighlight(version) {
 
   applyNewHighlightColors();
 }
-
-
-    if (version === "062") {
+if (version === "062") {
       document.body.classList.add("v0620-new-active");
       if (new062Btn) new062Btn.classList.add("active");
     }
