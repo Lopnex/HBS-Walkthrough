@@ -108,9 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ]);
 
   // NEW content IDs (green) per version (left nav name color)
-  const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
-  const newIds062 = new Set(["main-story"]);
-  const newIds063 = new Set(["main-story"]);
+  const newIds061 = new Set(["main-story", "ella-norton", "tilly-reynolds"]);
+  const newIds062 = new Set(["main-story", "ella-norton", "tilly-reynolds"]); // fill later
+  const newIds063 = new Set(["main-story", "ella-norton", "tilly-reynolds"]); // fill later
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
@@ -378,13 +378,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Shared activator so 6.2.x and 6.3.x behave like 6.1.x (only for Main Story + pulses)
-  function activateNewHighlight(version) {
-    clearNewHighlights();
+  
+function activateNewHighlight(version) {
+  clearNewHighlights();
 
-    if (version === "061") {
-      document.body.classList.add("v0610-new-active");
-      if (new061Btn) new061Btn.classList.add("active");
-    }
+  // 🔥 Force Current Storylines ON when using New highlights
+  currentFilterOn = true;
+  if (currentBtn) currentBtn.classList.add("active");
+  applyCurrentFilter();
+
+  if (version === "061") {
+    document.body.classList.add("v0610-new-active");
+    if (new061Btn) new061Btn.classList.add("active");
+  }
+
+  if (version === "062") {
+    document.body.classList.add("v0620-new-active");
+    if (new062Btn) new062Btn.classList.add("active");
+  }
+
+  if (version === "063") {
+    document.body.classList.add("v0630-new-active");
+    if (new063Btn) new063Btn.classList.add("active");
+  }
+
+  applyNewHighlightColors();
+}
+
 
     if (version === "062") {
       document.body.classList.add("v0620-new-active");
