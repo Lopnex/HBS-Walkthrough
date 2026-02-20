@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Current storylines list
   const currentStorylineIds = new Set([
-    "main-story",
+        "main-story",
     "side-quests",
     "adel-reynolds",
     "gemma-rey",
@@ -55,15 +55,21 @@ document.addEventListener("DOMContentLoaded", () => {
     "tilly-reynolds",
     "jessica-martin",
     "frankie-durham",
-    "louise-sampson",
     "jack-romer",
     "jill-romer",
     "nigel-cunningham",
     "dr-jones",
     "lucas-channing",
-    "lucy-channing",
-    "mika-colton",
-    "bruce-kreiger"
+    "bruce-kreiger",
+    "louise-samson",
+    "crystal",
+    "betty-randall",
+    "jenny-landon",
+    "lillie-michaels",
+    "rhea-cox",
+    "samantha-stewart",
+    "suki-sato"
+
   ]);
 
   // IDs that should always stay in nav even when Current Storylines filter is on
@@ -111,9 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ]);
 
   // NEW content IDs (green) per version (left nav name color)
-  const newIds061 = new Set(["main-story", "ella-norton", "tilly-reynolds"]);
-  const newIds062 = new Set(["main-story"]); // fill later
-  const newIds063 = new Set(["main-story"]); // fill later
+  const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
+  const newIds062 = new Set([]); // fill later
+  const newIds063 = new Set([]); // fill later
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
