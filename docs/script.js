@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "tilly-reynolds",
     "jessica-martin",
     "frankie-durham",
+    "louise-sampson",
     "jack-romer",
     "jill-romer",
     "nigel-cunningham",
