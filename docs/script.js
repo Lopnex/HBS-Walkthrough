@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Current storylines list
   const currentStorylineIds = new Set([
-        "main-story",
+    "main-story",
     "side-quests",
     "adel-reynolds",
     "gemma-rey",
@@ -60,16 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "nigel-cunningham",
     "dr-jones",
     "lucas-channing",
-    "bruce-kreiger",
-    "louise-samson",
-    "crystal",
-    "betty-randall",
-    "jenny-landon",
-    "lillie-michaels",
-    "rhea-cox",
-    "samantha-stewart",
-    "suki-sato"
-
+    "bruce-kreiger"
   ]);
 
   // IDs that should always stay in nav even when Current Storylines filter is on
@@ -117,9 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ]);
 
   // NEW content IDs (green) per version (left nav name color)
-  const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
-  const newIds062 = new Set([]); // fill later
-  const newIds063 = new Set([]); // fill later
+    const newIds061 = new Set(["main-story", "ella-norton", "tilly-reynolds"]);
+    const newIds062 = new Set(["main-story"]);
+    const newIds063 = new Set(["main-story"]);
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
@@ -609,3 +600,9 @@ document.addEventListener("DOMContentLoaded", () => {
   applyCurrentFilter();
   updateNavColors();
 });
+
+  if (new062Btn) new062Btn.addEventListener("click", () => activateNewHighlight("062"));
+
+  if (new063Btn) new063Btn.addEventListener("click", () => activateNewHighlight("063"));
+
+  if (new061Btn) new061Btn.addEventListener("click", () => activateNewHighlight("061"));
