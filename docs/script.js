@@ -107,10 +107,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "bruce-kreiger"
   ]);
 
-// NEW content IDs (green) per version (left nav name color)
-const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
-const newIds062 = new Set(["main-story"]);
-const newIds063 = new Set(["main-story"]);
+  // NEW content IDs (green) per version (left nav name color)
+  const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
+  const newIds062 = new Set([]); // fill later
+  const newIds063 = new Set([]); // fill later
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
@@ -346,64 +346,92 @@ const newIds063 = new Set(["main-story"]);
     });
   });
 
- // ====== HIGHLIGHT / FILTER BUTTONS (RIGHT SIDEBAR) ======
-const new063Btn = document.querySelector('.highlight-option[data-highlight="new-063"]');
-const new062Btn = document.querySelector('.highlight-option[data-highlight="new-062"]');
-const new061Btn = document.querySelector('.highlight-option[data-highlight="new-061"]');
+  // ====== HIGHLIGHT / FILTER BUTTONS (RIGHT SIDEBAR) ======
+  const new063Btn = document.querySelector('.highlight-option[data-highlight="new-063"]');
+  const new062Btn = document.querySelector('.highlight-option[data-highlight="new-062"]');
+  const new061Btn = document.querySelector('.highlight-option[data-highlight="new-061"]');
 
-const currentBtn = document.querySelector('.highlight-option[data-highlight="current"]');
-const pregBtn = document.querySelector('.highlight-option[data-highlight="pregnancy"]');
-const ntrBtn = document.querySelector('.highlight-option[data-highlight="ntr"]');
+  const currentBtn = document.querySelector('.highlight-option[data-highlight="current"]');
+  const pregBtn = document.querySelector('.highlight-option[data-highlight="pregnancy"]');
+  const ntrBtn = document.querySelector('.highlight-option[data-highlight="ntr"]');
 
-function clearNewHighlights() {
-  document.body.classList.remove("v0610-new-active", "v0620-new-active", "v0630-new-active");
-  document.querySelectorAll(".highlight-option-new").forEach((b) =>
-    b.classList.remove("active")
-  );
-}
-
-function getActiveNewBtn() {
-  if (new063Btn && new063Btn.classList.contains("active")) return new063Btn;
-  if (new062Btn && new062Btn.classList.contains("active")) return new062Btn;
-  if (new061Btn && new061Btn.classList.contains("active")) return new061Btn;
-  return null;
-}
-
-function getActiveNewSet() {
-  const btn = getActiveNewBtn();
-  if (btn === new063Btn) return newIds063;
-  if (btn === new062Btn) return newIds062;
-  if (btn === new061Btn) return newIds061;
-  return null;
-}
-
-// 🔥 Shared activator so 6.2.x and 6.3.x behave exactly like 6.1.x
-function activateNewHighlight(version) {
-  clearNewHighlights();
-
-  if (version === "061") {
-    document.body.classList.add("v0610-new-active");
-    if (new061Btn) new061Btn.classList.add("active");
+  function clearNewHighlights() {
+    document.body.classList.remove("v0610-new-active", "v0620-new-active", "v0630-new-active");
+    document.querySelectorAll(".highlight-option-new").forEach((b) =>
+      b.classList.remove("active")
+    );
   }
 
-  if (version === "062") {
-    document.body.classList.add("v0620-new-active");
-    if (new062Btn) new062Btn.classList.add("active");
+  function getActiveNewBtn() {
+    if (new063Btn && new063Btn.classList.contains("active")) return new063Btn;
+    if (new062Btn && new062Btn.classList.contains("active")) return new062Btn;
+    if (new061Btn && new061Btn.classList.contains("active")) return new061Btn;
+    return null;
   }
 
-  if (version === "063") {
-    document.body.classList.add("v0630-new-active");
-    if (new063Btn) new063Btn.classList.add("active");
+  function getActiveNewSet() {
+    const btn = getActiveNewBtn();
+    if (btn === new063Btn) return newIds063;
+    if (btn === new062Btn) return newIds062;
+    if (btn === new061Btn) return newIds061;
+    return null;
   }
 
-  applyNewHighlightColors();
-}
+  // Shared activator so 6.2.x and 6.3.x behave like 6.1.x (only for Main Story + pulses)
+  function activateNewHighlight(version) {
+    clearNewHighlights();
 
-// Hook up New version buttons
-if (new061Btn) new061Btn.addEventListener("click", () => activateNewHighlight("061"));
-if (new062Btn) new062Btn.addEventListener("click", () => activateNewHighlight("062"));
-if (new063Btn) new063Btn.addEventListener("click", () => activateNewHighlight("063"));
-  
+    if (version === "061") {
+      document.body.classList.add("v0610-new-active");
+      if (new061Btn) new061Btn.classList.add("active");
+    }
+
+    if (version === "062") {
+      document.body.classList.add("v0620-new-active");
+      if (new062Btn) new062Btn.classList.add("active");
+    }
+
+    if (version === "063") {
+      document.body.classList.add("v0630-new-active");
+      if (new063Btn) new063Btn.classList.add("active");
+    }
+
+    applyNewHighlightColors();
+  }
+
+  // Hook up New version buttons
+  if (new061Btn) new061Btn.addEventListener("click", () => activateNewHighlight("061"));
+  if (new062Btn) new062Btn.addEventListener("click", () => activateNewHighlight("062"));
+  if (new063Btn) new063Btn.addEventListener("click", () => activateNewHighlight("063"));
+
+  // ---------------- FILTER BUTTONS ----------------
+  if (currentBtn) {
+    currentBtn.addEventListener("click", () => {
+      const isActive = currentBtn.classList.contains("active");
+      currentBtn.classList.toggle("active", !isActive);
+      currentFilterOn = !isActive;
+      applyCurrentFilter();
+      applyNewHighlightColors();
+    });
+  }
+
+  if (pregBtn) {
+    pregBtn.addEventListener("click", () => {
+      pregBtn.classList.toggle("active");
+      applyPregnancyHighlight();
+      applyNewHighlightColors();
+    });
+  }
+
+  if (ntrBtn) {
+    ntrBtn.addEventListener("click", () => {
+      ntrBtn.classList.toggle("active");
+      applyNtrHighlight();
+      applyNewHighlightColors();
+    });
+  }
+
+
   // Cache colors from buttons
   let ntrTextColor = null;
   function getNtrTextColor() {
