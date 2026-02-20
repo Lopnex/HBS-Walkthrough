@@ -60,8 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "nigel-cunningham",
     "dr-jones",
     "lucas-channing",
-    "bruce-kreiger"
-  ]);
+    "bruce-kreiger",
+    "maddy-jones"
+]);
 
   // IDs that should always stay in nav even when Current Storylines filter is on
   const alwaysShowIds = new Set(["main-story", "side-quests"]);
@@ -109,7 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NEW content IDs (green) per version (left nav name color)
     const newIds061 = new Set(["main-story", "ella-norton", "tilly-reynolds"]);
-    const newIds062 = new Set(["main-story"]);
+    const newIds062 = new Set([
+  "main-story",
+  "maddy-jones",
+  "amy-bronson",
+  "claire-bosworth"
+]);
     const newIds063 = new Set(["main-story"]);
 
   // Paths — go into "Paths" header when NTR is active
