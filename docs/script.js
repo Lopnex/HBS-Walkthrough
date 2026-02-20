@@ -108,9 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ]);
 
   // NEW content IDs (green) per version (left nav name color)
-  const newIds061 = new Set(["main-story", "ella-norton", "tilly-reynolds"]);
-  const newIds062 = new Set(["main-story", "ella-norton", "tilly-reynolds"]); // fill later
-  const newIds063 = new Set(["main-story", "ella-norton", "tilly-reynolds"]); // fill later
+    const newIds061 = new Set(["main-story", "ella-norton", "tilly-reynolds"]);
+    const newIds062 = new Set(["main-story"]);
+    const newIds063 = new Set(["main-story"]);
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function activateNewHighlight(version) {
   clearNewHighlights();
 
-  // Force Current Storylines ON when using New highlights (restore old behavior)
+  // Force Current Storylines ON when using New highlights
   currentFilterOn = true;
   if (currentBtn) currentBtn.classList.add("active");
   applyCurrentFilter();
@@ -390,30 +390,16 @@ function activateNewHighlight(version) {
   if (version === "061") {
     document.body.classList.add("v0610-new-active");
     if (new061Btn) new061Btn.classList.add("active");
-  }
-  if (version === "062") {
+  } else if (version === "062") {
     document.body.classList.add("v0620-new-active");
     if (new062Btn) new062Btn.classList.add("active");
-  }
-  if (version === "063") {
+  } else if (version === "063") {
     document.body.classList.add("v0630-new-active");
     if (new063Btn) new063Btn.classList.add("active");
   }
 
   applyNewHighlightColors();
 }
-if (version === "062") {
-      document.body.classList.add("v0620-new-active");
-      if (new062Btn) new062Btn.classList.add("active");
-    }
-
-    if (version === "063") {
-      document.body.classList.add("v0630-new-active");
-      if (new063Btn) new063Btn.classList.add("active");
-    }
-
-    applyNewHighlightColors();
-  }
 
   // Hook up New version buttons
   if (new061Btn) new061Btn.addEventListener("click", () => activateNewHighlight("061"));
@@ -421,17 +407,15 @@ if (version === "062") {
   if (new063Btn) new063Btn.addEventListener("click", () => activateNewHighlight("063"));
 
   // ---------------- FILTER BUTTONS ----------------
-  if (currentBtn) {
+    if (currentBtn) {
     currentBtn.addEventListener("click", () => {
-      const isActive = currentBtn.classList.contains("active");
-      currentBtn.classList.toggle("active", !isActive);
-      currentFilterOn = !isActive;
+      currentFilterOn = !currentFilterOn;
+      currentBtn.classList.toggle("active", currentFilterOn);
       applyCurrentFilter();
       applyNewHighlightColors();
     });
   }
-
-  if (pregBtn) {
+if (pregBtn) {
     pregBtn.addEventListener("click", () => {
       pregBtn.classList.toggle("active");
       applyPregnancyHighlight();
@@ -692,10 +676,6 @@ if (version === "062") {
       if (version === "061") {
         document.body.classList.add("v0610-new-active");
         new061Btn2 && new061Btn2.classList.add("active");
-      }
-      if (version === "062") {
-        document.body.classList.add("v0620-new-active");
-        new062Btn2 && new062Btn2.classList.add("active");
       }
       if (version === "063") {
         document.body.classList.add("v0630-new-active");
