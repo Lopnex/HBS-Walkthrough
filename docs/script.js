@@ -109,8 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NEW content IDs (green) per version (left nav name color)
   const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
-  const newIds062 = new Set(["main-story"]);
-  const newIds063 = new Set(["main-story"]);
+  const newIds062 = new Set([]); // fill later
+  const newIds063 = new Set([]); // fill later
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
@@ -656,4 +656,61 @@ document.addEventListener("DOMContentLoaded", () => {
   // ====== INITIAL PAINT ======
   applyCurrentFilter();
   updateNavColors();
+
+  // ===== HOTFIX: Re-bind highlight buttons safely at the end (guaranteed) =====
+  (function bindHighlightsSafely() {
+    const new061Btn2 = document.querySelector('.highlight-option[data-highlight="new-061"]');
+    const new062Btn2 = document.querySelector('.highlight-option[data-highlight="new-062"]');
+    const new063Btn2 = document.querySelector('.highlight-option[data-highlight="new-063"]');
+    const currentBtn2 = document.querySelector('.highlight-option[data-highlight="current"]');
+    const pregBtn2 = document.querySelector('.highlight-option[data-highlight="pregnancy"]');
+    const ntrBtn2 = document.querySelector('.highlight-option[data-highlight="ntr"]');
+
+    function clearNewHighlights2() {
+      document.body.classList.remove("v0610-new-active", "v0620-new-active", "v0630-new-active");
+      document.querySelectorAll(".highlight-option-new").forEach((b) => b.classList.remove("active"));
+    }
+
+    function activateNewHighlight2(version) {
+      clearNewHighlights2();
+      if (version === "061") {
+        document.body.classList.add("v0610-new-active");
+        new061Btn2 && new061Btn2.classList.add("active");
+      }
+      if (version === "062") {
+        document.body.classList.add("v0620-new-active");
+        new062Btn2 && new062Btn2.classList.add("active");
+      }
+      if (version === "063") {
+        document.body.classList.add("v0630-new-active");
+        new063Btn2 && new063Btn2.classList.add("active");
+      }
+      if (typeof applyNewHighlightColors === "function") applyNewHighlightColors();
+    }
+
+    if (new061Btn2) new061Btn2.addEventListener("click", () => activateNewHighlight2("061"));
+    if (new062Btn2) new062Btn2.addEventListener("click", () => activateNewHighlight2("062"));
+    if (new063Btn2) new063Btn2.addEventListener("click", () => activateNewHighlight2("063"));
+
+    if (currentBtn2) currentBtn2.addEventListener("click", () => {
+      const isActive = currentBtn2.classList.contains("active");
+      currentBtn2.classList.toggle("active", !isActive);
+      if (typeof currentFilterOn !== "undefined") currentFilterOn = !isActive;
+      if (typeof applyCurrentFilter === "function") applyCurrentFilter();
+      if (typeof applyNewHighlightColors === "function") applyNewHighlightColors();
+    });
+
+    if (pregBtn2) pregBtn2.addEventListener("click", () => {
+      pregBtn2.classList.toggle("active");
+      if (typeof applyPregnancyHighlight === "function") applyPregnancyHighlight();
+      if (typeof applyNewHighlightColors === "function") applyNewHighlightColors();
+    });
+
+    if (ntrBtn2) ntrBtn2.addEventListener("click", () => {
+      ntrBtn2.classList.toggle("active");
+      if (typeof applyNtrHighlight === "function") applyNtrHighlight();
+      if (typeof applyNewHighlightColors === "function") applyNewHighlightColors();
+    });
+  })();
+
 });
