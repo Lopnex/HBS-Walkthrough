@@ -431,3 +431,18 @@ body.v0630-new-active .content-section .v0630-new {
     margin: 0 0 16px;
   }
 }
+
+
+/* ===== FORCE RIGHT SIDEBAR TO ACCEPT CLICKS (HOTFIX) ===== */
+#rightbar,
+#rightbar * {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 50;
+}
+
+/* Ensure middle content never overlays the rightbar */
+#content {
+  position: relative;
+  z-index: 1;
+}
