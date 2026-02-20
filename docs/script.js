@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 "rhea-cox",
 "maddy-jones"
 ]); // fill later
-  const newIds063 = new Set(["main-story"]); // fill later
+  const newIds063 = new Set(["main-story", "sandra-benson"]); // fill later
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
