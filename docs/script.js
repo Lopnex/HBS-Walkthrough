@@ -109,8 +109,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // NEW content IDs (green) per version (left nav name color)
   const newIds061 = new Set(["main-story", "tilly-reynolds", "ella-norton"]);
-  const newIds062 = new Set([]); // fill later
-  const newIds063 = new Set([]); // fill later
+  const newIds062 = new Set(["main-story"]);
+  const newIds063 = new Set(["main-story"]);
 
   // Paths — go into "Paths" header when NTR is active
   const pathIds = ["dr-jones", "frank", "lucas-channing", "nigel-cunningham"];
